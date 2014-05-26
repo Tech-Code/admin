@@ -17,4 +17,6 @@ public interface CityStationDao extends PagingAndSortingRepository<CityStation, 
 			+ "where c.cityCode = :cityCode ")
 	List<CityStation> findByCityCode(
 			@Param("cityCode") String cityCode);
+	
+	
 }
