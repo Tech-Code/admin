@@ -83,6 +83,16 @@
 						href="javascript:addTab('tabId_reglist','注册用户管理','<%=root%>/view/user/reglist.jsp');">注册用户管理</a></li>
 				</ul>
 			</div>
+
+            <div title="城际换成" style="overflow: hidden;">
+                <ul>
+                    <li>
+                        <a href="javascript:addTab('tabId_adlist','城际交通站点管理','<%=root%>/view/citystation/cslist.jsp');">城际交通站点管理</a>
+                    </li>
+                </ul>
+            </div>
+
+
 			<div title="数据管理" style="overflow: hidden;">
 				<ul>
 					<li>

@@ -9,7 +9,7 @@ public class Constants {
 	public final static String RESULT_SUCCESS = "1";
 
 	public final static String USER_INFO_SESSION = "user";
-	public final static String AD_INFO_SESSION = "ad";
+	public final static String CS_INFO_SESSION = "cs";
 	
 	public final static String MODEL_INFO_SESSION = "model";
 }

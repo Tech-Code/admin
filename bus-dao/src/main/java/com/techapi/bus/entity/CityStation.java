@@ -1,15 +1,18 @@
 package com.techapi.bus.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 @Entity
-@Table(name="CITYSTATION")
+@Table(name="BUS_CITYSTATION")
 public class CityStation {
-	@Id
-	@Column(name="CITY_CODE")
+    @Id
+    @GeneratedValue(generator = "UUIDGenerator")
+    @GenericGenerator(name="UUIDGenerator",strategy="uuid")
+    private String id;
+
+    @Column(name="CITY_CODE")
 	private String cityCode;
 	@Column(name="CITY_NAME")
 	private String cityName;
@@ -28,6 +31,13 @@ public class CityStation {
 	public void setCityCode(String cityCode) {
 		this.cityCode = cityCode;
 	}
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 	public String getCityName() {
 		return cityName;
 	}
@@ -58,4 +68,9 @@ public class CityStation {
 	public void setCoordinate(String coordinate) {
 		this.coordinate = coordinate;
 	}
+
+    @Override
+    public String toString() {
+        return this.cityCode + this.cityName + "(" + this.coordinate + ")";
+    }
 }

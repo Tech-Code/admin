@@ -9,8 +9,8 @@ import com.techapi.bus.entity.User;
 
 /**
  * @Description:
- * @author hongjia.hu
- * @date 2014-3-8
+ * @author Andrew.Xue
+ * @date 2014-5-31
  */
 @Service
 public class UserService {

@@ -72,6 +72,7 @@
 			<props>
 				<prop key="hibernate.format_sql">${hibernate.formatSql}</prop>
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl}</prop>
+                <prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
 			</props>
 		</property>
@@ -81,13 +82,6 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
-	<!-- JPA模板 -->
-	<bean id="jpaTemplate" class="org.springframework.orm.jpa.JpaTemplate">
-	   <property name="entityManagerFactory">
-	    <ref local="entityManagerFactory" />
-	   </property>
-	</bean>
-	
-	<tx:annotation-driven proxy-target-class="true" />
+	<tx:annotation-driven transaction-manager="transactionManager" />
 
 </beans>

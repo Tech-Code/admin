@@ -20,7 +20,6 @@ public class PageUtils {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("total", list == null ? 0 : list.size());
 		result.put("rows", list);
-
 		return result;
 	}
 }

@@ -1,15 +1,15 @@
 package com.techapi.bus.dao;
 
-import javax.annotation.Resource;
-
+import com.techapi.bus.entity.CityStation;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.techapi.bus.entity.CityStation;
+import javax.annotation.Resource;
 
 /**
  * Created by CH on 4/17/14.
@@ -23,12 +23,51 @@ public class CityStationDaoTest {
     private CityStationDao dao;
 
     @Test
-    public void testList() {
+    public void testFindByCityCode() {
         Iterable<CityStation> ecs = dao.findByCityCode("010");
         Assert.assertNotNull(ecs);
         for (CityStation ec : ecs) {
             System.out.println(ec);
         }
+    }
+
+    @Test
+    public void testFindAll() {
+        Iterable<CityStation> ecs = dao.findAll();
+        Assert.assertNotNull(ecs);
+        for (CityStation ec : ecs) {
+            System.out.println(ec);
+        }
+    }
+
+    @Test
+    @Rollback(false)
+    public void testUpdateCityStation() {
+        int result = dao.updateCityStation("010","北京");
+        //CityStation cityStation = new CityStation();
+        //cityStation.setCityCode("010");
+        //cityStation.setCityName("天津");
+        //cityStation.setCityCode("010");
+
+        //dao.save(cityStation);
+
+        //dao.deleteAll();
+
+        System.out.println("result:" + result);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testAddCityStation() {
+        CityStation cityStation = new CityStation();
+        cityStation.setCityCode("121");
+        cityStation.setCityName("上海");
+        cityStation.setStationName("111");
+        cityStation.setCoordinate("32.232,112.1212");
+//        cityStation.setId("1111");
+        cityStation.setTransdetail("111");
+        cityStation.setTransType("11");
+        dao.save(cityStation);
     }
 
 }
