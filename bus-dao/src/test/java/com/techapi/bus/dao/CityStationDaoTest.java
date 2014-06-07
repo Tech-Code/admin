@@ -1,6 +1,9 @@
 package com.techapi.bus.dao;
 
-import com.techapi.bus.entity.CityStation;
+import java.util.List;
+
+import javax.annotation.Resource;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
+import com.techapi.bus.entity.CityStation;
 
 /**
  * Created by CH on 4/17/14.
@@ -21,6 +24,12 @@ public class CityStationDaoTest {
 	
     @Resource
     private CityStationDao dao;
+    
+    @Test
+    public void testfindCityAndTransstation(){
+    	List<Object[]> o =dao.findCityAndTransstation();
+        System.out.println(o.get(0));
+    }
 
     @Test
     public void testFindByCityCode() {

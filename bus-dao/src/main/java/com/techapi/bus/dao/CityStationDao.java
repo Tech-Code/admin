@@ -25,7 +25,12 @@ public interface CityStationDao extends PagingAndSortingRepository<CityStation, 
     @Query("update CityStation c set c.cityName = :cityName where c.cityCode = :cityCode")
     public int updateCityStation(@Param("cityCode") String cityCode,
                              @Param("cityName") String cityName);
-
+    /***
+     * 原生sql，解析时需要按顺序
+     * @return
+     */
+    @Query(value="select t.TRANSDETAIL,t.TRANSTYPE, t.TRIPS, t.CITYCODE, t.STATION, t.STATIONORDER, t.COORDINATE, t.ARRIVETIME, t.DEPARTTIME, t.MILES, t.PRICE, c.CITY_NAME from BUS_TRANSSTATION t inner join BUS_CITYSTATION c on T.STATION = C.STATION_NAME",nativeQuery=true)
+    public List<Object[]> findCityAndTransstation();
 	
 	
 }

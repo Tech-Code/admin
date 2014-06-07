@@ -39,4 +39,84 @@ public class Taxi {
 	private double n_exceed_s_cost;// IS '夜间超出起步单价(元/公里)';
 	@Column(name="N_S_EXCEED_D_COST")
 	private double n_s_exceed_d_cost;// IS '夜间超出规定距离单价(元/公里)';
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getCitycode() {
+		return citycode;
+	}
+	public void setCitycode(String citycode) {
+		this.citycode = citycode;
+	}
+	public String getCityname() {
+		return cityname;
+	}
+	public void setCityname(String cityname) {
+		this.cityname = cityname;
+	}
+	public String getD_timesection() {
+		return d_timesection;
+	}
+	public void setD_timesection(String d_timesection) {
+		this.d_timesection = d_timesection;
+	}
+	public int getD_s_miles() {
+		return d_s_miles;
+	}
+	public void setD_s_miles(int d_s_miles) {
+		this.d_s_miles = d_s_miles;
+	}
+	public double getD_s_cost() {
+		return d_s_cost;
+	}
+	public void setD_s_cost(double d_s_cost) {
+		this.d_s_cost = d_s_cost;
+	}
+	public double getD_exceed_s_cost() {
+		return d_exceed_s_cost;
+	}
+	public void setD_exceed_s_cost(double d_exceed_s_cost) {
+		this.d_exceed_s_cost = d_exceed_s_cost;
+	}
+	public double getD_s_exceed_d_cost() {
+		return d_s_exceed_d_cost;
+	}
+	public void setD_s_exceed_d_cost(double d_s_exceed_d_cost) {
+		this.d_s_exceed_d_cost = d_s_exceed_d_cost;
+	}
+	public String getN_timesection() {
+		return n_timesection;
+	}
+	public void setN_timesection(String n_timesection) {
+		this.n_timesection = n_timesection;
+	}
+	public int getN_s_miles() {
+		return n_s_miles;
+	}
+	public void setN_s_miles(int n_s_miles) {
+		this.n_s_miles = n_s_miles;
+	}
+	public double getN_s_cost() {
+		return n_s_cost;
+	}
+	public void setN_s_cost(double n_s_cost) {
+		this.n_s_cost = n_s_cost;
+	}
+	public double getN_exceed_s_cost() {
+		return n_exceed_s_cost;
+	}
+	public void setN_exceed_s_cost(double n_exceed_s_cost) {
+		this.n_exceed_s_cost = n_exceed_s_cost;
+	}
+	public double getN_s_exceed_d_cost() {
+		return n_s_exceed_d_cost;
+	}
+	public void setN_s_exceed_d_cost(double n_s_exceed_d_cost) {
+		this.n_s_exceed_d_cost = n_s_exceed_d_cost;
+	}
+	
+	
 }
