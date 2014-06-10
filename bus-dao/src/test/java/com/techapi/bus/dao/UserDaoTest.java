@@ -26,6 +26,7 @@ public class UserDaoTest {
     @Test
     public void testLogin() {
         User ecs = userDao.login("admin","admin");
+        System.out.println(ecs);
     }
 
 }
