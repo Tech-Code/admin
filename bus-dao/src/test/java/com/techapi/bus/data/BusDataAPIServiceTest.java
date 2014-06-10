@@ -34,7 +34,7 @@ public class BusDataAPIServiceTest {
 	@Test
 	public void testFindOneTaxiByCityName() {
 		Taxi t = busDataAPIService.findOneTaxiByCityName("北京市");
-		System.out.println(t.getCityname());
+		System.out.println(t.getCityName());
 	}
 
 	@Test

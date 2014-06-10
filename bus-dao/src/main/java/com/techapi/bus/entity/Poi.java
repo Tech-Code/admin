@@ -16,23 +16,23 @@ public class Poi {
     @GenericGenerator(name="UUIDGenerator",strategy="uuid")
     private String id;
 	@Column(name="CITYCODE")
-	private String citycode;// IS '城市代码';
+	private String cityCode;// IS '城市代码';
 	@Column(name="STATIONID")
-	private String stationid;// IS '站点ID';
+	private String stationId;// IS '站点ID';
 	@Column(name="POIID")
-	private String poiid;// IS 'POIID';
+	private String poiId;// IS 'POIID';
 	@Column(name="POINAME")
-	private String poiname;// IS '地标名称';
+	private String poiName;// IS '地标名称';
 	@Column(name="POITYPE1")
-	private String poitype1;// IS 'POI大类';
+	private String poiType1;// IS 'POI大类';
 	@Column(name="POITYPE2")
-	private String poitype2;// IS 'POI中类';
+	private String poiType2;// IS 'POI中类';
 	@Column(name="POITYPE3")
-	private String poitype3;// IS 'POI小类';
+	private String poiType3;// IS 'POI小类';
 	@Column(name="POICOORDINATE")
-	private String poicoordinate;// IS 'POI坐标';
+	private String poiCoordinate;// IS 'POI坐标';
 	@Column(name="WALKDISTANCE")
-	private String walkdistance;// IS '距离站点的步行距离(米)';
+	private String walkDistance;// IS '距离站点的步行距离(米)';
 	@Column(name="ORIENTATION")
 	private String orientation;// IS '方位';
 	public String getId() {
@@ -41,59 +41,59 @@ public class Poi {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getCitycode() {
-		return citycode;
+	public String getCityCode() {
+		return cityCode;
 	}
-	public void setCitycode(String citycode) {
-		this.citycode = citycode;
+	public void setCityCode(String cityCode) {
+		this.cityCode = cityCode;
 	}
-	public String getStationid() {
-		return stationid;
+	public String getStationId() {
+		return stationId;
 	}
-	public void setStationid(String stationid) {
-		this.stationid = stationid;
+	public void setStationId(String stationId) {
+		this.stationId = stationId;
 	}
-	public String getPoiid() {
-		return poiid;
+	public String getPoiId() {
+		return poiId;
 	}
-	public void setPoiid(String poiid) {
-		this.poiid = poiid;
+	public void setPoiId(String poiId) {
+		this.poiId = poiId;
 	}
-	public String getPoiname() {
-		return poiname;
+	public String getPoiName() {
+		return poiName;
 	}
-	public void setPoiname(String poiname) {
-		this.poiname = poiname;
+	public void setPoiName(String poiName) {
+		this.poiName = poiName;
 	}
-	public String getPoitype1() {
-		return poitype1;
+	public String getPoiType1() {
+		return poiType1;
 	}
-	public void setPoitype1(String poitype1) {
-		this.poitype1 = poitype1;
+	public void setPoiType1(String poiType1) {
+		this.poiType1 = poiType1;
 	}
-	public String getPoitype2() {
-		return poitype2;
+	public String getPoiType2() {
+		return poiType2;
 	}
-	public void setPoitype2(String poitype2) {
-		this.poitype2 = poitype2;
+	public void setPoiType2(String poiType2) {
+		this.poiType2 = poiType2;
 	}
-	public String getPoitype3() {
-		return poitype3;
+	public String getPoiType3() {
+		return poiType3;
 	}
-	public void setPoitype3(String poitype3) {
-		this.poitype3 = poitype3;
+	public void setPoiType3(String poiType3) {
+		this.poiType3 = poiType3;
 	}
-	public String getPoicoordinate() {
-		return poicoordinate;
+	public String getPoiCoordinate() {
+		return poiCoordinate;
 	}
-	public void setPoicoordinate(String poicoordinate) {
-		this.poicoordinate = poicoordinate;
+	public void setPoiCoordinate(String poiCoordinate) {
+		this.poiCoordinate = poiCoordinate;
 	}
-	public String getWalkdistance() {
-		return walkdistance;
+	public String getWalkDistance() {
+		return walkDistance;
 	}
-	public void setWalkdistance(String walkdistance) {
-		this.walkdistance = walkdistance;
+	public void setWalkDistance(String walkDistance) {
+		this.walkDistance = walkDistance;
 	}
 	public String getOrientation() {
 		return orientation;

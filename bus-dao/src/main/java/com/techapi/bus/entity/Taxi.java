@@ -16,9 +16,9 @@ public class Taxi {
     @GenericGenerator(name="UUIDGenerator",strategy="uuid")
     private String id;
 	@Column(name="CITYCODE")
-	private String  citycode;// IS '城市代码';
+	private String  cityCode;// IS '城市代码';
 	@Column(name="CITYNAME")
-	private String cityname;// IS '城市名';
+	private String cityName;// IS '城市名';
 	@Column(name="D_TIMESECTION")
 	private String d_timesection;// IS '日间时间区间';
 	@Column(name="D_S_MILES")
@@ -45,17 +45,17 @@ public class Taxi {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getCitycode() {
-		return citycode;
+	public String getCityCode() {
+		return cityCode;
 	}
-	public void setCitycode(String citycode) {
-		this.citycode = citycode;
+	public void setCityCode(String cityCode) {
+		this.cityCode = cityCode;
 	}
-	public String getCityname() {
-		return cityname;
+	public String getCityName() {
+		return cityName;
 	}
-	public void setCityname(String cityname) {
-		this.cityname = cityname;
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
 	}
 	public String getD_timesection() {
 		return d_timesection;
@@ -117,6 +117,7 @@ public class Taxi {
 	public void setN_s_exceed_d_cost(double n_s_exceed_d_cost) {
 		this.n_s_exceed_d_cost = n_s_exceed_d_cost;
 	}
+	
 	
 	
 }
