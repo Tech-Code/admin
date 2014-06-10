@@ -5,9 +5,10 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Component;
 
 import com.techapi.bus.entity.Speed;
-
+@Component("speedDao")
 public interface SpeedDao extends PagingAndSortingRepository<Speed, String> {
 
 	/***
@@ -17,7 +18,7 @@ public interface SpeedDao extends PagingAndSortingRepository<Speed, String> {
 	 * @return
 	 */
 	@Query("select c from Speed c "
-			+ "where c.transportation = :transportation and c.cityname= :cityname")
+			+ "where c.tranSportation = :transportation and c.cityName= :cityname")
 	public List<Speed> findByTransportationAndCityName(
 			@Param("transportation") String transportation,
 			@Param("cityname") String cityname);
@@ -30,7 +31,7 @@ public interface SpeedDao extends PagingAndSortingRepository<Speed, String> {
 	 * @return
 	 */
 	@Query("select c from Speed c "
-			+ "where c.transportation = :transportation and c.cityname= :cityname and c.transportdes= :transportdes")
+			+ "where c.tranSportation = :transportation and c.cityName= :cityname and c.tranSportDes= :transportdes")
 	public List<Speed> findByTransportationAndDetailAndCityName(
 			@Param("transportation") String transportation,
 			@Param("cityname") String cityname,@Param("transportdes") String transportdes);

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.techapi.bus.BusConstants;
@@ -14,16 +15,16 @@ import com.techapi.bus.dao.TaxiDao;
 import com.techapi.bus.entity.Poi;
 import com.techapi.bus.entity.Speed;
 import com.techapi.bus.entity.Taxi;
-@Service
+@Component("busDataAPIService")
 public class BusDataAPIService {
 
 	@Autowired
 	public CityTransstationDataService cityTransstationDataService;
-	@Resource
+	@Autowired
     private PoiDao poiDao;
-	@Resource
+	@Autowired
     private SpeedDao speedDao;
-	@Resource
+	@Autowired
     private TaxiDao taxiDao;
 	/***
 	 * 城际站点表数据
