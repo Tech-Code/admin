@@ -88,21 +88,21 @@ public class ImportPoi {
 
 
                     Poi poi = new Poi();
-                    poi.setCitycode(adminCode);
-                    poi.setStationid(station.getStationId());
-                    poi.setPoiid(poiid);
-                    poi.setPoiname(name);
-                    poi.setPoitype1(poiType1);
+                    poi.setCityCode(adminCode);
+                    poi.setStationId(station.getStationId());
+                    poi.setPoiId(poiid);
+                    poi.setPoiName(name);
+                    poi.setPoiType1(poiType1);
                     if(poiType != null) {
-                        poi.setPoitype2(poiType.getPoiType2());
-                        poi.setPoitype3(poiType.getPoiType3());
+                        poi.setPoiType2(poiType.getPoiType2());
+                        poi.setPoiType3(poiType.getPoiType3());
                     } else {
-                        poi.setPoitype2("");
-                        poi.setPoitype3("");
+                        poi.setPoiType2("");
+                        poi.setPoiType3("");
                     }
 
-                    poi.setPoicoordinate(x + "," + y);
-                    poi.setWalkdistance(distance);
+                    poi.setPoiCoordinate(x + "," + y);
+                    poi.setWalkDistance(distance);
                     poi.setOrientation("");
                     poiList.add(poi);
 
