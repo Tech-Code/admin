@@ -10,20 +10,10 @@
 
 	<distributionManagement>
 		<repository>
-			<id>od-release</id>
-			<name>OD release repository</name>
-			<url>http://nexus.uschecomrnd.net/content/repositories/releases/</url>
+			<id>releases</id>
+			<name>Internal Releases</name>
+			<url>http://mvn.navi.chetuobang.com:8081/nexus/content/repositories/releases/</url>
 		</repository>
-		<snapshotRepository>
-			<id>od-snapshot</id>
-			<name>OD snapshot repository</name>
-			<url>http://nexus.uschecomrnd.net/content/repositories/snapshots/</url>
-		</snapshotRepository>
-		<site>
-			<id>site</id>
-			<name>Site deployments</name>
-			<url>dav:http://sonar.uschecomrnd.net/site/${project.version}/</url>
-		</site>
 	</distributionManagement>
 
 	<scm>
@@ -38,6 +28,7 @@
 		<junit.version>4.8.2</junit.version>
 		<spring.version>3.2.8.RELEASE</spring.version>
 	</properties>
+	
 
 	<modules>
 		<module>bus-dao</module>
@@ -45,24 +36,131 @@
 	</modules>
 
 	<build>
+		<finalName>${project.artifactId}-${project.version}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
 				<configuration>
-					<fork>true</fork>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5</version>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/config/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/resources/</directory>
+									<includes>
+										<include>*.properties</include>
+										<include>*.xml</include>
+										<include>*.config</include>
+									</includes>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
-					<mavenExecutorId>forked-path</mavenExecutorId>
+					<outputDirectory>${project.build.directory}</outputDirectory>
+					<excludes>
+						<exclude>*.properties</exclude>
+						<exclude>*.xml</exclude>
+						<exclude>*.config</exclude>
+					</excludes>
+					<useDefaultManifestFile>true</useDefaultManifestFile>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+						<manifestEntries>
+							<SVN-Revision>${SVN.revision}</SVN-Revision>
+						</manifestEntries>
+					</archive>
 				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.0-beta-3</version>
+				<configuration>
+					<reportPlugins>
+
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-jxr-plugin</artifactId>
+							<version>2.1</version>
+							<configuration>
+								<aggregate>true</aggregate>
+							</configuration>
+						</plugin>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-report-plugin</artifactId>
+							<version>2.6</version>
+						</plugin>
+						<plugin>
+							<groupId>org.codehaus.mojo</groupId>
+							<artifactId>cobertura-maven-plugin</artifactId>
+							<version>2.4</version>
+							<configuration>
+								<formats>
+									<format>xml</format>
+									<format>html</format>
+								</formats>
+							</configuration>
+						</plugin>
+						<plugin>
+							<groupId>org.codehaus.mojo</groupId>
+							<artifactId>findbugs-maven-plugin</artifactId>
+							<version>2.3.2</version>
+						</plugin>
+					</reportPlugins>
+				</configuration>
+			</plugin>		
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2.1</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/assembly/assembly.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
