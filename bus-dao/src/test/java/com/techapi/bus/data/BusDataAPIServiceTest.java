@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.techapi.bus.entity.Poi;
 import com.techapi.bus.entity.Speed;
 import com.techapi.bus.entity.Taxi;
 
@@ -18,19 +19,19 @@ import com.techapi.bus.entity.Taxi;
 @ContextConfiguration("classpath:META-INF/applicationContext-bus-dao-oracle.xml")
 @Transactional
 public class BusDataAPIServiceTest {
-	@Autowired
+	@Resource
 	public BusDataAPIService busDataAPIService;
 	@Test
 	public void testGetAllCityTransstation() {
 		busDataAPIService.getAllCityTransstation();
 	}
-	/*
+	
 	@Test
 	public void testFindOnePoiBystationID() {
 		Poi p =busDataAPIService.findOnePoiBystationID("141203");
-		System.out.println(p.getPoiname());
+//		System.out.println(p.getPoiName());
 	}
-	*/
+	
 	
 	@Test
 	public void testFindOneTaxiByCityName() {

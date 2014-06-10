@@ -11,7 +11,7 @@
 
 	<context:property-placeholder location="classpath*:bus-*.properties"/>
 
-	<context:component-scan base-package="com.techapi.bus" />
+	<context:component-scan base-package="com.techapi.bus.*" />
 
 	<context:annotation-config />
 
