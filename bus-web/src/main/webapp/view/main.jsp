@@ -8,8 +8,10 @@
 	$(function() {
 		$('#centerTab').tabs({
 			onBeforeClose: function(title){
+                alert(title);
 				return confirm('您确定要关闭当前页面吗?');
 			  },
+
 			tools : [ {
 				iconCls : 'icon-back',
 				handler : function() {
