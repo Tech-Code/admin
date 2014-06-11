@@ -27,10 +27,6 @@ public class ImportPoi {
             List<Station> stationList = cityStationMap.get(cityName);
             int lineCount = 1;
             for (Station station : stationList) {
-
-                if(lineCount == 3) {
-                    break;
-                }
                 System.out.println("BEGIN -- CityName: " + cityName + ",StationName: " + station.getStationName() + "行数: " + lineCount++);
                 System.out.println("--------------------------------");
 
@@ -70,6 +66,8 @@ public class ImportPoi {
                     String y = poiMap.get("y").toString();
                     String adminCode = poiMap.get("adminCode").toString();
                     String distance = poiMap.get("distance").toString();
+                    String address = StringUtil.getString(poiMap.get("address").toString());
+                    String tel = StringUtil.getString(poiMap.get("telephone").toString());
 
                     otype = otype.toUpperCase().replace("0X", "");
                     stype = stype.toUpperCase().replace("0X", "");
@@ -92,15 +90,13 @@ public class ImportPoi {
                     poi.setPoiId(poiid);
                     poi.setPoiName(name);
 
-                    if(poiType != null) {
-                        poi.setPoiType1(poiType.getPoiType1());
-                        poi.setPoiType2(poiType.getPoiType2());
-                        poi.setPoiType3(poiType.getPoiType3());
-                    } else {
-                        poi.setPoiType1("");
-                        poi.setPoiType2("");
-                        poi.setPoiType3("");
+                    if(poiType == null) {
+                        continue;
                     }
+
+                    poi.setPoiType1(poiType.getPoiType1());
+                    poi.setPoiType2(poiType.getPoiType2());
+                    poi.setPoiType3(poiType.getPoiType3());
 
                     poi.setPoiCoordinate(x + "," + y);
                     poi.setWalkDistance(distance);
@@ -108,6 +104,8 @@ public class ImportPoi {
                             Double.parseDouble(station.getStationLat()),
                             Double.parseDouble(x),
                             Double.parseDouble(y)));
+                    poi.setAddress(address);
+                    poi.setTel(tel);
                     poiList.add(poi);
 
 //                   System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");

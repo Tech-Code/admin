@@ -31,7 +31,6 @@ public class FileUtils {
                 for (String line : lines) {
                     String[] stationData = line.split(",");
                     Station station = new Station();
-                    System.out.println("stationData.size: " + stationData.length);
                     station.setStationId(stationData[0]);
                     station.setStationName(stationData[1]);
                     station.setStationLat(stationData[3]);

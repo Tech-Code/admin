@@ -1,19 +1,17 @@
 package com.techapi.bus.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name="BUS_POI")
 public class Poi {
 
-    @Id
-    @GeneratedValue(generator = "UUIDGenerator")
-    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid")
-    private String id;
     @Column(name="CITYCODE")
 	private String cityCode;// IS '城市代码';
+    @Id
 	@Column(name="STATIONID")
 	private String stationId;// IS '站点ID';
 	@Column(name="POIID")
@@ -37,13 +35,6 @@ public class Poi {
     @Column(name = "TEL")
     private String tel;// IS '电话';
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getCityCode() {
 		return cityCode;
