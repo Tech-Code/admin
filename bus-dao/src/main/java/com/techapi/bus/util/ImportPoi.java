@@ -28,6 +28,9 @@ public class ImportPoi {
             int lineCount = 1;
             for (Station station : stationList) {
 
+                if(lineCount == 3) {
+                    break;
+                }
                 System.out.println("BEGIN -- CityName: " + cityName + ",StationName: " + station.getStationName() + "行数: " + lineCount++);
                 System.out.println("--------------------------------");
 

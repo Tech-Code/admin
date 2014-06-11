@@ -39,7 +39,7 @@ public class HttpUtils {
 
     private static MultiThreadedHttpConnectionManager connectionManager = null;
 
-    private static int connectionTimeOut = 25000;
+    private static int connectionTimeOut = 100000;
 
     private static int socketTimeOut = 25000;
 

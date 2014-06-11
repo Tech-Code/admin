@@ -2,23 +2,17 @@ package com.techapi.bus.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="BUS_POI")
 public class Poi {
-	@Id
-    @GeneratedValue(generator = "UUIDGenerator")
-    @GenericGenerator(name="UUIDGenerator",strategy="uuid")
-    private String id;
 	@Column(name="CITYCODE")
 	private String cityCode;// IS '城市代码';
 	@Column(name="STATIONID")
 	private String stationId;// IS '站点ID';
+    @Id
 	@Column(name="POIID")
 	private String poiId;// IS 'POIID';
 	@Column(name="POINAME")
@@ -35,12 +29,6 @@ public class Poi {
 	private String walkDistance;// IS '距离站点的步行距离(米)';
 	@Column(name="ORIENTATION")
 	private String orientation;// IS '方位';
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
 	public String getCityCode() {
 		return cityCode;
 	}
