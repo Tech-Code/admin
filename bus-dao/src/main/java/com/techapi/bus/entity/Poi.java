@@ -1,18 +1,21 @@
 package com.techapi.bus.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name="BUS_POI")
 public class Poi {
-	@Column(name="CITYCODE")
+
+    @Id
+    @GeneratedValue(generator = "UUIDGenerator")
+    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid")
+    private String id;
+    @Column(name="CITYCODE")
 	private String cityCode;// IS '城市代码';
 	@Column(name="STATIONID")
 	private String stationId;// IS '站点ID';
-    @Id
 	@Column(name="POIID")
 	private String poiId;// IS 'POIID';
 	@Column(name="POINAME")
@@ -29,7 +32,20 @@ public class Poi {
 	private String walkDistance;// IS '距离站点的步行距离(米)';
 	@Column(name="ORIENTATION")
 	private String orientation;// IS '方位';
-	public String getCityCode() {
+    @Column(name = "ADDRESS")
+    private String address;// IS '地址';
+    @Column(name = "TEL")
+    private String tel;// IS '电话';
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getCityCode() {
 		return cityCode;
 	}
 	public void setCityCode(String cityCode) {
@@ -89,4 +105,20 @@ public class Poi {
 	public void setOrientation(String orientation) {
 		this.orientation = orientation;
 	}
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
 }

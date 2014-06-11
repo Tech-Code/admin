@@ -17,7 +17,7 @@ public class XMLUtils {
      * @return Map
      * @description 将xml字符串转换成map
      */
-    public static Map readStringXmlOut(String xml) {
+    public static Map readPoiXMLToMap(String xml) {
         Map result = new HashMap();
         Document doc = null;
         try {
@@ -51,6 +51,9 @@ public class XMLUtils {
                 String cityCode = poiElement.elementTextTrim("CITY_CODE");
                 String adminName = poiElement.elementTextTrim("ADMIN_NAME");
                 String distance = poiElement.elementTextTrim("distance");
+                String address = poiElement.elementTextTrim("ADDRESS");
+                String telephone = poiElement.elementTextTrim("TELEPHONE");
+
 
                 map.put("poiid", poiid);
                 map.put("name", name);
@@ -65,6 +68,8 @@ public class XMLUtils {
                 map.put("cityCode", cityCode);
                 map.put("adminName", adminName);
                 map.put("distance", distance);
+                map.put("address", address);
+                map.put("telephone", telephone);
 
                 poilist.add(map);
             }

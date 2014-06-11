@@ -51,7 +51,7 @@ public class ImportPoi {
                 // 调用接口 cityCode为三位，按照cityCode处理
                 String response = HttpUtils.URLGet("http://221.180.144.45:9092/CMPOISearch2/lnm_sisserver.php?",paraMap,"UTF-8");
                 // 解析json/xml
-                Map result = XMLUtils.readStringXmlOut(response);
+                Map result = XMLUtils.readPoiXMLToMap(response);
 
 
                 List<Map<String,String>> poilist = (List)result.get("poilist");
@@ -69,10 +69,6 @@ public class ImportPoi {
                     String x = poiMap.get("x").toString();
                     String y = poiMap.get("y").toString();
                     String adminCode = poiMap.get("adminCode").toString();
-                    String provinceName = poiMap.get("provinceName").toString();
-                    String _cityName = poiMap.get("cityName").toString();
-                    //String cityCode = poiMap.get("cityCode").toString();
-                    String adminName = poiMap.get("adminName").toString();
                     String distance = poiMap.get("distance").toString();
 
                     otype = otype.toUpperCase().replace("0X", "");
@@ -95,21 +91,26 @@ public class ImportPoi {
                     poi.setStationId(station.getStationId());
                     poi.setPoiId(poiid);
                     poi.setPoiName(name);
-                    poi.setPoiType1(poiType1);
+
                     if(poiType != null) {
+                        poi.setPoiType1(poiType.getPoiType1());
                         poi.setPoiType2(poiType.getPoiType2());
                         poi.setPoiType3(poiType.getPoiType3());
                     } else {
+                        poi.setPoiType1("");
                         poi.setPoiType2("");
                         poi.setPoiType3("");
                     }
 
                     poi.setPoiCoordinate(x + "," + y);
                     poi.setWalkDistance(distance);
-                    poi.setOrientation("");
+                    poi.setOrientation(MapUtil.getDirection(Double.parseDouble(station.getStationLon()),
+                            Double.parseDouble(station.getStationLat()),
+                            Double.parseDouble(x),
+                            Double.parseDouble(y)));
                     poiList.add(poi);
 
-//                    System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+//                   System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
                 }
                 System.out.println("--------------------------------");
             }

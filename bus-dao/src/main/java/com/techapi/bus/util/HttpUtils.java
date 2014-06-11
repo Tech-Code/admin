@@ -216,7 +216,7 @@ public class HttpUtils {
 
         String response = URLGet("http://221.180.144.45:9092/CMPOISearch2/lnm_sisserver.php?",paraMap,"UTF-8");
 
-        Map map = XMLUtils.readStringXmlOut(response);
+        Map map = XMLUtils.readPoiXMLToMap(response);
         System.out.println(response);
         Iterator iterator = map.keySet().iterator();
         while (iterator.hasNext()) {
