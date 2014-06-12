@@ -8,7 +8,7 @@
 	$(function() {
 		$('#centerTab').tabs({
 			onBeforeClose: function(title){
-                alert(title);
+                //alert(title);
 				return confirm('您确定要关闭当前页面吗?');
 			  },
 
@@ -89,8 +89,12 @@
             <div title="城际换成" style="overflow: hidden;">
                 <ul>
                     <li>
-                        <a href="javascript:addTab('tabId_adlist','城市交通站点管理','<%=root%>/view/citystation/cslist.jsp');">城际交通站点管理</a>
-                        <a href="javascript:addTab('tabId_adlist','城际交通站点管理','<%=root%>/view/transstation/tslist.jsp');">城际交通站点管理</a>
+                        <a href="javascript:addTab('tabId_cslist','城市交通站点管理','<%=root%>/view/citystation/cslist.jsp');">城际交通站点管理</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <a href="javascript:addTab('tabId_tslist','城际交通站点管理','<%=root%>/view/transstation/tslist.jsp');">城际交通站点管理</a>
                     </li>
                 </ul>
             </div>
