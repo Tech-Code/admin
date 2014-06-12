@@ -10,14 +10,10 @@ import java.util.*;
  * Created by xuefei on 6/8/14.
  */
 public class ImportPoi {
-    public static List<Poi> importPoi() {
+
+    public static List<Poi> importPoi(Map<String,List<Station>> cityStationMap,
+                                      Map<String, PoiType> poiTypeMap) {
         List<Poi> poiList = new ArrayList<>();
-
-        // 读站点信息表  Map<cityName,List<StationObject>>
-        Map<String,List<Station>> cityStationMap = FileUtils.getStationData("/Users/xuefei/Documents/MyDocument/Fun/bus/站点数据-20140609/text");
-
-        // 读取poi类别表
-        Map<String,PoiType> poiTypeMap = FileUtils.getPoiType("/Users/xuefei/Documents/MyDocument/Fun/bus/GIS地标分类表-typemap.csv");
 
         Iterator cityNameIterator = cityStationMap.keySet().iterator();
         while(cityNameIterator.hasNext()) {
@@ -120,7 +116,7 @@ public class ImportPoi {
     }
 
     public static void main(String[] args) {
-        List<Poi> poiList = importPoi();
-        System.out.println(poiList.size());
+//        List<Poi> poiList = importPoi();
+//        System.out.println(poiList.size());
     }
 }

@@ -5,10 +5,7 @@ import com.techapi.bus.entity.Station;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by xuefei on 6/9/14.
@@ -65,6 +62,23 @@ public class FileUtils {
         return poiTypeMap;
     }
 
+    public static List<Station> splitListWithStep(List<Station> stationList, int start, int step) {
+
+        if (stationList == null || stationList.isEmpty()) {
+            return null;
+        }
+        int startIndex = start;
+        int endIndex = start + step;
+        if (startIndex > endIndex || startIndex > stationList.size()) {
+            return null;
+        }
+        if (endIndex > stationList.size()) {
+            endIndex = stationList.size();
+        }
+
+        return stationList.subList(startIndex,endIndex);
+
+    }
     public static void main(String[] args) {
         Map<String,List<Station>> map = FileUtils.getStationData("/Users/xuefei/Documents/MyDocument/Fun/bus/站点数据-20140609/text");
         System.out.println(map.size());
