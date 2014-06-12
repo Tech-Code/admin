@@ -1,9 +1,6 @@
 package com.techapi.bus.dao;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
+import com.techapi.bus.entity.CityStation;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +9,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.techapi.bus.entity.CityStation;
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by CH on 4/17/14.
