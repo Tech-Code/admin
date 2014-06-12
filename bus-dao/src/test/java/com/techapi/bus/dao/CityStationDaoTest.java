@@ -61,6 +61,8 @@ public class CityStationDaoTest {
         //dao.deleteAll();
 
         System.out.println("result:" + result);
+
+        System.out.println("ss");
     }
 
     @Test
