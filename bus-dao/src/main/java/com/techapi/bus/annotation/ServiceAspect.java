@@ -3,11 +3,14 @@ package com.techapi.bus.annotation;
 
 import java.lang.reflect.Method;
 
+import javax.annotation.Resource;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.techapi.bus.util.TTL;
@@ -16,14 +19,14 @@ import com.techapi.bus.util.TTL;
  * aop拦截器,统一处理缓存
  * @ClassName: ServiceAspect
  * @author jiayusun@sohu-inc.com
- * @date 2014-1-16 下午12:26:01
  */
 @Component("ServiceAspect")
 @Aspect
 public class ServiceAspect {
 
     public static final Model m = Model.ON;
-    
+    @Autowired
+    public CacheProxy cacheProxy;
     
     @Pointcut("execution(@com.techapi.bus.annotation.ServiceCache * *(..))")  
     private void pointCutMethod() {  
@@ -34,19 +37,19 @@ public class ServiceAspect {
         Object[] arg = pjp.getArgs();    
         String methodName = pjp.getSignature().getName();
         String key = createMemacheKey(methodName,arg);
-//        Object st = MemcachedClientUtil.get(key);
-//        if(st!=null&&m==Model.ON){
-//            return st;
-//        }else{
-//            Object retVal = pjp.proceed();
-//            try {
-//                MemcachedClientUtil.set(key, getMethodTTL(pjp.getTarget().getClass(),methodName).getTime(), retVal);
-//            } catch (Exception e) {
+        System.out.println("key-------"+key);
+        Object st = cacheProxy.get(key);
+        if(st!=null&&m==Model.ON){
+            return st;
+        }else{
+            Object retVal = pjp.proceed();
+            try {
+            	cacheProxy.put(key, retVal,getMethodTTL(pjp.getTarget().getClass(),methodName).getTime());
+            } catch (Exception e) {
 //                logger.error("memcache set error: key is {}",key,e);
-//            }
-//            return retVal;
-//        }
-    	return null;
+            }
+            return retVal;
+        }
     }
 
     public String createMemacheKey(String methodName,Object[] arg){

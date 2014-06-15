@@ -9,11 +9,12 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Component;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-
+@Component("cacheProxy")
 public class CacheProxyJedisImpl implements CacheProxy {
 
 	private static final Log log = LogFactory.getLog(CacheProxyJedisImpl.class);

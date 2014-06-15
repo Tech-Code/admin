@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +36,7 @@ public class BusDataAPIServiceTest {
 	public void testFindOneTaxiByCityName() {
 		Taxi t = busDataAPIService.findOneTaxiByCityName("北京市");
 		System.out.println("test");
-		System.out.println(t.getCityName());
+//		System.out.println(t.getCityName());
 	}
 
 	@Test
