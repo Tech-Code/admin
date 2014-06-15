@@ -1,6 +1,8 @@
 package com.techapi.bus.data;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -48,11 +50,28 @@ public class BusDataAPIService {
 	/**
 	 * 根据地标点获得POI（实时接口）
 	 * @param stationid 站点ID
+	 * @param stationid 返回数据条数
 	 * @return
 	 */
-	public List<Poi> findPoiBystationID(String stationid){
+	public List<Poi> findPoiBystationID(String stationid,Integer num){
 		List<Poi> poiList =poiDao.findBystationID(stationid);
+		if(poiList.size()>num){
+			return poiList.subList(0, num);
+		}
 		return poiList;
+	}
+	/***
+	 * 批量返回一批地标点获得POI（实时接口）
+	 * @param stationid... 地标点串
+	 * @return
+	 */
+	public Map<String,List<Poi>>  findPoiBystationIDList(String... stationids){
+		Map<String,List<Poi>> map = new HashMap<String,List<Poi>>();
+		for(String stationid:stationids){
+			List<Poi> poiList =poiDao.findBystationID(stationid);
+			map.put(stationid, poiList);
+		}
+		return map;
 	}
 	/***
 	 * 根据城市名获得一个出租车费用

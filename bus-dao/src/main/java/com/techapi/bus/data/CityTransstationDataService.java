@@ -1,6 +1,7 @@
 package com.techapi.bus.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,12 +22,11 @@ public class CityTransstationDataService {
 	 * @return
 	 */
 	public List<CityTransstationRelation> getAllCityTransstation() {
+		
+		
 		List<CityTransstationRelation> ctrList = new ArrayList<CityTransstationRelation>();
-		/***
-		 * Map<交通工具类型，城际换乘信息实体>
-		 */
-		Map<String, List<TransstationInformation>> slMap = new ConcurrentHashMap<String, List<TransstationInformation>>();
-
+		
+		Map<String, Map<String,List<TransstationInformation>>> slMap = new ConcurrentHashMap<String, Map<String,List<TransstationInformation>>>();
 		List<Object[]> cityTransstationList = this.dao
 				.findCityAndTransstation();
 		for (Object[] o : cityTransstationList) {
@@ -47,19 +47,28 @@ public class CityTransstationDataService {
 					stationorder, coordinate, arrivetime, departtime, miles,
 					price, cityname);
 			if (slMap.containsKey(transtype)) {
-				slMap.get(transtype).add(tif);
+				Map<String,List<TransstationInformation>> slt = slMap.get(transtype);
+				if(slt.containsKey(trips)){
+					slt.get(trips).add(tif);
+				}else{
+					List<TransstationInformation> tifList = new ArrayList<TransstationInformation>();
+					tifList.add(tif);
+					slt.put(trips, tifList);
+				}
 			} else {
 				List<TransstationInformation> tifList = new ArrayList<TransstationInformation>();
 				tifList.add(tif);
-				slMap.put(transtype, tifList);
+				Map<String,List<TransstationInformation>> slt = new HashMap<String,List<TransstationInformation>>();
+				slt.put(trips, tifList);
+				slMap.put(transtype, slt);
 			}
 		}
+		
 		// 遍历Map对象
-		for (Entry<String, List<TransstationInformation>> entry : slMap
-				.entrySet()) {
+		for (Entry<String, Map<String,List<TransstationInformation>>> entry : slMap.entrySet()) {
 			CityTransstationRelation ctr = new CityTransstationRelation();
-			ctr.setTranstype(entry.getKey());
 			ctr.setTransstationInformation(entry.getValue());
+			ctr.setTranstype(entry.getKey());
 			ctrList.add(ctr);
 		}
 		return ctrList;
