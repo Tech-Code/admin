@@ -16,11 +16,11 @@
 </style>
 </head>
 <body>
-	<form action="" class="formular" id="csForm">
+	<form action="" class="formular" id="poiForm">
 		<%--<input type="hidden" id="lng" name="lng" value="${cs.lng }" />--%>
 		<%--<input type="hidden" id="lat" name="lat" value="${cs.lat }" />--%>
-		<input type="hidden" id="transdetail" name="transdetail" value="${cs.transdetail }" />
-		<input type="hidden" id="id" name="id" value="${cs.id }" />
+		<%--<input type="hidden" id="transdetail" name="transdetail" value="${cs.transdetail }" />--%>
+		<%--<input type="hidden" id="id" name="id" value="${cs.id }" />--%>
 
 		<fieldset>
 			<legend> 基础信息 </legend>
@@ -114,15 +114,15 @@
     }
 
 	function add() {
-        var transdetails = "";
-        $("input[name='transdetailGroup']").each(function(){
-            if(true==$(this).attr("checked")) {
-                transdetails = transdetails + $(this).attr('value') + ";";
-            }
-        })
-        $("#transdetail").attr('value',transdetails);
+//        var transdetails = "";
+//        $("input[name='transdetailGroup']").each(function(){
+//            if(true==$(this).attr("checked")) {
+//                transdetails = transdetails + $(this).attr('value') + ";";
+//            }
+//        })
+//        $("#transdetail").attr('value',transdetails);
 
-		$.post("${ctx}/citystation/add", $("#csForm").serializeArray(),
+		$.post("${ctx}/poi/add", $("#poiForm").serializeArray(),
 			function(data) {
 				$.messager.alert('提示', "操作成功", 'info');
 				//$('#MyPopWindow').window('close');

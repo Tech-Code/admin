@@ -50,7 +50,7 @@ public class PoiController {
     public String update(Model model, String id) throws Exception {
         Poi poi = poiService.findById(id);
         model.addAttribute(Constants.CS_INFO_SESSION, poi);
-        return "citystation/add";
+        return "poi/add";
     }
 
     @RequestMapping(value = "/delete")
