@@ -11,6 +11,6 @@ import com.techapi.bus.entity.Poi;
 public interface PoiDao extends PagingAndSortingRepository<Poi, String>{
 
 	@Query("select c from Poi c "
-			+ "where c.stationId = :stationid ")
+			+ "where c.stationId = :stationid order by walkDistance asc")
 	public List<Poi> findBystationID(@Param("stationid") String stationid);
 }
