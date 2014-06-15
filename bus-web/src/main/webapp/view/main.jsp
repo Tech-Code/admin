@@ -97,6 +97,22 @@
                         <a href="javascript:addTab('tabId_tslist','城际交通站点管理','<%=root%>/view/transstation/tslist.jsp');">城际交通站点管理</a>
                     </li>
                 </ul>
+                <ul>
+                    <li>
+                        <a href="javascript:addTab('tabId_poilist','公交站点地标管理','<%=root%>/view/poi/poilist.jsp');">公交站点地标管理</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <a href="javascript:addTab('tabId_bclist','公交车费用配置管理','<%=root%>/view/cost/bclist.jsp');">公交车费用配置管理</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <a href="javascript:addTab('tabId_splist','时速配置管理','<%=root%>/view/speed/splist.jsp');">时速配置管理</a>
+                    </li>
+                </ul>
+
             </div>
 
 
