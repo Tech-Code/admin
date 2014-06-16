@@ -104,7 +104,7 @@
                 </ul>
                 <ul>
                     <li>
-                        <a href="javascript:addTab('tabId_bclist','公交车费用配置管理','<%=root%>/view/cost/bclist.jsp');">公交车费用配置管理</a>
+                        <a href="javascript:addTab('tabId_bclist','公交车费用配置管理','<%=root%>/view/taxi/taxilist.jsp');">公交车费用配置管理</a>
                     </li>
                 </ul>
                 <ul>

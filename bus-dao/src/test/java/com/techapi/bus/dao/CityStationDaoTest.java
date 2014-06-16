@@ -10,6 +10,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -77,6 +80,33 @@ public class CityStationDaoTest {
         cityStation.setTransdetail("111");
         cityStation.setTransType("11");
         dao.save(cityStation);
+    }
+
+    @Test
+    @Rollback(false)
+    public void importCityStationData() {
+        File file = new File("/Users/xuefei/Desktop/BUS_CITYSTATION.csv");
+
+        try {
+            List<String> lines = org.apache.commons.io.FileUtils.readLines(file);
+            List<CityStation> cityStationList = new ArrayList<>();
+            for (String line : lines) {
+                System.out.println("line: " + line);
+                String[] cityStationData = line.split(",");
+                CityStation cityStation = new CityStation();
+                cityStation.setCityCode(cityStationData[0]);
+                cityStation.setCityName(cityStationData[1]);
+                cityStation.setTransType(cityStationData[2]);
+                cityStation.setStationName(cityStationData[3]);
+                cityStation.setTransdetail(cityStationData[4]);
+                cityStation.setCoordinate((cityStationData[5]+ "," + cityStationData[6]).replace("\"",""));
+                cityStationList.add(cityStation);
+            }
+
+            dao.save(cityStationList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

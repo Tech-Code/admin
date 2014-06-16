@@ -1,12 +1,8 @@
 package com.techapi.bus.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name="BUS_TRANSSTATION")
@@ -27,7 +23,7 @@ public class Transstation {
 	@Column(name="STATION")
 	private String station;//	站点	VARCHAR2(64)
 	@Column(name="STATIONORDER")
-	private String stationOrder;//	站序	NUMBER(6)
+	private int stationOrder;//	站序	NUMBER(6)
 	@Column(name="COORDINATE")
 	private String coordinate;//	站点坐标	VARCHAR2(64)
 	@Column(name="ARRIVETIME")
@@ -74,10 +70,10 @@ public class Transstation {
 	public void setStation(String station) {
 		this.station = station;
 	}
-	public String getStationOrder() {
+	public int getStationOrder() {
 		return stationOrder;
 	}
-	public void setStationOrder(String stationOrder) {
+	public void setStationOrder(int stationOrder) {
 		this.stationOrder = stationOrder;
 	}
 	public String getCoordinate() {

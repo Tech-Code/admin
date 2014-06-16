@@ -12,15 +12,15 @@ public class CityStation {
     @GenericGenerator(name="UUIDGenerator",strategy="uuid")
     private String id;
 
-    @Column(name="CITY_CODE")
+    @Column(name="CITYCODE")
 	private String cityCode;
-	@Column(name="CITY_NAME")
+	@Column(name="CITYNAME")
 	private String cityName;
-	@Column(name="TRANS_TYPE")
+	@Column(name="TRANSTYPE")
 	private String transType;
-	@Column(name="STATION_NAME")
+	@Column(name="STATIONNAME")
 	private String stationName;
-	@Column(name="TRANS_DETAIL")
+	@Column(name="TRANSDETAIL")
 	private String transdetail;
 	@Column(name="COORDINATE")
 	private String coordinate;
