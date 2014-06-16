@@ -109,7 +109,7 @@
                 </ul>
                 <ul>
                     <li>
-                        <a href="javascript:addTab('tabId_splist','时速配置管理','<%=root%>/view/speed/splist.jsp');">时速配置管理</a>
+                        <a href="javascript:addTab('tabId_splist','时速配置管理','<%=root%>/view/speed/speedlist.jsp');">时速配置管理</a>
                     </li>
                 </ul>
 

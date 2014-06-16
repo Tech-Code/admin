@@ -16,7 +16,7 @@
 			collapsible : true,//可折叠
 			url : "${ctx}/poi/list", //数据来源
 			sortOrder : 'desc', //倒序
-			idField:'stationId', //主键字段
+			idField:'id', //主键字段
 			remoteSort : true, //服务器端排序
 			pagination : true, //显示分页
 			rownumbers : true, //显示行号
@@ -167,7 +167,7 @@
 		var ps = "";
 		$.each(rows, function(i, n) {
 			if (i == 0)
-				ps += "?id=" + n.stationId;
+				ps += "?id=" + n.id;
 		});
 		
 		var url = '<%=root%>/poi/update' + ps;
@@ -194,9 +194,9 @@
 				var ps = "";
 				$.each(rows, function(i, n) {
 					if (i == 0)
-						ps += "?id=" + n.stationId;
+						ps += "?id=" + n.id;
 					else
-						ps += "&id=" + n.stationId;
+						ps += "&id=" + n.id;
 				});
 				$.post('<%=root%>/poi/delete' + ps, function() {
 					$('#poiTable').datagrid('reload');

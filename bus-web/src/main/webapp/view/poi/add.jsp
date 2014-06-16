@@ -19,51 +19,51 @@
 	<form action="" class="formular" id="poiForm">
 		<%--<input type="hidden" id="lng" name="lng" value="${cs.lng }" />--%>
 		<%--<input type="hidden" id="lat" name="lat" value="${cs.lat }" />--%>
-		<%--<input type="hidden" id="transdetail" name="transdetail" value="${cs.transdetail }" />--%>
-		<%--<input type="hidden" id="id" name="id" value="${cs.id }" />--%>
+		<input type="hidden" id="orientation" name="orientation" value="${poi.orientation }" />
+		<input type="hidden" id="id" name="id" value="${poi.id }" />
 
 		<fieldset>
 			<legend> 基础信息 </legend>
 			<div style="width:39%;height:520px;float: left">
 				<label>
 					<span>城市代码</span>
-					<input name="cityCode" value="${cs.cityCode }" class="text-input"/>
+					<input name="cityCode" value="${poi.cityCode }" class="text-input"/>
 				</label>
 				<label>
 					<span>站点ID</span>
-                    <input name="stationId" value="${cs.stationId }" class="text-input"/>
+                    <input name="stationId" value="${poi.stationId }" class="text-input"/>
                 </label>
                 <label>
 					<span>POIID</span>
-                    <input name="poiId" value="${cs.poiId }" class="text-input"/>
+                    <input name="poiId" value="${poi.poiId }" class="text-input"/>
                 </label>
                 <label>
 					<span>地标点名称</span>
-                    <input name="poiName" value="${cs.poiName }" class="text-input"/>
+                    <input name="poiName" value="${poi.poiName }" class="text-input"/>
                 </label>
                 <label>
 					<span>地标点大类型</span>
-                    <input name="poiType1" value="${cs.poiType1 }" class="text-input"/>
+                    <input name="poiType1" value="${poi.poiType1 }" class="text-input"/>
                 </label>
                 <label>
 					<span>地标点中类型</span>
-                    <input name="poiType2" value="${cs.poiType2 }" class="text-input"/>
+                    <input name="poiType2" value="${poi.poiType2 }" class="text-input"/>
                 </label>
                 <label>
 					<span>地标点小类型</span>
-                    <input name="poiType3" value="${cs.poiType3 }" class="text-input"/>
+                    <input name="poiType3" value="${poi.poiType3 }" class="text-input"/>
                 </label>
                 <label>
 					<span>地标点坐标</span>
-                    <input name="poiCoordinate" value="${cs.poiCoordinate }" class="text-input"/>
+                    <input name="poiCoordinate" value="${poi.poiCoordinate }" class="text-input"/>
                 </label>
                 <label>
 					<span>地址</span>
-                    <input name="address" value="${cs.address }" class="text-input"/>
+                    <input name="address" value="${poi.address }" class="text-input"/>
                 </label>
                 <label>
 					<span>电话</span>
-                    <input name="tel" value="${cs.tel }" class="text-input"/>
+                    <input name="tel" value="${poi.tel }" class="text-input"/>
                 </label>
 			</div>
 			<div style="width:60%;height:300px;border: 1px solid gray;float: right;" id="container"> </div>
@@ -142,7 +142,7 @@
 	<%--}, 200);--%>
 	<%----%>
 	<%--setTimeout(function(){--%>
-		<%--editor.setContent('${cs.adContent }', false)--%>
+		<%--editor.setContent('${poi.adContent }', false)--%>
 	<%--}, 1000);--%>
 	
 </script>

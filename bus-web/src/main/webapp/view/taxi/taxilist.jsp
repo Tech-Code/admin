@@ -5,7 +5,7 @@
 <head>
 <script type="text/javascript">
 	jQuery(function($) {
-		$('#bcTable').datagrid({
+		$('#taxiTable').datagrid({
 			title : '公交车费用配置表', //标题
 			method : 'post',
 			iconCls : 'icon-edit', //图标
@@ -140,18 +140,18 @@
 				}
 			}],
 			onLoadSuccess : function() {
-				$('#bcTable').datagrid('clearSelections'); //一定要加上这一句，要不然datagrid会记住之前的选择状态，删除时会出问题
+				$('#taxiTable').datagrid('clearSelections'); //一定要加上这一句，要不然datagrid会记住之前的选择状态，删除时会出问题
 			}
 		});
 	});
 	//新增
 	function addrow() {
-		parent.addTab('tabId_bc_add','添加公交车费用','<%=root%>/view/taxi/add.jsp');
+		parent.addTab('tabId_taxi_add','添加公交车费用','<%=root%>/view/taxi/add.jsp');
 
 	}
 	//更新
 	function updaterow() {
-		var rows = $('#bcTable').datagrid('getSelections');
+		var rows = $('#taxiTable').datagrid('getSelections');
 		//这里有一个jquery easyui datagrid的一个小bug，必须把主键单独列出来，要不然不能多选
 		if (rows.length == 0) {
 			$.messager.alert('提示', "请选择你要更新的公交车费用", 'info');
@@ -170,17 +170,6 @@
 		
 		var url = '<%=root%>/taxi/update' + ps;
 
-//        $('#dd').dialog({
-//            title: 'My Dialog',
-//            width: 400,
-//            height: 200,
-//            close: false,
-//            cache: false,
-//            href: url,
-//            modal: true
-//        });
-        //$('#dd').dialog('refresh', 'new_content.php');
-
 		parent.addTab('tabId_bc_update','更新公交车费用',url);
 	}
 
@@ -188,16 +177,16 @@
 	function deleterow() {
 		$.messager.confirm('提示', '确定要删除吗?', function(result) {
 			if (result) {
-				var rows = $('#bcTable').datagrid('getSelections');
+				var rows = $('#taxiTable').datagrid('getSelections');
 				var ps = "";
 				$.each(rows, function(i, n) {
 					if (i == 0)
-						ps += "?id=" + n.stationId;
+						ps += "?id=" + n.id;
 					else
-						ps += "&id=" + n.stationId;
+						ps += "&id=" + n.id;
 				});
 				$.post('<%=root%>/taxi/delete' + ps, function() {
-					$('#bcTable').datagrid('reload');
+					$('#taxiTable').datagrid('reload');
 					$.messager.alert('删除', '删除已成功', 'info');
 				});
 			}
@@ -208,7 +197,7 @@
 
 <body>
 	<div style="padding: 10" id="tabdiv">
-		<table id="bcTable"></table>
+		<table id="taxiTable"></table>
 	</div>
 </body>
 </html>

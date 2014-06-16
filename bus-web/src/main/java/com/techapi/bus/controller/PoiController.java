@@ -49,7 +49,7 @@ public class PoiController {
     @RequestMapping("/update")
     public String update(Model model, String id) throws Exception {
         Poi poi = poiService.findById(id);
-        model.addAttribute(Constants.CS_INFO_SESSION, poi);
+        model.addAttribute(Constants.POI_INFO_SESSION, poi);
         return "poi/add";
     }
 

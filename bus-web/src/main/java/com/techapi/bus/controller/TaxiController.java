@@ -49,7 +49,7 @@ public class TaxiController {
     @RequestMapping("/update")
     public String update(Model model, String id) throws Exception {
         Taxi taxi = taxiService.findById(id);
-        model.addAttribute(Constants.CS_INFO_SESSION, taxi);
+        model.addAttribute(Constants.TAXI_INFO_SESSION, taxi);
         return "taxi/add";
     }
 

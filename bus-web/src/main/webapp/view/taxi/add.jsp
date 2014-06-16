@@ -17,61 +17,58 @@
 </head>
 <body>
 	<form action="" class="formular" id="taxiForm">
-		<%--<input type="hidden" id="lng" name="lng" value="${cs.lng }" />--%>
-		<%--<input type="hidden" id="lat" name="lat" value="${cs.lat }" />--%>
-		<%--<input type="hidden" id="transdetail" name="transdetail" value="${cs.transdetail }" />--%>
-		<%--<input type="hidden" id="id" name="id" value="${cs.id }" />--%>
+		<input type="hidden" id="id" name="id" value="${taxi.id }" />
 
 		<fieldset>
 			<legend> 基础信息 </legend>
 			<div style="width:39%;height:620px;float: left">
 				<label>
 					<span>城市代码</span>
-					<input name="cityCode" value="${cs.cityCode }" class="text-input"/>
+					<input name="cityCode" value="${taxi.cityCode }" class="text-input"/>
 				</label>
 				<label>
 					<span>城市名称</span>
-                    <input name="cityName" value="${cs.cityName }" class="text-input"/>
+                    <input name="cityName" value="${taxi.cityName }" class="text-input"/>
                 </label>
                 <label>
 					<span>日间时间区间</span>
-                    <input name="d_timesection" value="${cs.d_timesection }" class="text-input"/>
+                    <input name="d_timesection" value="${taxi.d_timesection }" class="text-input"/>
                 </label>
                 <label>
 					<span>起步公里数</span>
-                    <input name="d_s_miles" value="${cs.d_s_miles }" class="text-input"/>
+                    <input name="d_s_miles" value="${taxi.d_s_miles }" class="text-input"/>
                 </label>
                 <label>
 					<span>起步价</span>
-                    <input name="d_s_cost" value="${cs.d_s_cost }" class="text-input"/>
+                    <input name="d_s_cost" value="${taxi.d_s_cost }" class="text-input"/>
                 </label>
                 <label>
 					<span>超出起步单价</span>
-                    <input name="d_exceed_s_cost" value="${cs.d_exceed_s_cost }" class="text-input"/>
+                    <input name="d_exceed_s_cost" value="${taxi.d_exceed_s_cost }" class="text-input"/>
                 </label>
                 <label>
 					<span>超出规定距离单价</span>
-                    <input name="d_s_exceed_d_cost" value="${cs.d_s_exceed_d_cost }" class="text-input"/>
+                    <input name="d_s_exceed_d_cost" value="${taxi.d_s_exceed_d_cost }" class="text-input"/>
                 </label>
                 <label>
 					<span>夜间时间区间</span>
-                    <input name="n_timesection" value="${cs.n_timesection }" class="text-input"/>
+                    <input name="n_timesection" value="${taxi.n_timesection }" class="text-input"/>
                 </label>
                 <label>
 					<span>夜间起步公里数</span>
-                    <input name="n_s_miles" value="${cs.n_s_miles }" class="text-input"/>
+                    <input name="n_s_miles" value="${taxi.n_s_miles }" class="text-input"/>
                 </label>
                 <label>
 					<span>夜间起步价(元)</span>
-                    <input name="n_s_cost" value="${cs.n_s_cost }" class="text-input"/>
+                    <input name="n_s_cost" value="${taxi.n_s_cost }" class="text-input"/>
                 </label>
                 <label>
 					<span>夜间超出起步单价</span>
-                    <input name="n_exceed_s_cost" value="${cs.n_exceed_s_cost }" class="text-input"/>
+                    <input name="n_exceed_s_cost" value="${taxi.n_exceed_s_cost }" class="text-input"/>
                 </label>
                 <label>
 					<span>夜间超出规定距离单价</span>
-                    <input name="n_s_exceed_d_cost" value="${cs.n_s_exceed_d_cost }" class="text-input"/>
+                    <input name="n_s_exceed_d_cost" value="${taxi.n_s_exceed_d_cost }" class="text-input"/>
                 </label>
 			</div>
 			<div style="width:60%;height:300px;border: 1px solid gray;float: right;" id="container"> </div>
@@ -122,13 +119,6 @@
     }
 
 	function add() {
-//        var transdetails = "";
-//        $("input[name='transdetailGroup']").each(function(){
-//            if(true==$(this).attr("checked")) {
-//                transdetails = transdetails + $(this).attr('value') + ";";
-//            }
-//        })
-//        $("#transdetail").attr('value',transdetails);
 
 		$.post("${ctx}/taxi/add", $("#taxiForm").serializeArray(),
 			function(data) {
@@ -150,7 +140,7 @@
 	<%--}, 200);--%>
 	<%----%>
 	<%--setTimeout(function(){--%>
-		<%--editor.setContent('${cs.adContent }', false)--%>
+		<%--editor.setContent('${taxi.adContent }', false)--%>
 	<%--}, 1000);--%>
 	
 </script>

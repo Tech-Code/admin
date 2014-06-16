@@ -40,7 +40,7 @@
                     <option value="飞机" <c:if test="${cs.transType=='飞机' }" >selected</c:if>>飞机</option>
                     <option value="轮渡" <c:if test="${cs.transType=='轮渡' }" >selected</c:if>>轮渡</option>
                     </select>
-                    </label>
+                </label>
 				<label>
 					<span>站名</span>
 					<input name="stationName" value="${cs.stationName }" class="text-input" />
