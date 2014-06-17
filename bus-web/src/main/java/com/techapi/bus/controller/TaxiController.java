@@ -1,7 +1,7 @@
 package com.techapi.bus.controller;
 
-import com.techapi.bus.entity.Poi;
-import com.techapi.bus.service.PoiService;
+import com.techapi.bus.entity.Taxi;
+import com.techapi.bus.service.TaxiService;
 import com.techapi.bus.util.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,20 +16,20 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/poi")
-public class PoiController {
+@RequestMapping("/taxi")
+public class TaxiController {
 
 	@Resource
-	private PoiService poiService;
+	private TaxiService taxiService;
 
     @RequestMapping(value = "/add")
     @ResponseBody
-    public Map<String, String> add(Poi poi, HttpServletRequest request)
+    public Map<String, String> add(Taxi taxi, HttpServletRequest request)
             throws Exception {
         Map<String, String> map = new HashMap<>();
 
         try {
-            poiService.addOrUpdate(poi);
+            taxiService.addOrUpdate(taxi);
             map.put("mes", "操作成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,14 +43,14 @@ public class PoiController {
 	@RequestMapping("/list")
     @ResponseBody
 	public Map<String, Object> list() throws Exception {
-        return poiService.findAll();
+        return taxiService.findAll();
 	}
 
     @RequestMapping("/update")
     public String update(Model model, String id) throws Exception {
-        Poi poi = poiService.findById(id);
-        model.addAttribute(Constants.POI_INFO_SESSION, poi);
-        return "poi/add";
+        Taxi taxi = taxiService.findById(id);
+        model.addAttribute(Constants.TAXI_INFO_SESSION, taxi);
+        return "taxi/add";
     }
 
     @RequestMapping(value = "/delete")
@@ -59,8 +59,8 @@ public class PoiController {
             throws Exception {
         Map<String, String> map = new HashMap<String, String>();
         try {
-            List<Poi> poiList = poiService.findByIds(ids);
-            poiService.deleteMany(poiList);
+            List<Taxi> taxiList = taxiService.findByIds(ids);
+            taxiService.deleteMany(taxiList);
             map.put("mes", "删除成功");
         } catch (Exception e) {
             e.printStackTrace();

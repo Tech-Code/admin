@@ -1,7 +1,7 @@
 package com.techapi.bus.controller;
 
-import com.techapi.bus.entity.Poi;
-import com.techapi.bus.service.PoiService;
+import com.techapi.bus.entity.Speed;
+import com.techapi.bus.service.SpeedService;
 import com.techapi.bus.util.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,20 +16,20 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/poi")
-public class PoiController {
+@RequestMapping("/speed")
+public class SpeedController {
 
 	@Resource
-	private PoiService poiService;
+	private SpeedService speedService;
 
     @RequestMapping(value = "/add")
     @ResponseBody
-    public Map<String, String> add(Poi poi, HttpServletRequest request)
+    public Map<String, String> add(Speed speed, HttpServletRequest request)
             throws Exception {
         Map<String, String> map = new HashMap<>();
 
         try {
-            poiService.addOrUpdate(poi);
+            speedService.addOrUpdate(speed);
             map.put("mes", "操作成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,14 +43,14 @@ public class PoiController {
 	@RequestMapping("/list")
     @ResponseBody
 	public Map<String, Object> list() throws Exception {
-        return poiService.findAll();
+        return speedService.findAll();
 	}
 
     @RequestMapping("/update")
     public String update(Model model, String id) throws Exception {
-        Poi poi = poiService.findById(id);
-        model.addAttribute(Constants.POI_INFO_SESSION, poi);
-        return "poi/add";
+        Speed speed = speedService.findById(id);
+        model.addAttribute(Constants.SPEED_INFO_SESSION, speed);
+        return "speed/add";
     }
 
     @RequestMapping(value = "/delete")
@@ -59,8 +59,8 @@ public class PoiController {
             throws Exception {
         Map<String, String> map = new HashMap<String, String>();
         try {
-            List<Poi> poiList = poiService.findByIds(ids);
-            poiService.deleteMany(poiList);
+            List<Speed> speedList = speedService.findByIds(ids);
+            speedService.deleteMany(speedList);
             map.put("mes", "删除成功");
         } catch (Exception e) {
             e.printStackTrace();

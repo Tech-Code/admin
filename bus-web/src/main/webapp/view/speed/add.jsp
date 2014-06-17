@@ -16,54 +16,34 @@
 </style>
 </head>
 <body>
-	<form action="" class="formular" id="poiForm">
-		<%--<input type="hidden" id="lng" name="lng" value="${cs.lng }" />--%>
-		<%--<input type="hidden" id="lat" name="lat" value="${cs.lat }" />--%>
-		<input type="hidden" id="orientation" name="orientation" value="${poi.orientation }" />
-		<input type="hidden" id="id" name="id" value="${poi.id }" />
+	<form action="" class="formular" id="speedForm">
+		<input type="hidden" id="id" name="id" value="${speed.id }" />
 
 		<fieldset>
 			<legend> 基础信息 </legend>
-			<div style="width:39%;height:520px;float: left">
+			<div style="width:39%;height:350px;float: left">
 				<label>
-					<span>城市代码</span>
-					<input name="cityCode" value="${poi.cityCode }" class="text-input"/>
+                    <span>交通工具类型</span>
+                    <select name="tranSportation" class="text-input">
+                        <option value="公交车" <c:if test="${speed.tranSportation=='公交车' }">selected</c:if>>公交车</option>
+                        <option value="出租车" <c:if test="${speed.tranSportation=='出租车' }">selected</c:if>>出租车</option>
+                    </select>
 				</label>
 				<label>
-					<span>站点ID</span>
-                    <input name="stationId" value="${poi.stationId }" class="text-input"/>
+					<span>交通工具明细</span>
+                    <input name="tranSportDes" value="${speed.tranSportDes }" class="text-input"/>
                 </label>
                 <label>
-					<span>POIID</span>
-                    <input name="poiId" value="${poi.poiId }" class="text-input"/>
+					<span>时速</span>
+                    <input name="speed" value="${speed.speed }" class="text-input"/>
                 </label>
                 <label>
-					<span>地标点名称</span>
-                    <input name="poiName" value="${poi.poiName }" class="text-input"/>
+					<span>城市代码</span>
+                    <input name="cityCode" value="${speed.cityCode }" class="text-input"/>
                 </label>
                 <label>
-					<span>地标点大类型</span>
-                    <input name="poiType1" value="${poi.poiType1 }" class="text-input"/>
-                </label>
-                <label>
-					<span>地标点中类型</span>
-                    <input name="poiType2" value="${poi.poiType2 }" class="text-input"/>
-                </label>
-                <label>
-					<span>地标点小类型</span>
-                    <input name="poiType3" value="${poi.poiType3 }" class="text-input"/>
-                </label>
-                <label>
-					<span>地标点坐标</span>
-                    <input name="poiCoordinate" value="${poi.poiCoordinate }" class="text-input"/>
-                </label>
-                <label>
-					<span>地址</span>
-                    <input name="address" value="${poi.address }" class="text-input"/>
-                </label>
-                <label>
-					<span>电话</span>
-                    <input name="tel" value="${poi.tel }" class="text-input"/>
+					<span>城市名</span>
+                    <input name="cityName" value="${speed.cityName }" class="text-input"/>
                 </label>
 			</div>
 			<div style="width:60%;height:300px;border: 1px solid gray;float: right;" id="container"> </div>
@@ -108,11 +88,6 @@
 		$('#lat').val(pt.lat);
 	});
 
-    function getTransdetail(transdetails) {
-
-
-    }
-
 	function add() {
 //        var transdetails = "";
 //        $("input[name='transdetailGroup']").each(function(){
@@ -122,7 +97,7 @@
 //        })
 //        $("#transdetail").attr('value',transdetails);
 
-		$.post("${ctx}/poi/add", $("#poiForm").serializeArray(),
+		$.post("${ctx}/speed/add", $("#speedForm").serializeArray(),
 			function(data) {
 				$.messager.alert('提示', "操作成功", 'info');
 				//$('#MyPopWindow').window('close');
@@ -142,7 +117,7 @@
 	<%--}, 200);--%>
 	<%----%>
 	<%--setTimeout(function(){--%>
-		<%--editor.setContent('${poi.adContent }', false)--%>
+		<%--editor.setContent('${speed.adContent }', false)--%>
 	<%--}, 1000);--%>
 	
 </script>

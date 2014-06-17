@@ -1,17 +1,19 @@
 package com.techapi.bus.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name="BUS_POI")
 public class Poi {
 
+    @Id
+    @GeneratedValue(generator = "UUIDGenerator")
+    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid")
+    private String id;
     @Column(name="CITYCODE")
 	private String cityCode;// IS '城市代码';
-    @Id
 	@Column(name="STATIONID")
 	private String stationId;// IS '站点ID';
 	@Column(name="POIID")
@@ -27,7 +29,7 @@ public class Poi {
 	@Column(name="POICOORDINATE")
 	private String poiCoordinate;// IS 'POI坐标';
 	@Column(name="WALKDISTANCE")
-	private String walkDistance;// IS '距离站点的步行距离(米)';
+	private double walkDistance;// IS '距离站点的步行距离(米)';
 	@Column(name="ORIENTATION")
 	private String orientation;// IS '方位';
     @Column(name = "ADDRESS")
@@ -35,6 +37,13 @@ public class Poi {
     @Column(name = "TEL")
     private String tel;// IS '电话';
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getCityCode() {
 		return cityCode;
@@ -84,10 +93,10 @@ public class Poi {
 	public void setPoiCoordinate(String poiCoordinate) {
 		this.poiCoordinate = poiCoordinate;
 	}
-	public String getWalkDistance() {
+	public double getWalkDistance() {
 		return walkDistance;
 	}
-	public void setWalkDistance(String walkDistance) {
+	public void setWalkDistance(double walkDistance) {
 		this.walkDistance = walkDistance;
 	}
 	public String getOrientation() {

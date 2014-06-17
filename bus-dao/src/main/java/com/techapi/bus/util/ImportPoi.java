@@ -95,7 +95,7 @@ public class ImportPoi {
                     poi.setPoiType3(poiType.getPoiType3());
 
                     poi.setPoiCoordinate(x + "," + y);
-                    poi.setWalkDistance(distance);
+                    poi.setWalkDistance(Double.parseDouble(distance));
                     poi.setOrientation(MapUtil.getDirection(Double.parseDouble(station.getStationLon()),
                             Double.parseDouble(station.getStationLat()),
                             Double.parseDouble(x),

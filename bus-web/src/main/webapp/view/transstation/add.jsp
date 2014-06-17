@@ -16,84 +16,74 @@
 </style>
 </head>
 <body>
-	<form action="" class="formular" id="csForm">
-		<%--<input type="hidden" id="lng" name="lng" value="${cs.lng }" />--%>
-		<%--<input type="hidden" id="lat" name="lat" value="${cs.lat }" />--%>
-		<input type="hidden" id="transdetail" name="transdetail" value="${cs.transdetail }" />
-		<input type="hidden" id="id" name="id" value="${cs.id }" />
+	<form action="" class="formular" id="tsForm">
+        <input type="hidden" id="id" name="id" value="${ts.id }" />
 
 		<fieldset>
 			<legend> 基础信息 </legend>
-			<div style="width:39%;height:370px;float: left">
-				<label>
-					<span>城市代码</span>
-					<input name="cityCode" value="${cs.cityCode }" class="text-input"/>
-				</label>
-				<label>
-					<span>城市名称</span>
-                    <input name="cityName" value="${cs.cityName }" class="text-input"/>
-                </label>
+			<div style="width:39%;height:600px;float: left">
                 <label>
                     <span>交通工具类型</span>
                     <select name="transType" class="text-input" >
-                    <option value="火车" <c:if test="${cs.transType=='火车' }" >selected</c:if>>火车</option>
-                    <option value="飞机" <c:if test="${cs.transType=='飞机' }" >selected</c:if>>飞机</option>
-                    <option value="轮渡" <c:if test="${cs.transType=='轮渡' }" >selected</c:if>>轮渡</option>
+                    <option value="火车" <c:if test="${ts.transType=='火车' }" >selected</c:if>>火车</option>
+                    <option value="飞机" <c:if test="${ts.transType=='飞机' }" >selected</c:if>>飞机</option>
+                    <option value="轮渡" <c:if test="${ts.transType=='轮渡' }" >selected</c:if>>轮渡</option>
                     </select>
-                    </label>
+                </label>
 				<label>
-					<span>站名</span>
-					<input name="stationName" value="${cs.stationName }" class="text-input" />
-				</label>
-                <label>
-                    <span>交通工具小类</span>
-                    <label><input type="checkbox" class="checkbox" name="transdetailGroup" value="高铁" id="transdetail1" />高铁</label>
-                    <label><input type="checkbox" class="checkbox" name="transdetailGroup" value="动车" id="transdetail2" />动车</label>
-                    <label><input type="checkbox" class="checkbox" name="transdetailGroup" value="特快" id="transdetail3" />特快</label>
-                    <label><input type="checkbox" class="checkbox" name="transdetailGroup" value="普快" id="transdetail4" />普快</label>
-                    <label><input type="checkbox" class="checkbox" name="transdetailGroup" value="直达" id="transdetail5" />直达</label>
+					<span>班次</span>
+                    <input name="trips" value="${ts.trips }" class="text-input"/>
                 </label>
                 <label>
-                    <span>站名坐标</span>
-                    <input name="coordinate" value="${cs.coordinate }" class="text-input" />
+                    <span>交通工具小类</span>
+                    <select name="transDetail" class="text-input">
+                        <option value="高铁" <c:if test="${ts.transDetail=='高铁' }">selected</c:if>>高铁</option>
+                        <option value="动车" <c:if test="${ts.transDetail=='动车' }">selected</c:if>>动车</option>
+                        <option value="特快" <c:if test="${ts.transDetail=='特快' }">selected</c:if>>特快</option>
+                        <option value="普快" <c:if test="${ts.transDetail=='普快' }">selected</c:if>>普快</option>
+                        <option value="直达" <c:if test="${ts.transDetail=='直达' }">selected</c:if>>直达</option>
+                    </select>
+                </label>
+				<label>
+					<span>城市代码</span>
+                    <input name="cityCode" value="${ts.cityCode }" class="text-input"/>
+                </label>
+				<label>
+					<span>站点</span>
+                    <input name="station" value="${ts.station }" class="text-input"/>
+                </label>
+				<label>
+					<span>站序</span>
+                    <input name="stationOrder" value="${ts.stationOrder }" class="text-input"/>
+                </label>
+				<label>
+					<span>站点坐标</span>
+                    <input name="coordinate" value="${ts.coordinate }" class="text-input"/>
+                </label>
+				<label>
+					<span>到达时间</span>
+                    <input name="arriveTime" value="${ts.arriveTime }" class="text-input"/>
+                </label>
+				<label>
+					<span>发车时间</span>
+                    <input name="departTime" value="${ts.departTime }" class="text-input"/>
+                </label>
+				<label>
+					<span>里程</span>
+                    <input name="miles" value="${ts.miles }" class="text-input"/>
+                </label>
+				<label>
+					<span>票价</span>
+                    <input name="price" value="${ts.price }" class="text-input"/>
                 </label>
 			</div>
 			<div style="width:60%;height:300px;border: 1px solid gray;float: right;" id="container"> </div>
 		</fieldset>
-		<%--<fieldset>--%>
-			<%--<legend> 详细信息 </legend>--%>
-			<%--<div style="width:100%;">--%>
-				<%--<script id="editor" name="adContent" type="text/plain"--%>
-					<%--style="height: 200px;"></script>--%>
-			<%--</div>--%>
-		<%--</fieldset>--%>
 		<input id="save" type="button" value="保存"
 					onclick="add()" class="easyui-linkbutton" />
 	</form>
 </body>
 <script type="text/javascript">
-    // 处理checkbox
-    var transdetail = '${cs.transdetail}';
-    var transdetails = transdetail.split(";");
-    for(var i = 0; i < transdetails.length;i++) {
-        if(transdetails[i] == "高铁") {
-            $("#transdetail1").attr("checked",true);
-        }
-        if(transdetails[i] == "动车") {
-            $("#transdetail2").attr("checked",true);
-        }
-        if(transdetails[i] == "特快") {
-            $("#transdetail3").attr("checked",true);
-        }
-        if(transdetails[i] == "普快") {
-            $("#transdetail4").attr("checked",true);
-        }
-        if(transdetails[i] == "直达") {
-            $("#transdetail5").attr("checked",true)
-        }
-    }
-
-
 	//以下两句话为创建地图
 	var map = new BMap.Map("container");
 	var lng = 123.438973;
@@ -134,15 +124,8 @@
     }
 
 	function add() {
-        var transdetails = "";
-        $("input[name='transdetailGroup']").each(function(){
-            if(true==$(this).attr("checked")) {
-                transdetails = transdetails + $(this).attr('value') + ";";
-            }
-        })
-        $("#transdetail").attr('value',transdetails);
 
-		$.post("${ctx}/citystation/add", $("#csForm").serializeArray(),
+		$.post("${ctx}/transstation/add", $("#tsForm").serializeArray(),
 			function(data) {
 				$.messager.alert('提示', "操作成功", 'info');
 				//$('#MyPopWindow').window('close');
@@ -151,19 +134,6 @@
 			});
 
 	}
-
-
-
-
-	<%--var editor;--%>
-	<%--setTimeout(function(){--%>
-		<%--//实例化编辑器--%>
-		<%--editor = UE.getEditor('editor');--%>
-	<%--}, 200);--%>
-	<%----%>
-	<%--setTimeout(function(){--%>
-		<%--editor.setContent('${cs.adContent }', false)--%>
-	<%--}, 1000);--%>
 	
 </script>
 </html>

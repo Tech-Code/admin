@@ -18,17 +18,17 @@ import java.util.Map;
 public class PoiService {
 
 	@Resource
-	private PoiDao PoiDao;
+	private PoiDao poiDao;
 
     public void addOrUpdate(Poi poi) {
-        PoiDao.save(poi);
+        poiDao.save(poi);
     }
 
 	/**
 	 * @return
 	 */
 	public Map<String,Object> findAll() {
-		List<Poi>poiList = (List<Poi>)PoiDao.findAll();
+		List<Poi>poiList = (List<Poi>) poiDao.findAll();
         return PageUtils.getPageMap(poiList);
 	}
 
@@ -36,12 +36,12 @@ public class PoiService {
      * @return
      */
     public Poi findById(String id) {
-        Poi poi = PoiDao.findOne(id);
+        Poi poi = poiDao.findOne(id);
         return poi;
     }
 
     public List<Poi> findByIds(List<String> ids) {
-        return (List<Poi>)PoiDao.findAll(ids);
+        return (List<Poi>) poiDao.findAll(ids);
     }
 
     public void update(String id) {
@@ -50,11 +50,11 @@ public class PoiService {
     }
 
     public void deleteOne(String id) {
-        PoiDao.delete(id);
+        poiDao.delete(id);
     }
 
     public void deleteMany(List<Poi> poiList) {
-        PoiDao.delete(poiList);
+        poiDao.delete(poiList);
     }
 
 }

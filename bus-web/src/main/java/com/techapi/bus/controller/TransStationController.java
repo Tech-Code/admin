@@ -26,7 +26,7 @@ public class TransStationController {
     @ResponseBody
     public Map<String, String> add(Transstation transStation, HttpServletRequest request)
             throws Exception {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
 
         try {
             transStationService.addOrUpdate(transStation);
@@ -49,7 +49,7 @@ public class TransStationController {
     @RequestMapping("/update")
     public String update(Model model, String id) throws Exception {
         Transstation transStation = transStationService.findById(id);
-        model.addAttribute(Constants.CS_INFO_SESSION, transStation);
+        model.addAttribute(Constants.TS_INFO_SESSION, transStation);
         return "transstation/add";
     }
 

@@ -1,12 +1,8 @@
 package com.techapi.bus.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name="BUS_TAXI")
@@ -37,8 +33,16 @@ public class Taxi {
 	private double n_s_cost;// IS '夜间起步价(元)';
 	@Column(name="N_EXCEED_S_COST")
 	private double n_exceed_s_cost;// IS '夜间超出起步单价(元/公里)';
-	@Column(name="N_S_EXCEED_D_COST")
-	private double n_s_exceed_d_cost;// IS '夜间超出规定距离单价(元/公里)';
+	@Column(name="D_BAS")
+	private double d_bas;// IS '日间燃油费';
+    @Column(name = "N_BAS")
+    private double n_bas;// IS '夜间燃油费';
+    @Column(name = "D_EXCEED_DISTANCE")
+    private double d_exceed_distance;// IS '日间规定距离';
+    @Column(name = "N_EXCEED_DISTANCE")
+    private double n_exceed_distance;// IS '夜间规定距离';
+    @Column(name = "N_S_EXCEED_D_COST")
+    private double n_s_exceed_d_cost;// IS '夜间超出规定距离单价';
 	public String getId() {
 		return id;
 	}
@@ -117,7 +121,36 @@ public class Taxi {
 	public void setN_s_exceed_d_cost(double n_s_exceed_d_cost) {
 		this.n_s_exceed_d_cost = n_s_exceed_d_cost;
 	}
-	
-	
-	
+
+    public double getD_bas() {
+        return d_bas;
+    }
+
+    public void setD_bas(double d_bas) {
+        this.d_bas = d_bas;
+    }
+
+    public double getN_bas() {
+        return n_bas;
+    }
+
+    public void setN_bas(double n_bas) {
+        this.n_bas = n_bas;
+    }
+
+    public double getD_exceed_distance() {
+        return d_exceed_distance;
+    }
+
+    public void setD_exceed_distance(double d_exceed_distance) {
+        this.d_exceed_distance = d_exceed_distance;
+    }
+
+    public double getN_exceed_distance() {
+        return n_exceed_distance;
+    }
+
+    public void setN_exceed_distance(double n_exceed_distance) {
+        this.n_exceed_distance = n_exceed_distance;
+    }
 }
