@@ -148,6 +148,24 @@
 					</li>
 				</ul>
 			</div>
+			
+			<div title="日志查询" style="overflow: hidden;">
+				<ul>
+					<li>
+						<a href="javascript:addTab('tabId_adlist','业务统计','<%=root%>/view/analysis/typelist.jsp');">业务账号统计</a>
+					</li>
+				</ul>
+				<ul>
+					<li>
+						<a href="javascript:addTab('tabId_match_list','城市统计','<%=root%>/view/analysis/citylist.jsp');">城市统计</a>
+					</li>
+				</ul>
+				<ul>
+					<li>
+						<a href="javascript:addTab('tabId_feed_tab','时间统计','<%=root%>/view/analysis/grouplist.jsp');">时段统计</a>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 	<!-- 正中间panel -->
