@@ -14,8 +14,10 @@ public final class BusConstants {
      * 时速表无City默认值
      */
     public static final String DEFAULT_CITYNAME="默认";
-
-
+    /***
+     * poi站点缓存key
+     */
+    public static final String BUS_POI_STATIONID="bus_poi_%s";
 
 
 }

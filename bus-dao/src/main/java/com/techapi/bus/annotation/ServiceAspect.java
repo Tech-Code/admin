@@ -37,7 +37,6 @@ public class ServiceAspect {
         Object[] arg = pjp.getArgs();    
         String methodName = pjp.getSignature().getName();
         String key = createMemacheKey(methodName,arg);
-        System.out.println("key-------"+key);
         Object st = cacheProxy.get(key);
         if(st!=null&&m==Model.ON){
             return st;

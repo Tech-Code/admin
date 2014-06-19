@@ -1,6 +1,7 @@
 package com.techapi.bus.data;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -28,6 +29,7 @@ public class BusDataAPIServiceTest {
 	}
 	
 	@Test
+	@Ignore
 	public void testFindOnePoiBystationID() {
 		Poi p =busDataAPIService.findOnePoiBystationID("530800010014027");
 		System.out.println(p.getPoiName());
@@ -53,6 +55,13 @@ public class BusDataAPIServiceTest {
 	@Ignore
 	public void testFindOneSpeedByCityTransportatio() {
 		Speed sp =busDataAPIService.findOneSpeedByCityTransportation("公交", "默认","");
+	}
+	@Test
+	public void testfindPoiBystationIDList(){
+		Map<String,List<Poi>> mp = busDataAPIService.findPoiBystationIDList("530800010013001", "530800010014027","530800010009012");
+		for(java.util.Map.Entry<String, List<Poi>> e:mp.entrySet()){
+			System.out.println(e.getKey());
+		}
 	}
 
 }
