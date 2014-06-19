@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name="ANALYSIS_CITY")
-public class AnalysisCity {
+public class AnalysisCity implements java.io.Serializable{
 
 	@Id
     @GeneratedValue(generator = "UUIDGenerator")

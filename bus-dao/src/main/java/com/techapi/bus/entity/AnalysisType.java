@@ -15,7 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name="ANALYSIS_TYPE")
-public class AnalysisType {
+public class AnalysisType implements java.io.Serializable{
 	@Id
     @GeneratedValue(generator = "UUIDGenerator")
     @GenericGenerator(name="UUIDGenerator",strategy="uuid")

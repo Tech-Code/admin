@@ -3,7 +3,7 @@ package com.techapi.bus.data;
 import java.util.List;
 import java.util.Map;
 
-public class CityTransstationRelation {
+public class CityTransstationRelation implements java.io.Serializable{
     
 	private String transtype;
 	private Map<String,List<TransstationInformation>> transstationInformation;

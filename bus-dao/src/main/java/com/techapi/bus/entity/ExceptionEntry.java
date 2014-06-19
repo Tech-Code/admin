@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "exception_entry")
-public class ExceptionEntry {
+public class ExceptionEntry implements java.io.Serializable{
 
     @EmbeddedId
     private EntryId id;

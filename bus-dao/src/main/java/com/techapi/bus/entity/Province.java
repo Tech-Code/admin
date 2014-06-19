@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by xuefei on 6/9/14.
  */
-public class Province {
+public class Province implements java.io.Serializable{
     private String provinceName;
     private String provinceId;
     private List<City> cityList;

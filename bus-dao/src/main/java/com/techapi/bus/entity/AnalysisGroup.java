@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name="ANALYSIS_GROUP")
-public class AnalysisGroup{
+public class AnalysisGroup implements java.io.Serializable{
 	@Id
     @GeneratedValue(generator = "UUIDGenerator")
     @GenericGenerator(name="UUIDGenerator",strategy="uuid")

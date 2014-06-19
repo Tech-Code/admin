@@ -3,7 +3,7 @@ package com.techapi.bus.entity;
 /**
  * Created by xuefei on 6/8/14.
  */
-public class Station {
+public class Station implements java.io.Serializable{
     private String stationId;
     private String stationName;
     private String stationLon;

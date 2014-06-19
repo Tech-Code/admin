@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ignore_entry")
-public class IgnoreList {
+public class IgnoreList implements java.io.Serializable{
 
     @Id
     private String id;

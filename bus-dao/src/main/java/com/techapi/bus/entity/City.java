@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by xuefei on 6/8/14.
  */
-public class City {
+public class City implements java.io.Serializable{
     private String cityId;
 
     public String getCityId() {

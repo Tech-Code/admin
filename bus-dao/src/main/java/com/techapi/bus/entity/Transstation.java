@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="BUS_TRANSSTATION")
-public class Transstation {
+public class Transstation implements java.io.Serializable{
 
 	@Id
     @GeneratedValue(generator = "UUIDGenerator")

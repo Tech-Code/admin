@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "server")
-public class Server {
+public class Server implements java.io.Serializable{
 
     @Id
     private String id;

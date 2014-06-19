@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "message_entry")
-public class MessageEntry {
+public class MessageEntry implements java.io.Serializable{
 
     @Id
     @EmbeddedId

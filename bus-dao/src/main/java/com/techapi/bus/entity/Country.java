@@ -3,7 +3,7 @@ package com.techapi.bus.entity;
 /**
  * Created by xuefei on 6/9/14.
  */
-public class Country {
+public class Country implements java.io.Serializable{
     private String countryId;
     private String countryName;
 

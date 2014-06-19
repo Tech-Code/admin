@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface CacheProxy {
-	public static final String VALIDCHECKKEY_PREFIX="validcheckkey.";
+	
 	public Object get(String key);
 	public String getString(String key);
 	public boolean put(String key,Object value);
@@ -19,14 +19,6 @@ public interface CacheProxy {
 	 */
 	public boolean put(String key,Object value,int expires);
 	public boolean delete(String key);
-	/**
-	 * 
-	 * @param key
-	 * @param validCheckKey 使用validCheckKey做有效性检查，存储用的数据结构为list，validKey--标识listvalue，value是key-valueCheckKey
-	 * @return
-	 * List<Object>
-	 */
-	public List<Object> listWithValidCheck(String key,String validCheckKey);
 	/**
 	 * 
 	 * @param key
@@ -53,15 +45,6 @@ public interface CacheProxy {
 	 * boolean
 	 */
 	public boolean saveList(String key,List<Object> list,int expires);
-	/**
-	 * 
-	 * @param key
-	 * @param list
-	 * @param validCheckKey 设置validCheckKey做有效性检查，存储用的数据结构为list，validKey--标识listvalue，value是key-valueCheckKey
-	 * @return
-	 * boolean
-	 */
-	public boolean saveListWithValidCheck(String key,List<Object> list,String validCheckKey);
 	/**
 	 * 删除list形式的缓存
 	 * @param key

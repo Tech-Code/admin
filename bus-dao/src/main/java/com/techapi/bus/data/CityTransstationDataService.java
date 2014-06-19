@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.techapi.bus.dao.CityStationDao;
 @Component("cityTransstationDataService")
-public class CityTransstationDataService {
+public class CityTransstationDataService implements java.io.Serializable{
 
 	@Autowired
 	private CityStationDao dao;

@@ -10,7 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="BUS_SPEED")
-public class Speed {
+public class Speed implements java.io.Serializable {
 
 	@Id
     @GeneratedValue(generator = "UUIDGenerator")

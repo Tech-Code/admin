@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.techapi.bus.BusConstants;
+import com.techapi.bus.annotation.ServiceCache;
 import com.techapi.bus.dao.PoiDao;
 import com.techapi.bus.dao.SpeedDao;
 import com.techapi.bus.dao.TaxiDao;
 import com.techapi.bus.entity.Poi;
 import com.techapi.bus.entity.Speed;
 import com.techapi.bus.entity.Taxi;
+import com.techapi.bus.util.TTL;
 @Service
 public class BusDataAPIService {
 
@@ -40,6 +42,7 @@ public class BusDataAPIService {
 	 * @param stationid 站点ID
 	 * @return
 	 */
+	@ServiceCache(TTL._1M)
 	public Poi findOnePoiBystationID(String stationid){
 		List<Poi> poiList =poiDao.findBystationID(stationid);
 		if(poiList!=null&&poiList.size()>0){

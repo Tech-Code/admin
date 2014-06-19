@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="LOGIN_USER")
-public class User {
+public class User implements java.io.Serializable{
 	@Id
 	@Column(name="ID")
 	private String id;

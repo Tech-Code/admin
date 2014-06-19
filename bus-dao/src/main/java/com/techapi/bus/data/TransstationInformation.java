@@ -1,7 +1,7 @@
 package com.techapi.bus.data;
 
 
-public class TransstationInformation {
+public class TransstationInformation implements java.io.Serializable{
 
 	private String transtype;//	交通工具类型	VARCHAR2(64)
 	private String trips;//	班次	VARCHAR2(64)

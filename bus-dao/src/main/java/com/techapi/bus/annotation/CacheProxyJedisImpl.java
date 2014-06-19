@@ -10,25 +10,35 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 @Component("cacheProxy")
 public class CacheProxyJedisImpl implements CacheProxy {
 
 	private static final Log log = LogFactory.getLog(CacheProxyJedisImpl.class);
-	private ISerializer serializer;
+	private ISerializer serializer = new HessianSerializer();
 	private static Random random = new Random();
 	private static final List<JedisPool> poolList = new ArrayList<JedisPool>();
+	
 	static{
-//		String hostAndPort = CacheContext.getInstance().getSingleServer();
-//				for(int i = 0; i < CacheContext.getInstance().getPoolCount(); i++){
-//					JedisPool jp = new JedisPool(config, hostAndPortArr[0], Integer.valueOf(hostAndPortArr[1]),5000);
-//					poolList.add(jp);
-//				}
-//			}
-//		}
+		String hostAndPort = "180.184.33.132:6379";
+		if (StringUtils.isNotBlank(hostAndPort)) {
+			String[] hostAndPortArr = hostAndPort.split(":");
+			if (hostAndPortArr != null && hostAndPortArr.length == 2) {
+				JedisPoolConfig config = new JedisPoolConfig();
+				config.setMaxIdle(100);
+				config.setMaxTotal(50);
+				config.setMinIdle(40);
+				for(int i = 0; i < 8; i++){
+					JedisPool jp = new JedisPool(config, hostAndPortArr[0], Integer.valueOf(hostAndPortArr[1]),5000,"JL8qEYSCq7");
+					poolList.add(jp);
+				}
+			}
+		}
 	}
 	
 	public static JedisPool getJedisPool(){
@@ -98,37 +108,6 @@ public class CacheProxyJedisImpl implements CacheProxy {
 		return false;
 	}
 
-	@Override
-	public List<Object> listWithValidCheck(String key, String validCheckKey) {
-		if (StringUtils.isBlank(key) || StringUtils.isBlank(validCheckKey)) {
-			return null;
-		}
-		List<Object> list = null;
-		String checkValue = key.replace(validCheckKey.replace(CacheProxy.VALIDCHECKKEY_PREFIX, ""), "");
-		Jedis j = null;
-		JedisPool jp = getJedisPool();
-		try {
-			j = jp.getResource();
-			List<String> values = j.lrange(validCheckKey, 0, -1);
-			jp.returnResource(j);
-
-			if (values != null && values.size() > 0) {
-				if (values.contains(checkValue)) {
-					// 如果该key有效
-					byte[] bytesKey = key.getBytes();
-					j = jp.getResource();
-					byte[] bytesValue = j.get(bytesKey);
-					jp.returnResource(j);
-					list = (List<Object>) serializer.decode(bytesValue);
-				}
-			}
-
-		} catch (Exception e) {
-			jp.returnBrokenResource(j);
-			log.error(e.getMessage(), e);
-		}
-		return list;
-	}
 
 	@Override
 	public List<Object> list(String key) {
@@ -140,27 +119,6 @@ public class CacheProxyJedisImpl implements CacheProxy {
 		return put(key, list);
 	}
 
-	@Override
-	public boolean saveListWithValidCheck(String key, List<Object> list, String validCheckKey) {
-		if (StringUtils.isBlank(key) || StringUtils.isBlank(validCheckKey) || list == null) {
-			return false;
-		}
-		String checkValue = key.replace(validCheckKey.replace(CacheProxy.VALIDCHECKKEY_PREFIX, ""), "");
-		if (put(key, list)) {
-			Jedis j = null;
-			JedisPool jp = getJedisPool();
-			try {
-				j = jp.getResource();
-				j.rpush(validCheckKey, checkValue);
-				jp.returnResource(j);
-				return true;
-			} catch (Exception e) {
-				jp.returnBrokenResource(j);
-				log.error(e.getMessage(), e);
-			}
-		}
-		return false;
-	}
 
 	@Override
 	public boolean deleteList(String key) {

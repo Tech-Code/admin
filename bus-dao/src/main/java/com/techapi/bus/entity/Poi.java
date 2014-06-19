@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="BUS_POI")
-public class Poi {
+public class Poi implements java.io.Serializable{
 
     @Id
     @GeneratedValue(generator = "UUIDGenerator")

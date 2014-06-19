@@ -3,7 +3,7 @@ package com.techapi.bus.entity;
 /**
  * Created by xuefei on 6/10/14.
  */
-public class PoiType {
+public class PoiType implements java.io.Serializable{
     private String poiType1;
     private String poiType2;
     private String poiType3;

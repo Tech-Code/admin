@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,18 +22,20 @@ public class BusDataAPIServiceTest {
 	@Resource
 	public BusDataAPIService busDataAPIService;
 	@Test
+	@Ignore
 	public void testGetAllCityTransstation() {
 		busDataAPIService.getAllCityTransstation();
 	}
 	
 	@Test
 	public void testFindOnePoiBystationID() {
-		Poi p =busDataAPIService.findOnePoiBystationID("141203");
-//		System.out.println(p.getPoiName());
+		Poi p =busDataAPIService.findOnePoiBystationID("530800010014027");
+		System.out.println(p.getPoiName());
 	}
 	
 	
 	@Test
+	@Ignore
 	public void testFindOneTaxiByCityName() {
 		Taxi t = busDataAPIService.findOneTaxiByCityName("北京市");
 		System.out.println("test");
@@ -40,12 +43,14 @@ public class BusDataAPIServiceTest {
 	}
 
 	@Test
+	@Ignore
 	public void testFindSpeedByCityTransportatio() {
 		List<Speed> sp =busDataAPIService.findSpeedByCityTransportation("公交", "默认");
 		System.out.println(sp.get(0).getSpeed());
 	}
 
 	@Test
+	@Ignore
 	public void testFindOneSpeedByCityTransportatio() {
 		Speed sp =busDataAPIService.findOneSpeedByCityTransportation("公交", "默认","");
 	}

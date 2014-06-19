@@ -17,7 +17,7 @@ import com.techapi.bus.BusConstants;
  */
 @Entity
 @Table(name = "exception_count")
-public class ExceptionCount {
+public class ExceptionCount implements java.io.Serializable{
 
     @Id
     private String id;
