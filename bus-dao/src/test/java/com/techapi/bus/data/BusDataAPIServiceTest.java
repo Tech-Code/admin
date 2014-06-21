@@ -60,8 +60,7 @@ public class BusDataAPIServiceTest {
 	@Test
 	public void testfindPoiBystationIDList(){
 		List<String> ids = new ArrayList<String>();
-		ids.add("530800010013001");
-		Map<String,List<Poi>> mp = busDataAPIService.findPoiBystationIDList(ids);
+		Map<String,List<Poi>> mp = busDataAPIService.findPoiBystationIDList("530800010013001");
 		for(java.util.Map.Entry<String, List<Poi>> e:mp.entrySet()){
 			System.out.println(e.getKey());
 		}

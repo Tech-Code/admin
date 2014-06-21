@@ -93,7 +93,7 @@ public class BusDataAPIService {
 	 *            ... 地标点串
 	 * @return
 	 */
-	public Map<String, List<Poi>> findPoiBystationIDList(List<String> stationids) {
+	public Map<String, List<Poi>> findPoiBystationIDList(String... stationids) {
 		Map<String, List<Poi>> map = new HashMap<String, List<Poi>>();
 		for (String stationid : stationids) {
 			String stationcache = String.format(BusConstants.BUS_POI_STATIONID,
