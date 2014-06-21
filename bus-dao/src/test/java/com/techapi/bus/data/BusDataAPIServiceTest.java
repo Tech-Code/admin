@@ -1,5 +1,6 @@
 package com.techapi.bus.data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +59,9 @@ public class BusDataAPIServiceTest {
 	}
 	@Test
 	public void testfindPoiBystationIDList(){
-		Map<String,List<Poi>> mp = busDataAPIService.findPoiBystationIDList("530800010013001", "530800010014027","530800010009012");
+		List<String> ids = new ArrayList<String>();
+		ids.add("530800010013001");
+		Map<String,List<Poi>> mp = busDataAPIService.findPoiBystationIDList(ids);
 		for(java.util.Map.Entry<String, List<Poi>> e:mp.entrySet()){
 			System.out.println(e.getKey());
 		}

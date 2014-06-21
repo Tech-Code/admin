@@ -17,7 +17,7 @@ public final class BusConstants {
     /***
      * poi站点缓存key
      */
-    public static final String BUS_POI_STATIONID="bus_poi_%s";
+    public static final String BUS_POI_STATIONID="bus:poi:%s";
 
 
 }
