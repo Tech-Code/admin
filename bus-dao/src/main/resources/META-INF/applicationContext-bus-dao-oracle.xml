@@ -79,6 +79,17 @@
 			</props>
 		</property>
 	</bean>
+	
+	<bean id="cacheProxy" class="com.techapi.bus.annotation.CacheProxyJedisImpl">
+		<constructor-arg index="0" value="${redis.host}"/>
+		<constructor-arg index="1" value="${redis.password}" />
+		<constructor-arg index="2" value="${redis.port}"/>
+		<constructor-arg index="3" value="${reids.maxIdle}"/>
+		<constructor-arg index="4" value="${redis.maxTotal}"/>
+		<constructor-arg index="5" value="${redis.minIdle}"/>
+		<constructor-arg index="6" value="${redis.minEvictableIdleTimeMillis}"/>
+		<constructor-arg index="7" value="${redis.timeBetweenEvictionRunsMillis}"/>
+	</bean>
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
@@ -86,4 +97,9 @@
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	 <aop:aspectj-autoproxy/>
+	 
+	 
+	
+	 
+	 
 </beans>

@@ -16,7 +16,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-@Component("cacheProxy")
+//@Component("cacheProxy")
 public class CacheProxyJedisImpl implements CacheProxy {
 
 	private static final Log log = LogFactory.getLog(CacheProxyJedisImpl.class);
@@ -24,22 +24,32 @@ public class CacheProxyJedisImpl implements CacheProxy {
 	private static Random random = new Random();
 	private static final List<JedisPool> poolList = new ArrayList<JedisPool>();
 
-	static {
-		String hostAndPort = "180.184.33.132:6379";
-		if (StringUtils.isNotBlank(hostAndPort)) {
-			String[] hostAndPortArr = hostAndPort.split(":");
-			if (hostAndPortArr != null && hostAndPortArr.length == 2) {
-				JedisPoolConfig config = new JedisPoolConfig();
-				config.setMaxIdle(100);
-				config.setMaxTotal(50);
-				config.setMinIdle(40);
-				for (int i = 0; i < 8; i++) {
-					JedisPool jp = new JedisPool(config, hostAndPortArr[0],
-							Integer.valueOf(hostAndPortArr[1]), 5000,
-							"JL8qEYSCq7");
-					poolList.add(jp);
-				}
-			}
+	public CacheProxyJedisImpl(String hostname, String password, Integer port,
+			Integer maxIdle, Integer maxTotal, Integer minIdle,
+			Integer minEvictableIdleTimeMillis,
+			Integer timeBetweenEvictionRunsMillis) {
+		JedisPoolConfig config = new JedisPoolConfig();
+		if (maxIdle != null && maxIdle != 0) {
+			config.setMaxIdle(maxIdle);
+		}
+		if (maxTotal != null && maxTotal != 0) {
+			config.setMaxTotal(maxTotal);
+		}
+		if (minIdle != null && minIdle != 0) {
+			config.setMinIdle(minIdle);
+		}
+		if (minEvictableIdleTimeMillis != null
+				&& minEvictableIdleTimeMillis != 0) {
+			config.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
+		}
+		if (timeBetweenEvictionRunsMillis != null
+				&& timeBetweenEvictionRunsMillis != 0) {
+			config.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);
+		}
+
+		for (int i = 0; i < 8; i++) {
+			JedisPool jp = new JedisPool(config, hostname, port, 5000, password);
+			poolList.add(jp);
 		}
 	}
 
