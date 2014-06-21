@@ -23,8 +23,8 @@ public class CacheProxyJedisImpl implements CacheProxy {
 	private ISerializer serializer = new HessianSerializer();
 	private static Random random = new Random();
 	private static final List<JedisPool> poolList = new ArrayList<JedisPool>();
-	
-	static{
+
+	static {
 		String hostAndPort = "180.184.33.132:6379";
 		if (StringUtils.isNotBlank(hostAndPort)) {
 			String[] hostAndPortArr = hostAndPort.split(":");
@@ -33,15 +33,17 @@ public class CacheProxyJedisImpl implements CacheProxy {
 				config.setMaxIdle(100);
 				config.setMaxTotal(50);
 				config.setMinIdle(40);
-				for(int i = 0; i < 8; i++){
-					JedisPool jp = new JedisPool(config, hostAndPortArr[0], Integer.valueOf(hostAndPortArr[1]),5000,"JL8qEYSCq7");
+				for (int i = 0; i < 8; i++) {
+					JedisPool jp = new JedisPool(config, hostAndPortArr[0],
+							Integer.valueOf(hostAndPortArr[1]), 5000,
+							"JL8qEYSCq7");
 					poolList.add(jp);
 				}
 			}
 		}
 	}
-	
-	public static JedisPool getJedisPool(){
+
+	public static JedisPool getJedisPool() {
 		return poolList.get(random.nextInt(poolList.size()));
 	}
 
@@ -56,12 +58,23 @@ public class CacheProxyJedisImpl implements CacheProxy {
 				byte[] bytesKey = key.getBytes();
 				j = jp.getResource();
 				bytesValue = j.get(bytesKey);
+
+				/**
+				 * <pre>
+				 * Patch For:
+				 * 如果对象结构发变化，如增加属性，使用Hessian反序列化时会发生异常，此时需要remove该key
+				 * 或者设置该key生存时间为0，防止每次get该key，反序列化出现同样的异常
+				 * </pre>
+				 */
+				obj = serializer.decode(bytesValue);
+				if (obj == null) {
+					j.expire(bytesKey, 0);
+				}
 				jp.returnResource(j);
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 				jp.returnBrokenResource(j);
 			}
-			obj = serializer.decode(bytesValue);
 		}
 		return obj;
 	}
@@ -108,7 +121,6 @@ public class CacheProxyJedisImpl implements CacheProxy {
 		return false;
 	}
 
-
 	@Override
 	public List<Object> list(String key) {
 		return (List<Object>) get(key);
@@ -118,7 +130,6 @@ public class CacheProxyJedisImpl implements CacheProxy {
 	public boolean saveList(String key, List<Object> list) {
 		return put(key, list);
 	}
-
 
 	@Override
 	public boolean deleteList(String key) {
@@ -142,7 +153,6 @@ public class CacheProxyJedisImpl implements CacheProxy {
 		}
 		return ret;
 	}
-
 
 	public ISerializer getSerializer() {
 		return serializer;
@@ -196,7 +206,7 @@ public class CacheProxyJedisImpl implements CacheProxy {
 
 	@Override
 	public List<Object> mGet(List<String> keys) {
-		if(keys.size()==0){
+		if (keys.size() == 0) {
 			return new ArrayList<Object>();
 		}
 		Jedis j = null;
@@ -224,7 +234,7 @@ public class CacheProxyJedisImpl implements CacheProxy {
 
 	@Override
 	public List<String> mGetString(List<String> keys) {
-		if(keys.size()==0){
+		if (keys.size() == 0) {
 			return new ArrayList<String>();
 		}
 		Jedis j = null;
@@ -251,7 +261,7 @@ public class CacheProxyJedisImpl implements CacheProxy {
 		Jedis j = null;
 		JedisPool jp = getJedisPool();
 		int mapSize = map.size();
-		if (mapSize==0) {
+		if (mapSize == 0) {
 			return true;
 		}
 		byte[][] bytesKeysValues = new byte[mapSize * 2][];
