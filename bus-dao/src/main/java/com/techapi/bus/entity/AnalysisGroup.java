@@ -14,7 +14,7 @@ public class AnalysisGroup implements java.io.Serializable{
     @GeneratedValue(generator = "UUIDGenerator")
     @GenericGenerator(name="UUIDGenerator",strategy="uuid")
 	private String id;
-	@Column(name="NAME ")
+	@Column(name="NAME")
 	private String name;
 	@Column(name="MINUTE")
 	private String minute;

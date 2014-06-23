@@ -5,8 +5,8 @@
 <head>
 <script type="text/javascript">
 	jQuery(function($) {
-		$('#adTable').datagrid({
-			title : '广告列表', //标题
+		
+		$('#analysistypeTable').datagrid({
 			method : 'post',
 			iconCls : 'icon-edit', //图标
 			singleSelect : false, //多选
@@ -14,127 +14,130 @@
 			fitColumns : true, //自动调整各列，用了这个属性，下面各列的宽度值就只是一个比例。
 			striped : true, //奇偶行颜色不同
 			collapsible : true,//可折叠
-			url : "${ctx}/ad/list", //数据来源
+			url : "${ctx}/analysis/citylist?city=all&startTime="+getPreMonth(getToDay())+"&endTime="+getToDay(), //数据来源
 			sortOrder : 'desc', //倒序
 			idField:'id', //主键字段
 			remoteSort : true, //服务器端排序
 			pagination : true, //显示分页
 			rownumbers : true, //显示行号
-			columns : [ [ {
-				field : 'ck',
-				checkbox : true,
-				width : 2
-			}, //显示复选框
+			columns : [ [ 
 			{
-				field : 'title',
-				title : '广告标题',
+				field : 'day',
+				title : '日期',
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.title;
+					return row.day;
 				} //需要formatter一下才能显示正确的数据
 			},{
-				field : 'typeStr',
-				title : '广告类别',
+				field : 'cityName',
+				title : '城市名称',
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.typeStr;
+					return row.cityName;
 				} //需要formatter一下才能显示正确的数据
 			},{
-				field : 'startTimeStr',
-				title : '开始日期',
+				field : 'type',
+				title : '服务类型',
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.startTimeStr;
+					return row.type;
 				} //需要formatter一下才能显示正确的数据
 			},{
-				field : 'overTimeStr',
-				title : '结束日期',
+				field : 'total',
+				title : '业务总量',
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.overTimeStr;
+					return row.total;
 				} //需要formatter一下才能显示正确的数据
 			}] ],
-			toolbar : [ {
-				text : '新增',
-				iconCls : 'icon-add',
-				handler : function() {
-					addrow();
-				}
-			}, '-', {
-				text : '修改',
-				iconCls : 'icon-edit',
-				handler : function() {
-					updaterow();
-				}
-			}, '-', {
-				text : '删除',
-				iconCls : 'icon-remove',
-				handler : function() {
-					deleterow();
-				}
-			}],
+			
 			onLoadSuccess : function() {
-				$('#adTable').datagrid('clearSelections'); //一定要加上这一句，要不然datagrid会记住之前的选择状态，删除时会出问题
+				$('#analysistypeTable').datagrid('clearSelections'); //一定要加上这一句，要不然datagrid会记住之前的选择状态，删除时会出问题
 			}
-		});
-	});
-	//新增
-	function addrow() {
-		parent.addTab('tabId_ad_add','发布广告','<%=root%>/view/ad/add.jsp');
-
-	}
-	//更新
-	function updaterow() {
-		var rows = $('#adTable').datagrid('getSelections');
-		//这里有一个jquery easyui datagrid的一个小bug，必须把主键单独列出来，要不然不能多选
-		if (rows.length == 0) {
-			$.messager.alert('提示', "请选择你要更新的广告", 'info');
-			return;
-		}
-		if (rows.length > 1) {
-			$.messager.alert('提示', "只能选择一个广告进行更新", 'info');
-			return;
-		}
-
-		var ps = "";
-		$.each(rows, function(i, n) {
-			if (i == 0)
-				ps += "?id=" + n.id;
 		});
 		
-		var url = '<%=root%>/ad/update' + ps;
-		parent.addTab('tabId_ad_update','更新广告信息',url);
+		
+		$('#selectType').combobox({ 
+			url:"${ctx}/analysis/city",
+			valueField:'id', 
+			textField:'text' 
+			}); 
+		
+		$('#selectType').combobox('setValue','all');
+		$('#beginTime').datebox('setValue',getPreMonth(getToDay()));
+		$('#endTime').datebox('setValue',getToDay());
+	});
+	//更新
+	function select() {
+		var btime =$('#beginTime').datebox('getValue');
+		var etime = $('#endTime').datebox('getValue');
+		var selectType = $('#selectType').combobox('getValue');
+		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/citylist?",queryParams:{startTime:btime,endTime:etime,city:selectType},method:"post"});
 	}
+	
+	 function getToDay(){
+         
+         var now = new Date();
+         var nowYear = now.getFullYear();
+         var nowMonth = now.getMonth();
+         var nowDate = now.getDate();
+         newdate = new Date(nowYear,nowMonth,nowDate);
+         nowMonth = doHandleMonth(nowMonth + 1);
+         nowDate = doHandleMonth(nowDate);
+         return nowYear+"-"+nowMonth+"-"+nowDate;
+    }
+   
+    //----修改日期格式填充零
+    function doHandleMonth(month){
+         if(month.toString().length == 1){
+          month = "0" + month;
+         }
+         return month;
+    }
+    
+    function getPreMonth(date) {
+        var arr = date.split('-');
+        var year = arr[0]; //获取当前日期的年份
+        var month = arr[1]; //获取当前日期的月份
+        var day = arr[2]; //获取当前日期的日
+        var days = new Date(year, month, 0);
+        days = days.getDate(); //获取当前日期中月的天数
+        var year2 = year;
+        var month2 = parseInt(month) - 1;
+        if (month2 == 0) {
+            year2 = parseInt(year2) - 1;
+            month2 = 12;
+        }
+        var day2 = day;
+        var days2 = new Date(year2, month2, 0);
+        days2 = days2.getDate();
+        if (day2 > days2) {
+            day2 = days2;
+        }
+        if (month2 < 10) {
+            month2 = '0' + month2;
+        }
+        var t2 = year2 + '-' + month2 + '-' + day2;
+        return t2;
+    }
 
-// 	//删除
-	function deleterow() {
-		$.messager.confirm('提示', '确定要删除吗?', function(result) {
-			if (result) {
-				var rows = $('#adTable').datagrid('getSelections');
-				var ps = "";
-				$.each(rows, function(i, n) {
-					if (i == 0)
-						ps += "?id=" + n.id;
-					else
-						ps += "&id=" + n.id;
-				});
-				$.post('<%=root%>/ad/delete' + ps, function() {
-					$('#adTable').datagrid('reload');
-					$.messager.alert('删除', '删除已成功', 'info');
-				});
-			}
-		});
-	}
 </script>
 </head>
 
-<body>
+<body >
+<div style="margin:20px 0 10px 0;">
+<input class="easyui-datebox" id="beginTime" />
+<input class="easyui-datebox" id="endTime" data-options="required:true,showSeconds:false" />
+ <input class="easyui-combobox"  id="selectType" style="width:200px;" />
+ 
+ <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>  
+</div>
 	<div style="padding: 10" id="tabdiv">
-		<table id="adTable"></table>
+		<table id="analysistypeTable"></table>
 	</div>
 </body>
 </html>
