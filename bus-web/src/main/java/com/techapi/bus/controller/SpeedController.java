@@ -40,8 +40,8 @@ public class SpeedController {
 
 	@RequestMapping("/list")
     @ResponseBody
-	public Map<String, Object> list() throws Exception {
-        return speedService.findAll();
+	public Map<String, Object> list(int page, int rows) throws Exception {
+        return speedService.findSection(page, rows);
 	}
 
     @RequestMapping("/update")

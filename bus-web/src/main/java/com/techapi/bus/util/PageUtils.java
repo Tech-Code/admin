@@ -1,5 +1,7 @@
 package com.techapi.bus.util;
 
+import org.springframework.data.domain.Page;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,4 +24,12 @@ public class PageUtils {
 		result.put("rows", list);
 		return result;
 	}
+
+    public static Map<String, Object> getPageMap(Page<?> list) {
+        // TODO Auto-generated method stub
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("total", list.getTotalElements());
+        result.put("rows", list.getContent());
+        return result;
+    }
 }

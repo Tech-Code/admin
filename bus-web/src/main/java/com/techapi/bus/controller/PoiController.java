@@ -40,11 +40,11 @@ public class PoiController {
         return map;
     }
 
-	@RequestMapping("/list")
+    @RequestMapping("/list")
     @ResponseBody
-	public Map<String, Object> list() throws Exception {
-        return poiService.findAll();
-	}
+    public Map<String, Object> list(int page, int rows) throws Exception {
+        return poiService.findSection(page, rows);
+    }
 
     @RequestMapping("/update")
     public String update(Model model, String id) throws Exception {

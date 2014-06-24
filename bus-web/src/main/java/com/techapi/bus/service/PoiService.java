@@ -7,6 +7,9 @@ import com.techapi.bus.entity.Poi;
 import com.techapi.bus.util.PageUtils;
 import com.techapi.bus.util.TTL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -38,6 +41,13 @@ public class PoiService {
 		List<Poi>poiList = (List<Poi>) poiDao.findAll();
         return PageUtils.getPageMap(poiList);
 	}
+
+    public Map<String, Object> findSection(int page, int rows) {
+        Pageable pager = new PageRequest(page-1, rows);
+        Page<Poi> poiList = poiDao.findAll(pager);
+
+        return PageUtils.getPageMap(poiList);
+    }
 
     /**
      * @return

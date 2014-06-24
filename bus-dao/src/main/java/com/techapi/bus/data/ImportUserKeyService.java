@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-public class UserKeyService {
+public class ImportUserKeyService {
 
     @Resource
     private UserKeyDao dao;

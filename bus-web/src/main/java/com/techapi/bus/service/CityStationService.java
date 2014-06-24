@@ -4,6 +4,9 @@ import com.techapi.bus.dao.CityStationDao;
 import com.techapi.bus.entity.CityStation;
 import com.techapi.bus.solr.BaseQuery;
 import com.techapi.bus.util.PageUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -41,6 +44,13 @@ public class CityStationService extends BaseQuery{
 		List<CityStation>cityStationList = (List<CityStation>)cityStationDao.findAll();
         return PageUtils.getPageMap(cityStationList);
 	}
+
+    public Map<String, Object> findSection(int page, int rows) {
+        Pageable pager = new PageRequest(page - 1, rows);
+        Page<CityStation> cityStationList = cityStationDao.findAll(pager);
+
+        return PageUtils.getPageMap(cityStationList);
+    }
 
     /**
      * @return

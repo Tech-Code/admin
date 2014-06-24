@@ -7,6 +7,9 @@ import com.techapi.bus.entity.Speed;
 import com.techapi.bus.util.PageUtils;
 import com.techapi.bus.util.TTL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -80,6 +83,13 @@ public class SpeedService {
 		List<Speed>speedList = (List<Speed>) speedDao.findAll();
         return PageUtils.getPageMap(speedList);
 	}
+
+    public Map<String, Object> findSection(int page, int rows) {
+        Pageable pager = new PageRequest(page - 1, rows);
+        Page<Speed> speedList = speedDao.findAll(pager);
+
+        return PageUtils.getPageMap(speedList);
+    }
 
     /**
      * @return

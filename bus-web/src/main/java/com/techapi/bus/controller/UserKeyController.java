@@ -1,7 +1,7 @@
 package com.techapi.bus.controller;
 
-import com.techapi.bus.entity.Taxi;
-import com.techapi.bus.service.TaxiService;
+import com.techapi.bus.entity.UserKey;
+import com.techapi.bus.service.UserKeyService;
 import com.techapi.bus.util.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,20 +16,20 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/taxi")
-public class TaxiController {
+@RequestMapping("/userkey")
+public class UserKeyController {
 
-	@Resource
-	private TaxiService taxiService;
+    @Resource
+    private UserKeyService userKeyService;
 
     @RequestMapping(value = "/add")
     @ResponseBody
-    public Map<String, String> add(Taxi taxi, HttpServletRequest request)
+    public Map<String, String> add(UserKey userKey, HttpServletRequest request)
             throws Exception {
         Map<String, String> map = new HashMap<>();
 
         try {
-            taxiService.addOrUpdate(taxi);
+            userKeyService.addOrUpdate(userKey);
             map.put("mes", "操作成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,17 +40,17 @@ public class TaxiController {
         return map;
     }
 
-	@RequestMapping("/list")
+    @RequestMapping("/list")
     @ResponseBody
-	public Map<String, Object> list(int page, int rows) throws Exception {
-        return taxiService.findSection(page, rows);
-	}
+    public Map<String, Object> list(int page,int rows) throws Exception {
+        return userKeyService.findSection(page,rows);
+    }
 
     @RequestMapping("/update")
     public String update(Model model, String id) throws Exception {
-        Taxi taxi = taxiService.findById(id);
-        model.addAttribute(Constants.TAXI_INFO_SESSION, taxi);
-        return "taxi/add";
+        UserKey userKey = userKeyService.findById(id);
+        model.addAttribute(Constants.POI_INFO_SESSION, userKey);
+        return "userkey/add";
     }
 
     @RequestMapping(value = "/delete")
@@ -59,8 +59,8 @@ public class TaxiController {
             throws Exception {
         Map<String, String> map = new HashMap<String, String>();
         try {
-            List<Taxi> taxiList = taxiService.findByIds(ids);
-            taxiService.deleteMany(taxiList);
+            List<UserKey> poiList = userKeyService.findByIds(ids);
+            userKeyService.deleteMany(poiList);
             map.put("mes", "删除成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,5 +69,4 @@ public class TaxiController {
         }
         return map;// 重定向
     }
-
 }

@@ -1,6 +1,6 @@
 package com.techapi.bus.util;
 
-import com.techapi.bus.data.UserKeyService;
+import com.techapi.bus.data.ImportUserKeyService;
 import com.techapi.bus.entity.City;
 import com.techapi.bus.entity.Country;
 import com.techapi.bus.entity.Province;
@@ -25,8 +25,8 @@ public class ExcelUtils {
     protected ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
             "classpath:META-INF/applicationContext-bus-dao-oracle.xml");
 
-    public UserKeyService userKeyService = context
-            .getBean(UserKeyService.class);
+    public ImportUserKeyService importUserKeyService = context
+            .getBean(ImportUserKeyService.class);
 
     public static List<Province> readProvinceExcel() {
         List<Province> provinceList = new ArrayList<>();
@@ -117,6 +117,6 @@ public class ExcelUtils {
 
     public static void main(String[] args) {
         //ExcelUtils.readProvinceExcel();
-        new ExcelUtils().userKeyService.importUserKey(ExcelUtils.readKey());
+        new ExcelUtils().importUserKeyService.importUserKey(ExcelUtils.readKey());
     }
 }

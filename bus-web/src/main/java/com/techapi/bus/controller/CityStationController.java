@@ -42,8 +42,8 @@ public class CityStationController{
 
 	@RequestMapping("/list")
     @ResponseBody
-	public Map<String, Object> list() throws Exception {
-        return cityStationService.findAll();
+	public Map<String, Object> list(int page,int rows) throws Exception {
+        return cityStationService.findSection(page, rows);
 	}
 
     @RequestMapping("/update")

@@ -3,6 +3,9 @@ package com.techapi.bus.service;
 import com.techapi.bus.dao.TaxiDao;
 import com.techapi.bus.entity.Taxi;
 import com.techapi.bus.util.PageUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,6 +34,13 @@ public class TaxiService {
 		List<Taxi>taxiList = (List<Taxi>)taxiDao.findAll();
         return PageUtils.getPageMap(taxiList);
 	}
+
+    public Map<String, Object> findSection(int page, int rows) {
+        Pageable pager = new PageRequest(page - 1, rows);
+        Page<Taxi> taxiList = taxiDao.findAll(pager);
+
+        return PageUtils.getPageMap(taxiList);
+    }
 
     /**
      * @return

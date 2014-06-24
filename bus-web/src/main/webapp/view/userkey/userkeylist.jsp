@@ -26,130 +26,115 @@
                 width : 2
             }, //显示复选框
             {
-				field : 'cityCode',
-                title : '城市代码',
+				field : 'createDate',
+                title : '时间',
 				width : 20,
                 formatter : function(value, row, index) {
-                    return row.cityCode;
+                    return row.createDate;
                 } //需要formatter一下才能显示正确的数据
             },{
-				field : 'cityName',
-                title : '城市名称',
+				field : 'businessName',
+                title : '业务名称',
 				width : 20,
                 formatter : function(value, row, index) {
-                    return row.cityName;
+                    return row.businessName;
                 } //需要formatter一下才能显示正确的数据
             },{
-				field : 'd_timesection',
-				title : '日间时间区间',
+				field : 'businessSubName',
+				title : '业务子名称',
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.d_timesection;
+					return row.businessSubName;
 				} //需要formatter一下才能显示正确的数据
 			},{
-				field : 'd_s_miles',
-				title : '起步公里数',
+				field : 'businessFlag',
+				title : '业务标识',
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.d_s_miles;
+					return row.businessFlag;
 				} //需要formatter一下才能显示正确的数据
 			},{
-				field : 'd_s_cost',
-				title : '起步价',
+				field : 'businessType',
+				title : '业务分类',
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.d_s_cost;
+					return row.businessType;
 				} //需要formatter一下才能显示正确的数据
 			},{
-				field : 'd_exceed_s_cost',
-				title : '超出起步单价(元/公里)',
+				field : 'usedApi',
+				title : '使用API',
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.d_exceed_s_cost;
+					return row.usedApi;
 				} //需要formatter一下才能显示正确的数据
 			},{
-                    field : 'd_s_exceed_d_cost',
-                    title : '超出规定距离单价',
+                    field : 'province',
+                    title : '省份',
                     width : 20,
                     sortable : true,
                     formatter : function(value, row, index) {
-                        return row.d_s_exceed_d_cost;
+                        return row.province;
                     } //需要formatter一下才能显示正确的数据
             },{
-                    field : 'n_timesection',
-                    title : '夜间时间区间',
+                    field : 'status',
+                    title : '状态',
                     width : 20,
                     sortable : true,
                     formatter : function(value, row, index) {
-                        return row.n_timesection;
+                        return row.status;
                     } //需要formatter一下才能显示正确的数据
             },{
-                    field : 'n_s_miles',
-                    title : '夜间起步公里数',
+                    field : 'firm',
+                    title : '厂商',
                     width : 20,
                     sortable : true,
                     formatter : function(value, row, index) {
-                        return row.n_s_miles;
+                        return row.firm;
                     } //需要formatter一下才能显示正确的数据
             },{
-                    field : 'n_s_cost',
-                    title : '夜间起步价(元)',
+                    field : 'businessUrl',
+                    title : '业务地址',
                     width : 20,
                     sortable : true,
                     formatter : function(value, row, index) {
-                        return row.n_s_cost;
+                        return row.businessUrl;
                     } //需要formatter一下才能显示正确的数据
             },{
-                    field : 'n_exceed_s_cost',
-                    title : '夜间超出起步单价',
+                    field : 'key',
+                    title : 'key',
                     width : 20,
                     sortable : true,
                     formatter : function(value, row, index) {
-                        return row.n_exceed_s_cost;
+                        return row.key;
                     } //需要formatter一下才能显示正确的数据
             },{
-                    field : 'n_s_exceed_d_cost',
-                    title : '夜间超出规定距离单价',
+                    field : 'contact',
+                    title : '联系人',
                     width : 20,
                     sortable : true,
                     formatter : function(value, row, index) {
-                        return row.n_s_exceed_d_cost;
+                        return row.contact;
                     } //需要formatter一下才能显示正确的数据
             },{
-                    field : 'd_bas',
-                    title : '日间燃油税',
+                    field : 'businessResource',
+                    title : '资源',
                     width : 20,
                     sortable : true,
                     formatter : function(value, row, index) {
-                        return row.d_bas;
+                        return row.businessResource;
                     } //需要formatter一下才能显示正确的数据
             },{
-                    field : 'n_bas',
-                    title : '夜间燃油税',
+                    field : 'source',
+                    title : '来源',
                     width : 20,
                     sortable : true,
                     formatter : function(value, row, index) {
-                        return row.n_bas;
-                    } //需要formatter一下才能显示正确的数据
-            },{
-                    field : 'd_exceed_distance',
-                    title : '日间规定距离',
-                    width : 20,
-                    sortable : true,
-                    formatter : function(value, row, index) {
-                        return row.d_exceed_distance;
-                    } //需要formatter一下才能显示正确的数据
-            },{
-                    field : 'n_exceed_distance',
-                    title : '夜间规定距离',
-                    width : 20,
-                    sortable : true,
-                    formatter : function(value, row, index) {
-                        return row.n_exceed_distance;
+
+                        return row.source;
                     } //需要formatter一下才能显示正确的数据
             }] ],
 			toolbar : [ {
@@ -176,9 +161,10 @@
 			}
 		});
 	});
-	//新增
+
+    //新增
 	function addrow() {
-		parent.addTab('tabId_taxi_add','添加公交车费用','<%=root%>/view/taxi/add.jsp');
+		parent.addTab('tabId_key_add','添加用户key','<%=root%>/view/userkey/add.jsp');
 
 	}
 	//更新
@@ -186,11 +172,11 @@
 		var rows = $('#userKeyTable').datagrid('getSelections');
 		//这里有一个jquery easyui datagrid的一个小bug，必须把主键单独列出来，要不然不能多选
 		if (rows.length == 0) {
-			$.messager.alert('提示', "请选择你要更新的公交车费用", 'info');
+			$.messager.alert('提示', "请选择你要更新的用户key", 'info');
 			return;
 		}
 		if (rows.length > 1) {
-			$.messager.alert('提示', "只能选择一个公交车费用进行更新", 'info');
+			$.messager.alert('提示', "只能选择一个用户key进行更新", 'info');
 			return;
 		}
 
@@ -202,7 +188,7 @@
 		
 		var url = '<%=root%>/taxi/update' + ps;
 
-		parent.addTab('tabId_bc_update','更新公交车费用',url);
+		parent.addTab('tabId_key_update','更新用户key',url);
 	}
 
  	//删除
@@ -217,7 +203,7 @@
 					else
 						ps += "&id=" + n.id;
 				});
-				$.post('<%=root%>/taxi/delete' + ps, function() {
+				$.post('<%=root%>/usekey/delete' + ps, function() {
 					$('#userKeyTable').datagrid('reload');
 					$.messager.alert('删除', '删除已成功', 'info');
 				});

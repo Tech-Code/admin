@@ -114,7 +114,7 @@
                 </ul>
                 <ul>
                     <li>
-                        <a href="javascript:addTab('tabId_keylist','权限配置管理','<%=root%>/view/userkey/userkeylist.jsp');">时速配置管理</a>
+                        <a href="javascript:addTab('tabId_keylist','权限配置管理','<%=root%>/view/userkey/userkeylist.jsp');">权限配置管理</a>
                     </li>
                 </ul>
 

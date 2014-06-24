@@ -45,8 +45,8 @@ public class TransStationController {
 
 	@RequestMapping("/list")
     @ResponseBody
-	public Map<String, Object> list() throws Exception {
-        return transStationService.findAll();
+	public Map<String, Object> list(int page,int rows) throws Exception {
+        return transStationService.findSection(page, rows);
 	}
 
     @RequestMapping("/update")
