@@ -1,11 +1,14 @@
 package com.techapi.bus.service;
 
 import com.techapi.bus.dao.TransstationDao;
+import com.techapi.bus.entity.CityStation;
 import com.techapi.bus.entity.Transstation;
+import com.techapi.bus.solr.BaseQuery;
 import com.techapi.bus.util.PageUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +18,7 @@ import java.util.Map;
  * @date 2014-3-8
  */
 @Service
-public class TransStationService {
+public class TransStationService extends BaseQuery {
 
 	@Resource
 	private TransstationDao transStationDao;
@@ -60,4 +63,8 @@ public class TransStationService {
         transStationDao.delete(transStationList);
     }
 
+    public List<CityStation> suggetList(String q) {
+        List<CityStation> cityStationNameList = (ArrayList) queryBeans(q, 0, 10, CityStation.class);
+        return cityStationNameList;
+    }
 }

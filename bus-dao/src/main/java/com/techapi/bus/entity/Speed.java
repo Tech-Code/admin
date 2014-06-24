@@ -1,12 +1,8 @@
 package com.techapi.bus.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name="BUS_SPEED")
@@ -26,6 +22,9 @@ public class Speed implements java.io.Serializable {
 	private String  cityCode;// IS '城市代码';
 	@Column(name="CITYNAME")
 	private String cityName;// IS '城市名';
+	@Column(name="TRANSPORTTYPE")
+	private int transportType;// IS '交通工具类型 0:地铁,1:公交';
+
 	public String getId() {
 		return id;
 	}
@@ -62,4 +61,12 @@ public class Speed implements java.io.Serializable {
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
 	}
+
+    public int getTransportType() {
+        return transportType;
+    }
+
+    public void setTransportType(int transportType) {
+        this.transportType = transportType;
+    }
 }

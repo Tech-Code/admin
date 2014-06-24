@@ -5,9 +5,6 @@ public class Constants {
 	public final static String OPERATE_TYPE_UPDATE = "1";
 	public final static String OPERATE_TYPE_DELETE = "2";
 
-	public final static String RESULT_FAILED = "0";
-	public final static String RESULT_SUCCESS = "1";
-
 	public final static String USER_INFO_SESSION = "user";
 	public final static String CS_INFO_SESSION = "cs";
 	public final static String TS_INFO_SESSION = "ts";

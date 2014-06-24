@@ -26,18 +26,16 @@ public class SpeedController {
     @ResponseBody
     public Map<String, String> add(Speed speed, HttpServletRequest request)
             throws Exception {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map;
 
         try {
-            speedService.addOrUpdate(speed);
-            map.put("mes", "操作成功");
+            map = speedService.addOrUpdate(speed);
+            return map;
         } catch (Exception e) {
             e.printStackTrace();
-            map.put("mes", "操作失败");
             throw e;
         }
 
-        return map;
     }
 
 	@RequestMapping("/list")

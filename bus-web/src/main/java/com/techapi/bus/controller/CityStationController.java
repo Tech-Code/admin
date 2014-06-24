@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/citystation")
-public class CityStationController {
+public class CityStationController{
 
 	@Resource
 	private CityStationService cityStationService;

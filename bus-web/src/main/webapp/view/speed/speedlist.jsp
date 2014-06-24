@@ -116,17 +116,6 @@
 		
 		var url = '<%=root%>/speed/update' + ps;
 
-//        $('#dd').dialog({
-//            title: 'My Dialog',
-//            width: 400,
-//            height: 200,
-//            close: false,
-//            cache: false,
-//            href: url,
-//            modal: true
-//        });
-        //$('#dd').dialog('refresh', 'new_content.php');
-
 		parent.addTab('tabId_speed_update','更新城际站点信息',url);
 	}
 

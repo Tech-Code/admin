@@ -1,5 +1,7 @@
 package com.techapi.bus.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.techapi.bus.entity.CityStation;
 import com.techapi.bus.entity.Transstation;
 import com.techapi.bus.service.TransStationService;
 import com.techapi.bus.util.Constants;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +71,33 @@ public class TransStationController {
             throw e;
         }
         return map;// 重定向
+    }
+
+    @RequestMapping(value = "/suggestlist")
+    public
+    @ResponseBody
+    Object suggest(@RequestParam("stationName") String stationName)
+            throws Exception {
+        JSONObject json = new JSONObject();
+        List<CityStation> cityStationNameList = new ArrayList<>();
+
+//        if("".equals(stationName.trim())) {
+//            return json.put("result",cityStationNameList);
+//        }
+//        String q = "cityStationName:"+ stationName;
+        String q = "cityStationName:北京";
+
+        try {
+            cityStationNameList = transStationService.suggetList(q);
+
+            json.put("result", cityStationNameList);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            throw e;
+        }
+        return json;// 重定向
     }
 
 }

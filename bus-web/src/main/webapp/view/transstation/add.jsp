@@ -9,6 +9,7 @@
 <script type="text/javascript" src="<%=root%>/js/ueditor/ueditor.all.min.js"></script>
 <script type="text/javascript" src="<%=root%>/js/ueditor/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript" src="../../js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="../../js/autoComplete.js"></script>
 <style type="text/css">
 .clear {
 	clear: both;
@@ -32,7 +33,7 @@
                 </label>
 				<label>
 					<span>班次</span>
-                    <input name="trips" value="${ts.trips }" class="text-input"/>
+                    <input name="trips" id="trips" value="${ts.trips }" class="text-input"/>
                 </label>
                 <label>
                     <span>交通工具小类</span>
@@ -46,93 +47,82 @@
                 </label>
 				<label>
 					<span>城市代码</span>
-                    <input name="cityCode" value="${ts.cityCode }" class="text-input"/>
+                    <input name="cityCode" id="cityCode" value="${ts.cityCode }" class="text-input"/>
                 </label>
 				<label>
 					<span>站点</span>
-                    <input name="station" value="${ts.station }" class="text-input"/>
+                    <input name="station" value="${ts.station }" class="text-input" id="stationName"/>
+                    <div id="divAutoList"></div>
                 </label>
 				<label>
 					<span>站序</span>
-                    <input name="stationOrder" value="${ts.stationOrder }" class="text-input"/>
+                    <input name="stationOrder" id="stationOrder" value="${ts.stationOrder }" class="text-input"/>
                 </label>
 				<label>
 					<span>站点坐标</span>
-                    <input name="coordinate" value="${ts.coordinate }" class="text-input"/>
+                    <input name="coordinate" id="coordinate" value="${ts.coordinate }" class="text-input"/>
                 </label>
 				<label>
 					<span>到达时间</span>
-                    <input name="arriveTime" value="${ts.arriveTime }" class="text-input"/>
+                    <input name="arriveTime" id="arriveTime" value="${ts.arriveTime }" class="text-input"/>
                 </label>
 				<label>
 					<span>发车时间</span>
-                    <input name="departTime" value="${ts.departTime }" class="text-input"/>
+                    <input name="departTime" id="departTime" value="${ts.departTime }" class="text-input"/>
                 </label>
 				<label>
 					<span>里程</span>
-                    <input name="miles" value="${ts.miles }" class="text-input"/>
+                    <input name="miles" id="miles" value="${ts.miles }" class="text-input"/>
                 </label>
 				<label>
 					<span>票价</span>
-                    <input name="price" value="${ts.price }" class="text-input"/>
+                    <input name="price" id="price" value="${ts.price }" class="text-input"/>
                 </label>
 			</div>
-			<div style="width:60%;height:300px;border: 1px solid gray;float: right;" id="container"> </div>
 		</fieldset>
 		<input id="save" type="button" value="保存"
 					onclick="add()" class="easyui-linkbutton" />
 	</form>
 </body>
 <script type="text/javascript">
-	//以下两句话为创建地图
-	var map = new BMap.Map("container");
-	var lng = 123.438973;
-	var lat = 41.811334;
-	
-	var _lng = 123.458973;
-	var _lat = 41.83334;
-	if (_lng != '' && _lat != '') {
-		lng = _lng;
-		lat = _lat;
-	}else{
-		$('#lng').val(lng);
-		$('#lat').val(lat);
-	}
-
-	map.centerAndZoom(new BMap.Point(lng, lat), 14);
-	var marker = new BMap.Marker(new BMap.Point(lng, lat)); // 创建标注
-	map.addOverlay(marker);
-	//鱼骨控件
-	map.addControl(new BMap.NavigationControl());
-	map.enableScrollWheelZoom(); //启用滚轮放大缩小，默认禁用
-	map.enableContinuousZoom(); //启用地图惯性拖拽，默认禁用
-	//点击地图进行地址解析
-	var gc = new BMap.Geocoder();
-	map.addEventListener("click", function(e) {
-		var pt = e.point;
-		map.clearOverlays();
-		var marker1 = new BMap.Marker(new BMap.Point(pt.lng, pt.lat)); // 创建标注
-		map.addOverlay(marker1);
-
-		$('#lng').val(pt.lng);
-		$('#lat').val(pt.lat);
-	});
-
-    function getTransdetail(transdetails) {
-
-
-    }
-
+    $('#trips').validatebox({
+        required: true
+    });
+    $('#cityCode').validatebox({
+        required: true
+    });
+    $('#stationName').validatebox({
+        required: true
+    });
+    $('#stationOrder').validatebox({
+        required: true
+    });
+    $('#coordinate').validatebox({
+        required: true
+    });
+    $('#arriveTime').validatebox({
+        required: true
+    });
+    $('#departTime').validatebox({
+        required: true
+    });
+    $('#miles').validatebox({
+        required: true
+    });
+    $('#price').validatebox({
+        required: true
+    });
 	function add() {
+        var isValid = $('#tsForm').form('validate');
+        if (!isValid) {
+            $.messager.alert('提示', "信息不完整，请补全！", 'info');
+        } else {
+            $.post("${ctx}/transstation/add", $("#tsForm").serializeArray(),
+                    function (data) {
+                        $.messager.alert('提示', "操作成功", 'info');
 
-		$.post("${ctx}/transstation/add", $("#tsForm").serializeArray(),
-			function(data) {
-				$.messager.alert('提示', "操作成功", 'info');
-				//$('#MyPopWindow').window('close');
-				//$('#userTable').datagrid('reload');
-
-			});
-
+                    });
+        }
 	}
 	
 </script>

@@ -1,8 +1,12 @@
 package com.techapi.bus.service;
 
+import com.techapi.bus.annotation.CacheProxy;
+import com.techapi.bus.annotation.ServiceCache;
 import com.techapi.bus.dao.PoiDao;
 import com.techapi.bus.entity.Poi;
 import com.techapi.bus.util.PageUtils;
+import com.techapi.bus.util.TTL;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,7 +23,10 @@ public class PoiService {
 
 	@Resource
 	private PoiDao poiDao;
+    @Autowired
+    public CacheProxy cacheProxy;
 
+    @ServiceCache(TTL._30M)
     public void addOrUpdate(Poi poi) {
         poiDao.save(poi);
     }
@@ -36,17 +43,14 @@ public class PoiService {
      * @return
      */
     public Poi findById(String id) {
-        Poi poi = poiDao.findOne(id);
+        Poi poi = poiDao.findOneById(id);
         return poi;
     }
 
     public List<Poi> findByIds(List<String> ids) {
-        return (List<Poi>) poiDao.findAll(ids);
-    }
-
-    public void update(String id) {
-        //PoiDao.updatePoi("010","北京");
-        //PoiDao.save();
+        String[] idArray = ids.toArray(new String[0]);
+        List<Poi> deletePoi = poiDao.findByids(idArray);
+        return deletePoi;
     }
 
     public void deleteOne(String id) {
@@ -55,6 +59,7 @@ public class PoiService {
 
     public void deleteMany(List<Poi> poiList) {
         poiDao.delete(poiList);
+
     }
 
 }

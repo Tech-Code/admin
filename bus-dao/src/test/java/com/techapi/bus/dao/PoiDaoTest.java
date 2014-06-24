@@ -1,6 +1,7 @@
 package com.techapi.bus.dao;
 
 import com.techapi.bus.entity.Poi;
+import com.techapi.bus.entity.PoiPK;
 import com.techapi.bus.util.StringUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,8 +52,12 @@ public class PoiDaoTest {
                 String[] poiData = line.split(",");
                 Poi poi = new Poi();
                 poi.setCityCode(poiData[0]);
-                poi.setStationId(poiData[1]);
-                poi.setPoiId(poiData[2]);
+
+                PoiPK poiPK = new PoiPK();
+                poiPK.setStationId(poiData[1]);
+                poiPK.setPoiId(poiData[2]);
+                poi.setPoiPK(poiPK);
+
                 poi.setPoiName(poiData[3]);
                 poi.setPoiType1(poiData[4]);
                 poi.setPoiType2(poiData[5]);

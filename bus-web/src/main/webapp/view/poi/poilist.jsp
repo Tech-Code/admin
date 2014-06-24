@@ -34,20 +34,20 @@
                 } //需要formatter一下才能显示正确的数据
             },
 			{
-				field : 'stationId',
+				field : 'poiPK.stationId',
 				title : '站点ID',
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.stationId;
+					return row.poiPK.stationId;
 				} //需要formatter一下才能显示正确的数据
 			},{
-				field : 'poiId',
+				field : 'poiPK.poiId',
 				title : 'POIID',
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.poiId;
+					return row.poiPK.poiId;
 				} //需要formatter一下才能显示正确的数据
 			},{
 				field : 'poiName',

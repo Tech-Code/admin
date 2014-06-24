@@ -112,6 +112,11 @@
                         <a href="javascript:addTab('tabId_splist','时速配置管理','<%=root%>/view/speed/speedlist.jsp');">时速配置管理</a>
                     </li>
                 </ul>
+                <ul>
+                    <li>
+                        <a href="javascript:addTab('tabId_keylist','权限配置管理','<%=root%>/view/userkey/userkeylist.jsp');">时速配置管理</a>
+                    </li>
+                </ul>
 
             </div>
 

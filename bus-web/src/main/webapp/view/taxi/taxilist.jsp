@@ -119,6 +119,38 @@
                     formatter : function(value, row, index) {
                         return row.n_s_exceed_d_cost;
                     } //需要formatter一下才能显示正确的数据
+            },{
+                    field : 'd_bas',
+                    title : '日间燃油税',
+                    width : 20,
+                    sortable : true,
+                    formatter : function(value, row, index) {
+                        return row.d_bas;
+                    } //需要formatter一下才能显示正确的数据
+            },{
+                    field : 'n_bas',
+                    title : '夜间燃油税',
+                    width : 20,
+                    sortable : true,
+                    formatter : function(value, row, index) {
+                        return row.n_bas;
+                    } //需要formatter一下才能显示正确的数据
+            },{
+                    field : 'd_exceed_distance',
+                    title : '日间规定距离',
+                    width : 20,
+                    sortable : true,
+                    formatter : function(value, row, index) {
+                        return row.d_exceed_distance;
+                    } //需要formatter一下才能显示正确的数据
+            },{
+                    field : 'n_exceed_distance',
+                    title : '夜间规定距离',
+                    width : 20,
+                    sortable : true,
+                    formatter : function(value, row, index) {
+                        return row.n_exceed_distance;
+                    } //需要formatter一下才能显示正确的数据
             }] ],
 			toolbar : [ {
 				text : '新增',

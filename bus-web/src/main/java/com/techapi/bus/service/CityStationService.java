@@ -2,6 +2,7 @@ package com.techapi.bus.service;
 
 import com.techapi.bus.dao.CityStationDao;
 import com.techapi.bus.entity.CityStation;
+import com.techapi.bus.solr.BaseQuery;
 import com.techapi.bus.util.PageUtils;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ import java.util.Map;
  * @date 2014-3-8
  */
 @Service
-public class CityStationService {
+public class CityStationService extends BaseQuery{
 
 	@Resource
 	private CityStationDao cityStationDao;
@@ -29,6 +30,7 @@ public class CityStationService {
 //            }
 //        }
         cityStationDao.save(cityStation);
+        updateBean(cityStation);
     }
 
 	/**

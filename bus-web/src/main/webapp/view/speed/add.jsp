@@ -24,101 +24,70 @@
 			<div style="width:39%;height:350px;float: left">
 				<label>
                     <span>交通工具类型</span>
-                    <select name="tranSportation" class="text-input">
-                        <option value="公交车" <c:if test="${speed.tranSportation=='公交车' }">selected</c:if>>公交车</option>
-                        <option value="出租车" <c:if test="${speed.tranSportation=='出租车' }">selected</c:if>>出租车</option>
+                    <select name="transportType" class="text-input">
+                        <option value="0" <c:if test="${speed.transportType==0 }">selected</c:if>>地铁</option>
+                        <option value="1" <c:if test="${speed.transportType==1 }">selected</c:if>>公交车</option>
+                        <option value="2" <c:if test="${speed.transportType==3 }">selected</c:if>>出租车</option>
                     </select>
 				</label>
 				<label>
 					<span>交通工具明细</span>
-                    <input name="tranSportDes" value="${speed.tranSportDes }" class="text-input"/>
+                    <input name="tranSportDes" id="tranSportDes" value="${speed.tranSportDes }" class="text-input"/>
                 </label>
                 <label>
 					<span>时速</span>
-                    <input name="speed" value="${speed.speed }" class="text-input"/>
+                    <input name="speed" id="speed" value="${speed.speed }" class="text-input"/>
                 </label>
                 <label>
 					<span>城市代码</span>
-                    <input name="cityCode" value="${speed.cityCode }" class="text-input"/>
+                    <input name="cityCode" id="cityCode" value="${speed.cityCode }" class="text-input"/>
                 </label>
                 <label>
 					<span>城市名</span>
-                    <input name="cityName" value="${speed.cityName }" class="text-input"/>
+                    <input name="cityName" id="cityName" value="${speed.cityName }" class="text-input"/>
                 </label>
 			</div>
-			<div style="width:60%;height:300px;border: 1px solid gray;float: right;" id="container"> </div>
 		</fieldset>
 		<input id="save" type="button" value="保存"
 					onclick="add()" class="easyui-linkbutton" />
 	</form>
 </body>
 <script type="text/javascript">
-
-	//以下两句话为创建地图
-	var map = new BMap.Map("container");
-	var lng = 123.438973;
-	var lat = 41.811334;
-	
-	var _lng = 123.458973;
-	var _lat = 41.83334;
-	if (_lng != '' && _lat != '') {
-		lng = _lng;
-		lat = _lat;
-	}else{
-		$('#lng').val(lng);
-		$('#lat').val(lat);
-	}
-
-	map.centerAndZoom(new BMap.Point(lng, lat), 14);
-	var marker = new BMap.Marker(new BMap.Point(lng, lat)); // 创建标注
-	map.addOverlay(marker);
-	//鱼骨控件
-	map.addControl(new BMap.NavigationControl());
-	map.enableScrollWheelZoom(); //启用滚轮放大缩小，默认禁用
-	map.enableContinuousZoom(); //启用地图惯性拖拽，默认禁用
-	//点击地图进行地址解析
-	var gc = new BMap.Geocoder();
-	map.addEventListener("click", function(e) {
-		var pt = e.point;
-		map.clearOverlays();
-		var marker1 = new BMap.Marker(new BMap.Point(pt.lng, pt.lat)); // 创建标注
-		map.addOverlay(marker1);
-
-		$('#lng').val(pt.lng);
-		$('#lat').val(pt.lat);
-	});
-
+    $('#tranSportDes').validatebox({
+        required: true
+    });
+    $('#speed').validatebox({
+        required: true
+    });
+    $('#cityCode').validatebox({
+        required: true
+    });
+    $('#cityName').validatebox({
+        required: true
+    });
 	function add() {
-//        var transdetails = "";
-//        $("input[name='transdetailGroup']").each(function(){
-//            if(true==$(this).attr("checked")) {
-//                transdetails = transdetails + $(this).attr('value') + ";";
-//            }
-//        })
-//        $("#transdetail").attr('value',transdetails);
+        var isValid = $('#speedForm').form('validate');
+        if (!isValid) {
+            $.messager.alert('提示', "信息不完整，请补全！", 'info');
+        } else {
+            $.post("${ctx}/speed/add", $("#speedForm").serializeArray(),
+                    function (data) {
+                        if(data.result == '0' || data.result == '2') $.messager.alert('提示', data.alertInfo, 'info');
 
-		$.post("${ctx}/speed/add", $("#speedForm").serializeArray(),
-			function(data) {
-				$.messager.alert('提示', "操作成功", 'info');
-				//$('#MyPopWindow').window('close');
-				//$('#userTable').datagrid('reload');
+                        if(data.result == '1') $.messager.confirm('提示', '确定要覆盖吗?', function (result) {
+                            if (result) {
+                                $('#id').val(data.id);
+                                $.post("${ctx}/speed/add", $("#speedForm").serializeArray(),
+                                function (data) {
+                                    $.messager.alert('提示', data.alertInfo, 'info');
+                                    $('#id').val('');
+                                });
+                            }
+                        });
 
-			});
+                    });
+        }
 
 	}
-
-
-
-
-	<%--var editor;--%>
-	<%--setTimeout(function(){--%>
-		<%--//实例化编辑器--%>
-		<%--editor = UE.getEditor('editor');--%>
-	<%--}, 200);--%>
-	<%----%>
-	<%--setTimeout(function(){--%>
-		<%--editor.setContent('${speed.adContent }', false)--%>
-	<%--}, 1000);--%>
-	
 </script>
 </html>

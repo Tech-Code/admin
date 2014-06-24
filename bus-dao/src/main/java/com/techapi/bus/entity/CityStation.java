@@ -1,5 +1,6 @@
 package com.techapi.bus.entity;
 
+import org.apache.solr.client.solrj.beans.Field;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ public class CityStation implements java.io.Serializable{
     @Id
     @GeneratedValue(generator = "UUIDGenerator")
     @GenericGenerator(name="UUIDGenerator",strategy="uuid")
+    @Field
     private String id;
 
     @Column(name="CITYCODE")
@@ -19,6 +21,7 @@ public class CityStation implements java.io.Serializable{
 	@Column(name="TRANSTYPE")
 	private String transType;
 	@Column(name="STATIONNAME")
+    @Field("cityStationName")
 	private String stationName;
 	@Column(name="TRANSDETAIL")
 	private String transdetail;

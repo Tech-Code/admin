@@ -100,7 +100,7 @@
 	});
 	//新增
 	function addrow() {
-		parent.addTab('tabId_cs_add','发布广告','<%=root%>/view/citystation/add.jsp');
+		parent.addTab('tabId_cs_add','添加城际站点','<%=root%>/view/citystation/add.jsp');
 
 	}
 	//更新

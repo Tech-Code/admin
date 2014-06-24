@@ -1,13 +1,16 @@
 package com.techapi.bus.util;
 
+import com.techapi.bus.data.UserKeyService;
 import com.techapi.bus.entity.City;
 import com.techapi.bus.entity.Country;
 import com.techapi.bus.entity.Province;
+import com.techapi.bus.entity.UserKey;
 import jxl.Cell;
 import jxl.Range;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +21,14 @@ import java.util.List;
  * Created by xuefei on 6/9/14.
  */
 public class ExcelUtils {
-    public static List<Province> readExcel() {
+
+    protected ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+            "classpath:META-INF/applicationContext-bus-dao-oracle.xml");
+
+    public UserKeyService userKeyService = context
+            .getBean(UserKeyService.class);
+
+    public static List<Province> readProvinceExcel() {
         List<Province> provinceList = new ArrayList<>();
         try {
             Workbook workbook = Workbook.getWorkbook(new File("/Users/xuefei/Documents/MyDocument/Fun/bus/1 县级行政区划Ad_code列表_13Q4.xls"));
@@ -68,8 +78,45 @@ public class ExcelUtils {
         return provinceList;
     }
 
-    public static void main(String[] args) {
-        ExcelUtils.readExcel();
+    public static List<UserKey> readKey() {
+        List<UserKey> userKeyList = new ArrayList<>();
+        try {
+            Workbook workbook = Workbook.getWorkbook(new File("/Users/xuefei/Documents/MyDocument/Fun/bus/key生成策略及现有KEY/key生成策略及现有KEY/高德GIS业务现有KEY.xls"));
+            Sheet sheet = workbook.getSheet(0);
 
+            int columns = sheet.getColumns();
+            int rows = sheet.getRows();
+
+            for(int i = 1; i< rows; i++) {
+                UserKey userKey = new UserKey();
+
+                userKey.setCreateDate(sheet.getCell(0, i).getContents());
+                userKey.setBusinessName(sheet.getCell(1, i).getContents());
+                userKey.setBusinessSubName(sheet.getCell(2, i).getContents());
+                userKey.setBusinessFlag(sheet.getCell(3, i).getContents());
+                userKey.setBusinessType(sheet.getCell(4, i).getContents());
+                userKey.setUsedApi(sheet.getCell(5, i).getContents());
+                userKey.setProvince(sheet.getCell(6, i).getContents());
+                userKey.setStatus(sheet.getCell(7, i).getContents());
+                userKey.setFirm(sheet.getCell(8, i).getContents());
+                userKey.setBusinessUrl(sheet.getCell(9, i).getContents());
+                userKey.setKey(sheet.getCell(10, i).getContents());
+                userKey.setContact(sheet.getCell(11, i).getContents());
+                userKey.setBusinessResource(sheet.getCell(12, i).getContents());
+                userKey.setSource(0);
+                userKeyList.add(userKey);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            e.printStackTrace();
+        }
+        return userKeyList;
+    }
+
+    public static void main(String[] args) {
+        //ExcelUtils.readProvinceExcel();
+        new ExcelUtils().userKeyService.importUserKey(ExcelUtils.readKey());
     }
 }

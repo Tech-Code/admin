@@ -9,35 +9,17 @@ import java.util.ResourceBundle;
  */
 public class ConfigUtils {
 
-	/**
-	 * 关键字查询URL
-	 */
-	public static String QUERY_KEYWORD;
+    public static String SOLR_URL;
 
-	/**
-	 * 线路查询URL
-	 */
-	public static String QUERY_LINE;
-
-	/**
-	 * 城市ID
-	 */
-	private static String CITY_ID;
-	
-	/**
-	 * 发布地址
-	 */
-	public static String BASE_URL;
+    public static String BUS_DATA;
 
 	static {
 		try {
 			ResourceBundle rb = ResourceBundle.getBundle("config");
-			CITY_ID = rb.getString("baidu.cityid");
-			QUERY_KEYWORD = rb.getString("baidu.query.keyword").replace(
-					"{cityid}", CITY_ID);
-			QUERY_LINE = rb.getString("baidu.query.line").replace("{cityid}",
-					CITY_ID);
-			BASE_URL = rb.getString("sftp.url");
+
+            SOLR_URL = rb.getString("solr.url");
+
+            BUS_DATA = rb.getString("bus.data");
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

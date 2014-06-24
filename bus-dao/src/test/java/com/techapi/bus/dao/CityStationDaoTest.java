@@ -1,6 +1,7 @@
 package com.techapi.bus.dao;
 
 import com.techapi.bus.entity.CityStation;
+import com.techapi.bus.solr.BaseQuery;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +22,7 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:META-INF/applicationContext-bus-dao-oracle.xml")
 @Transactional
-public class CityStationDaoTest {
+public class CityStationDaoTest extends BaseQuery{
 	
     @Resource
     private CityStationDao dao;
@@ -72,14 +73,25 @@ public class CityStationDaoTest {
     @Rollback(false)
     public void testAddCityStation() {
         CityStation cityStation = new CityStation();
-        cityStation.setCityCode("121");
-        cityStation.setCityName("上海");
-        cityStation.setStationName("111");
+        cityStation.setCityName("北京");
+        cityStation.setStationName("北京南站");
         cityStation.setCoordinate("32.232,112.1212");
 //        cityStation.setId("1111");
         cityStation.setTransdetail("111");
         cityStation.setTransType("11");
         dao.save(cityStation);
+        updateBean(cityStation);
+    }
+
+    @Test
+    public void queryCityStation() {
+        String q = "cityStationName:北京";
+
+        List<CityStation> list = (List<CityStation>) queryBeans(
+                q, 0, 10,
+                CityStation.class);
+
+        System.out.println("1111");
     }
 
     @Test
