@@ -9,8 +9,6 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -53,7 +51,7 @@ public class CacheProxyJedisImpl implements CacheProxy {
 		}
 	}
 
-	public static JedisPool getJedisPool() {
+	public JedisPool getJedisPool() {
 		return poolList.get(random.nextInt(poolList.size()));
 	}
 
@@ -84,6 +82,39 @@ public class CacheProxyJedisImpl implements CacheProxy {
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 				jp.returnBrokenResource(j);
+			}
+		}
+		return obj;
+	}
+	
+	@Override
+	public Object get(String key, int dbIdx) {
+		Object obj = null;
+		if (StringUtils.isNotBlank(key)) {
+			Jedis jedis = null;
+			JedisPool jp = getJedisPool();
+			byte[] bytesValue = null;
+			try {
+				byte[] bytesKey = key.getBytes();
+				jedis = jp.getResource();
+				jedis.select(dbIdx);
+				bytesValue = jedis.get(bytesKey);
+
+				/**
+				 * <pre>
+				 * Patch For:
+				 * 如果对象结构发变化，如增加属性，使用Hessian反序列化时会发生异常，此时需要remove该key
+				 * 或者设置该key生存时间为0，防止每次get该key，反序列化出现同样的异常
+				 * </pre>
+				 */
+				obj = serializer.decode(bytesValue);
+				if (obj == null) {
+					jedis.expire(bytesKey, 0);
+				}
+				jp.returnResource(jedis);
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				jp.returnBrokenResource(jedis);
 			}
 		}
 		return obj;

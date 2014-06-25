@@ -12,15 +12,22 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
 import com.techapi.bus.BusConstants;
 import com.techapi.bus.annotation.CacheProxy;
+import com.techapi.bus.annotation.HessianSerializer;
+import com.techapi.bus.annotation.ISerializer;
 import com.techapi.bus.annotation.ServiceCache;
 import com.techapi.bus.dao.PoiDao;
 import com.techapi.bus.dao.SpeedDao;
 import com.techapi.bus.dao.TaxiDao;
+import com.techapi.bus.dao.UserKeyDao;
 import com.techapi.bus.entity.Poi;
 import com.techapi.bus.entity.Speed;
 import com.techapi.bus.entity.Taxi;
+import com.techapi.bus.entity.UserKey;
 import com.techapi.bus.util.TTL;
 
 @Service
@@ -34,6 +41,8 @@ public class BusDataAPIService {
 	private SpeedDao speedDao;
 	@Resource
 	private TaxiDao taxiDao;
+	@Resource
+	private UserKeyDao keyDao;
 	@Autowired
 	public CacheProxy cacheProxy;
 
@@ -49,6 +58,7 @@ public class BusDataAPIService {
 	public List<CityTransstationRelation> getAllCityTransstation() {
 		List<CityTransstationRelation> city = cityTransstationDataService
 				.getAllCityTransstation();
+
 		return city;
 	}
 
@@ -196,5 +206,35 @@ public class BusDataAPIService {
 			return speedList.get(0);
 		}
 		return null;
+	}
+
+	/**
+	 * 
+	 * @param cityname
+	 * @return
+	 */
+	public Object findUserKey(String key) {
+		int index = 2;
+		ISerializer serializer = new HessianSerializer();
+		String sKey = "BUS:CTL:" + key;
+
+		Object obj = cacheProxy.get(sKey, index);
+		if (obj == null) {
+			UserKey user = keyDao.findOneByKey(key);
+
+			if (user != null) {
+				// 数据持久化
+				JedisPool pool = cacheProxy.getJedisPool();
+				Jedis jedis = pool.getResource();
+				jedis.select(index);
+
+				byte[] bytesValue = serializer.encode(user);
+				byte[] bytesKey = sKey.getBytes();
+				jedis.set(bytesKey, bytesValue);
+				pool.returnResource(jedis);
+			}
+			return user;
+		}
+		return obj;
 	}
 }
