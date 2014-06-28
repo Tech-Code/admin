@@ -133,8 +133,9 @@
                     width : 20,
                     sortable : true,
                     formatter : function(value, row, index) {
-
-                        return row.source;
+                        if(value == 0) return "原始";
+                        if(value == 1) return "新增";
+                        //return row.source;
                     } //需要formatter一下才能显示正确的数据
             }] ],
 			toolbar : [ {
@@ -186,7 +187,7 @@
 				ps += "?id=" + n.id;
 		});
 		
-		var url = '<%=root%>/taxi/update' + ps;
+		var url = '<%=root%>/userkey/update' + ps;
 
 		parent.addTab('tabId_key_update','更新用户key',url);
 	}
@@ -203,7 +204,7 @@
 					else
 						ps += "&id=" + n.id;
 				});
-				$.post('<%=root%>/usekey/delete' + ps, function() {
+				$.post('<%=root%>/userkey/delete' + ps, function() {
 					$('#userKeyTable').datagrid('reload');
 					$.messager.alert('删除', '删除已成功', 'info');
 				});

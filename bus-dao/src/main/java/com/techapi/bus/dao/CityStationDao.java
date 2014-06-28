@@ -1,6 +1,7 @@
 package com.techapi.bus.dao;
 
 import com.techapi.bus.entity.CityStation;
+import com.techapi.bus.entity.Speed;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -31,6 +32,11 @@ public interface CityStationDao extends PagingAndSortingRepository<CityStation, 
      */
     @Query(value="select t.TRANSTYPE, t.TRIPS, t.TRANSDETAIL,t.CITYCODE, t.STATION, t.STATIONORDER, t.COORDINATE, t.ARRIVETIME, t.DEPARTTIME, t.MILES, t.PRICE, c.cityName from BUS_TRANSSTATION t inner join BUS_CITYSTATION c on T.STATION = C.stationName order by t.STATIONORDER",nativeQuery=true)
     public List<Object[]> findCityAndTransstation();
-	
-	
+
+
+    @Query("select c from CityStation c "
+            + "where c.stationName = :stationName")
+    public List<CityStation> findByStationName(
+            @Param("stationName") String stationName);
+
 }

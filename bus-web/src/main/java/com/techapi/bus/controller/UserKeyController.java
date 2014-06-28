@@ -49,7 +49,7 @@ public class UserKeyController {
     @RequestMapping("/update")
     public String update(Model model, String id) throws Exception {
         UserKey userKey = userKeyService.findById(id);
-        model.addAttribute(Constants.POI_INFO_SESSION, userKey);
+        model.addAttribute(Constants.KEY_INFO_SESSION, userKey);
         return "userkey/add";
     }
 

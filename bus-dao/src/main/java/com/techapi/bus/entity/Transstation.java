@@ -12,20 +12,10 @@ public class Transstation implements java.io.Serializable{
     @GeneratedValue(generator = "UUIDGenerator")
     @GenericGenerator(name="UUIDGenerator",strategy="uuid")
     private String id;
-	@Column(name="TRANSTYPE")
-	private String transType;//	交通工具类型	VARCHAR2(64)
 	@Column(name="TRIPS")
 	private String trips;//	班次	VARCHAR2(64)
-	@Column(name="TRANSDETAIL")
-	private String transDetail;//	交通工具小类	VARCHAR2(64)
-	@Column(name="CITYCODE")
-	private String cityCode;//	城市代码	VARCHAR2(64)
-	@Column(name="STATION")
-	private String station;//	站点	VARCHAR2(64)
 	@Column(name="STATIONORDER")
 	private int stationOrder;//	站序	NUMBER(6)
-	@Column(name="COORDINATE")
-	private String coordinate;//	站点坐标	VARCHAR2(64)
 	@Column(name="ARRIVETIME")
 	private String arriveTime;//	'到达时间--格式HH*60+mm'
 	@Column(name="DEPARTTIME")
@@ -34,53 +24,28 @@ public class Transstation implements java.io.Serializable{
 	private Double miles;//	里程	DECIMAL(12,1)
 	@Column(name="PRICE")
 	private Double price;//	票价	DECIMAL(12,1)
+    //@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
+    @ManyToOne()
+    @JoinColumn(name = "citystationid")
+    private CityStation cityStation;
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getTransType() {
-		return transType;
-	}
-	public void setTransType(String transType) {
-		this.transType = transType;
-	}
+
 	public String getTrips() {
 		return trips;
 	}
 	public void setTrips(String trips) {
 		this.trips = trips;
 	}
-	public String getTransDetail() {
-		return transDetail;
-	}
-	public void setTransDetail(String transDetail) {
-		this.transDetail = transDetail;
-	}
-	public String getCityCode() {
-		return cityCode;
-	}
-	public void setCityCode(String cityCode) {
-		this.cityCode = cityCode;
-	}
-	public String getStation() {
-		return station;
-	}
-	public void setStation(String station) {
-		this.station = station;
-	}
 	public int getStationOrder() {
 		return stationOrder;
 	}
 	public void setStationOrder(int stationOrder) {
 		this.stationOrder = stationOrder;
-	}
-	public String getCoordinate() {
-		return coordinate;
-	}
-	public void setCoordinate(String coordinate) {
-		this.coordinate = coordinate;
 	}
 	public String getArriveTime() {
 		return arriveTime;
@@ -106,5 +71,45 @@ public class Transstation implements java.io.Serializable{
 	public void setPrice(Double price) {
 		this.price = price;
 	}
-	
+
+
+    public CityStation getCityStation() {
+        return cityStation;
+    }
+
+    public void setCityStation(CityStation cityStation) {
+        this.cityStation = cityStation;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Transstation that = (Transstation) o;
+
+        if (stationOrder != that.stationOrder) return false;
+        if (arriveTime != null ? !arriveTime.equals(that.arriveTime) : that.arriveTime != null) return false;
+        if (cityStation != null ? !cityStation.equals(that.cityStation) : that.cityStation != null) return false;
+        if (departTime != null ? !departTime.equals(that.departTime) : that.departTime != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (miles != null ? !miles.equals(that.miles) : that.miles != null) return false;
+        if (price != null ? !price.equals(that.price) : that.price != null) return false;
+        if (trips != null ? !trips.equals(that.trips) : that.trips != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (trips != null ? trips.hashCode() : 0);
+        result = 31 * result + stationOrder;
+        result = 31 * result + (arriveTime != null ? arriveTime.hashCode() : 0);
+        result = 31 * result + (departTime != null ? departTime.hashCode() : 0);
+        result = 31 * result + (miles != null ? miles.hashCode() : 0);
+        result = 31 * result + (price != null ? price.hashCode() : 0);
+        result = 31 * result + (cityStation != null ? cityStation.hashCode() : 0);
+        return result;
+    }
 }

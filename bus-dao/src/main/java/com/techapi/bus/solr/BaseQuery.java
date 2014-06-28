@@ -1,5 +1,6 @@
 package com.techapi.bus.solr;
 
+import com.techapi.bus.entity.CityStation;
 import com.techapi.bus.util.ConfigUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -11,7 +12,6 @@ import org.apache.solr.common.SolrDocumentList;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Description
@@ -59,6 +59,8 @@ public class BaseQuery {
 	protected void updateBean(Object obj) {
 		// TODO Auto-generated method stub
 		try {
+            //String query = "cityStationName:" + ((CityStation)obj).getStationName();
+            //deleteBean(query);
 			server.addBean(obj);
 			server.commit();
 		} catch (SolrServerException e) {
@@ -70,7 +72,7 @@ public class BaseQuery {
 		}
 	}
 
-	protected List<?> queryBeans(String q, int start, int rows, Class<?> cls) {
+	public List<Object> queryBeans(String q, int start, int rows, Class<?> cls) {
 		SolrQuery query = new SolrQuery(q);
 		query.setStart(start);
 		query.setRows(rows);
@@ -82,8 +84,12 @@ public class BaseQuery {
 			for (int i = 0; i < list.size(); i++) {
 				Object obj = cls.newInstance();
 				SolrDocument doucument = list.get(i);
-                Map<String,Object> os = doucument.getFieldValueMap();
-				result.add(obj);
+                String cityStationName = doucument.getFieldValue("cityStationName").toString();
+                String id = doucument.getFieldValue("id").toString();
+                CityStation cityStation = new CityStation();
+                cityStation.setStationName(cityStationName);
+                cityStation.setId(id);
+				result.add(cityStation);
 			}
 
 			return result;
@@ -94,6 +100,17 @@ public class BaseQuery {
 
 		return null;
 	}
+
+    public void deleteBean(String query) {
+        try {
+            server.deleteByQuery(query);
+            server.commit();
+        } catch (SolrServerException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 	public long getNumFound() {
 		return numFound;

@@ -1,6 +1,5 @@
 package com.techapi.bus.util;
 
-import com.techapi.bus.data.ImportUserKeyService;
 import com.techapi.bus.entity.City;
 import com.techapi.bus.entity.Country;
 import com.techapi.bus.entity.Province;
@@ -10,23 +9,15 @@ import jxl.Range;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by xuefei on 6/9/14.
  */
 public class ExcelUtils {
-
-    protected ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-            "classpath:META-INF/applicationContext-bus-dao-oracle.xml");
-
-    public ImportUserKeyService importUserKeyService = context
-            .getBean(ImportUserKeyService.class);
 
     public static List<Province> readProvinceExcel() {
         List<Province> provinceList = new ArrayList<>();
@@ -84,7 +75,6 @@ public class ExcelUtils {
             Workbook workbook = Workbook.getWorkbook(new File("/Users/xuefei/Documents/MyDocument/Fun/bus/key生成策略及现有KEY/key生成策略及现有KEY/高德GIS业务现有KEY.xls"));
             Sheet sheet = workbook.getSheet(0);
 
-            int columns = sheet.getColumns();
             int rows = sheet.getRows();
 
             for(int i = 1; i< rows; i++) {
@@ -115,8 +105,56 @@ public class ExcelUtils {
         return userKeyList;
     }
 
-    public static void main(String[] args) {
-        //ExcelUtils.readProvinceExcel();
-        new ExcelUtils().importUserKeyService.importUserKey(ExcelUtils.readKey());
+    public static Map<String,Map<String,List<String>>> readPoiType() {
+        try {
+            Workbook workbook = Workbook.getWorkbook(new File("/Users/xuefei/Documents/MyDocument/Fun/bus/GIS地标分类表-typemap.xls"));
+            Sheet sheet = workbook.getSheet(0);
+
+            int rows = sheet.getRows();
+            Map<String,Map<String,List<String>>> result = new TreeMap<>();
+            String prePoiType1 = "";
+            String prePoiType2 = "";
+            List<String> poiType3List = new ArrayList<>();
+            Map<String, List<String>> poiType23Map = new TreeMap<>();
+            for (int i = 1; i < rows; i++) {
+                String poiType1 = sheet.getCell(1, i).getContents();
+                String poiType2 = sheet.getCell(2, i).getContents();
+                String poiType3 = sheet.getCell(3, i).getContents();
+
+                if(i == 1) {
+                    prePoiType1 = poiType1;
+                    prePoiType2 = poiType2;
+                }
+                System.out.println("prePoiType1:" + prePoiType1 + ",PoiType1:"+ poiType1+",i:" + i);
+                if(!prePoiType2.equals(poiType2)) {
+
+                    poiType23Map.put(prePoiType2, poiType3List);
+
+
+                    poiType3List = new ArrayList<>();
+                }
+                if(!prePoiType1.equals(poiType1)) {
+                    result.put(prePoiType1, poiType23Map);
+                    poiType23Map = new TreeMap<>();
+                }
+
+                poiType3List.add(poiType3);
+                prePoiType1 = poiType1;
+                prePoiType2 = poiType2;
+            }
+            return result;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
+    public static void main(String[] args) {
+        Map<String,Map<String,List<String>>> result = ExcelUtils.readPoiType();
+    }
+
+
 }

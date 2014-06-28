@@ -3,6 +3,7 @@ package com.techapi.bus.utils;
 import com.techapi.bus.BusConstants;
 import com.techapi.bus.annotation.CacheProxy;
 import com.techapi.bus.entity.Poi;
+import com.techapi.bus.entity.Speed;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,28 @@ public class RedisTest {
         } else {
             System.out.println("缓存中没有");
         }
+    }
+
+    @Test
+    @Rollback(false)
+    public void testGetSpeedFromRedis() {
+
+        String speedcache = String.format(BusConstants.BUS_SPEED_TYPE_CODE, "1");
+        Object o = cacheProxy.get(speedcache);
+        if (o != null) {
+            Speed speed = (Speed) o;
+            System.out.println("speed.toString():" + speed.toString());
+        } else {
+            System.out.println("缓存中没有");
+        }
+    }
+
+    @Test
+    @Rollback(false)
+    public void testRemoveKeyFromRedis() {
+
+        String poicache = String.format(BusConstants.BUS_CTL_KEY, "2butatc35npio4m88x5sy067x1aael8q628beqgn1qlsotl27b70t19x46syrfg0lb08rf34i6tk255t");
+        cacheProxy.delete(poicache, BusConstants.REDIS_INDEX_KEY);
     }
 
 }

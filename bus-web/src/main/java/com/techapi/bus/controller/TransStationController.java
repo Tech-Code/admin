@@ -29,18 +29,16 @@ public class TransStationController {
     @ResponseBody
     public Map<String, String> add(Transstation transStation, HttpServletRequest request)
             throws Exception {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map;
 
         try {
-            transStationService.addOrUpdate(transStation);
-            map.put("mes", "操作成功");
+            map = transStationService.addOrUpdate(transStation);
+            return map;
         } catch (Exception e) {
             e.printStackTrace();
-            map.put("mes", "操作失败");
             throw e;
         }
 
-        return map;
     }
 
 	@RequestMapping("/list")
@@ -79,16 +77,17 @@ public class TransStationController {
     Object suggest(@RequestParam("stationName") String stationName)
             throws Exception {
         JSONObject json = new JSONObject();
-        List<CityStation> cityStationNameList = new ArrayList<>();
+        List<CityStation> cityStationNameList;
 
-//        if("".equals(stationName.trim())) {
-//            return json.put("result",cityStationNameList);
-//        }
-//        String q = "cityStationName:"+ stationName;
-        String q = "cityStationName:北京";
+        //String q = "cityStationName:"+ "北京";
+        String q = "cityStationName:" + stationName;
 
         try {
-            cityStationNameList = transStationService.suggetList(q);
+            if(stationName.isEmpty()) {
+                cityStationNameList = new ArrayList<>();
+            } else {
+                cityStationNameList = transStationService.suggetList(q);
+            }
 
             json.put("result", cityStationNameList);
 

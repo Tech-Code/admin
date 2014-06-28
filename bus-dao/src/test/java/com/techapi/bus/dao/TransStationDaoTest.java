@@ -1,5 +1,6 @@
 package com.techapi.bus.dao;
 
+import com.techapi.bus.entity.CityStation;
 import com.techapi.bus.entity.Transstation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,25 @@ public class TransStationDaoTest {
 	public void testFindAll() {
 		List<Transstation> transstationList = (List<Transstation>)dao.findAll();
         System.out.println(transstationList.size());
+
+    }
+
+    @Test
+    @Rollback(false)
+    public void testAddTransstation() {
+        CityStation cityStation = new CityStation();
+        cityStation.setId("ff80808146d7d84e0146d7d8c92f0003");
+
+        Transstation transstation = new Transstation();
+        transstation.setArriveTime("1");
+        transstation.setCityStation(cityStation);
+        transstation.setDepartTime("1");
+        transstation.setMiles(1.0);
+        transstation.setPrice(1.0);
+        transstation.setStationOrder(1);
+        transstation.setTrips("1");
+
+        dao.save(transstation);
     }
 
     @Test
@@ -39,14 +59,9 @@ public class TransStationDaoTest {
                 System.out.println("line: " + line);
                 String[] transstationData = line.split(",");
                 Transstation transstation = new Transstation();
-                transstation.setTransType(transstationData[0]);
                 transstation.setTrips(transstationData[1]);
-                transstation.setTransDetail(transstationData[2]);
-                transstation.setCityCode(transstationData[3]);
-                transstation.setStation((transstationData[4]));
 
                 transstation.setStationOrder(Integer.parseInt(transstationData[5]));
-                transstation.setCoordinate((transstationData[6] + "," + transstationData[7]).replace("\"", ""));
                 transstation.setArriveTime(transstationData[8]);
                 transstation.setDepartTime(transstationData[9]);
                 transstation.setMiles(Double.parseDouble(transstationData[10]));

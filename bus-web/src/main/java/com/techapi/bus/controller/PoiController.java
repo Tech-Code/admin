@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/poi")
@@ -68,6 +69,42 @@ public class PoiController {
             throw e;
         }
         return map;// 重定向
+    }
+
+    @RequestMapping(value = "/getPoiType1")
+    @ResponseBody
+    public Map<String, Set> getPoiType1()
+            throws Exception {
+        Map<String, Set> map = new HashMap<>();
+        Map<String, Map<String, List<String>>> poiTypeMap = poiService.getPoiTypeData();
+
+        map.put("poiType1List", poiTypeMap.keySet());
+        return map;
+    }
+
+    @RequestMapping(value = "/getPoiType2")
+    @ResponseBody
+    public Map<String, Set> getPoiType2(String poiType1)
+            throws Exception {
+        Map<String, Set> map = new HashMap<>();
+        Map<String, Map<String, List<String>>> poiTypeMap = poiService.getPoiTypeData();
+
+        Map<String, List<String>> poiType2Map = poiTypeMap.get(poiType1);
+        map.put("poiType2List", poiType2Map.keySet());
+        return map;
+    }
+
+    @RequestMapping(value = "/getPoiType3")
+    @ResponseBody
+    public Map<String, List<String>> getPoiType3(String poiType1,String poiType2)
+            throws Exception {
+        Map<String, List<String>> map = new HashMap<>();
+        Map<String, Map<String, List<String>>> poiTypeMap = poiService.getPoiTypeData();
+
+        Map<String, List<String>> poiType2Map = poiTypeMap.get(poiType1);
+        List<String> poiType3List = poiType2Map.get(poiType2);
+        map.put("poiType3List", poiType3List);
+        return map;
     }
 
 }

@@ -200,7 +200,7 @@
 				});
 				$.post('<%=root%>/poi/delete' + ps, function() {
 					$('#poiTable').datagrid('reload');
-					$.messager.alert('删除', '删除已成功', 'info');
+					$.messager.alert('删除', data.mes, 'info');
 				});
 			}
 		});

@@ -26,6 +26,11 @@ public final class BusConstants {
     public static final String BUS_TAXI_CITYCODE="bus:taxi:%s";
 
     /**
+     * 用户key缓存key
+     */
+    public static final String BUS_CTL_KEY = "bus:ctl:%s";
+
+    /**
      * 交通工具类型
      */
     public static final String TRANSPORTATION_TYPE_BUS = "公交";
@@ -36,8 +41,10 @@ public final class BusConstants {
 
     /** 返回状态标识 */
     public static final String RESULT_SUCCESS = "0";
-    public static final String RESULT_REPEAT = "1"; // 重复记录
+    public static final String RESULT_REPEAT = "1"; // 重复记录 是否覆盖
     public static final String RESULT_ERROR = "2";
+    public static final String RESULT_NOTEXIST = "3";
+    public static final String RESULT_REPEAT_STATION = "4"; // 站点重复记录
 
     /**
      * 返回状态文字
@@ -45,6 +52,11 @@ public final class BusConstants {
     public static final String RESULT_SUCCESS_STR = "操作成功!";
     public static final String RESULT_REPEAT_STR = "信息存在!"; // 重复记录
     public static final String RESULT_ERROR_STR = "操作失败!";
+    public static final String RESULT_NOTEXIST_STR = "站点不存在!";
+    public static final String RESULT_REPEAT_STATION_STR = "站点在记录中已存在!";
 
+
+    /** redis Index */
+    public static final int REDIS_INDEX_KEY = 2;
 
 }

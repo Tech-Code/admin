@@ -57,7 +57,7 @@ $(document).ready(function () {
                         autoNode.html("");
 
                         for(var i=0;i < data.result.length;i++) {
-                            var newDivNode = $("<div>").attr("id", i);
+                            var newDivNode = $("<div>").attr("id", data.result[i].id);
                             newDivNode.html(data.result[i].stationName).appendTo(autoNode);
                             //添加光标进入事件, 高亮节点
                             newDivNode.mouseover(function () {
@@ -79,6 +79,13 @@ $(document).ready(function () {
                                 $("#divAutoList").hide();
                                 highlightindex = -1;
                                 $("#stationName").val(comText);
+                                $("#cityStationId").val($(this).attr("id"));
+                                $("#cityCode").val($(this).attr("cityCode"));
+                                $("#cityName").val($(this).attr("cityName"));
+                                $("#transType").val($(this).attr("transType"));
+                                $("#city_stationName").val($(this).attr("stationName"));
+                                $("#transdetail").val($(this).attr("transdetail"));
+                                $("#coordinate").val($(this).attr("coordinate"));
                             });
                         }
                         if (wordNodes.length > 0) {
