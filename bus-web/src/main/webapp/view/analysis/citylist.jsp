@@ -29,41 +29,18 @@
 					return row.typeName;
 				} //需要formatter一下才能显示正确的数据
 			},{
-				field : 'name',
-				title : '名称查询',
+				field : 'transfer',
+				title : '公交换乘',
 				width : 20,
 				formatter : function(value, row, index) {
-					return row.name;
+					return row.transfer;
 				} //需要formatter一下才能显示正确的数据
 			},{
-				field : 'poi',
-				title : '站点查询',
+				field : 'query',
+				title : '公交查询',
 				width : 20,
 				formatter : function(value, row, index) {
-					return row.poi;
-				} //需要formatter一下才能显示正确的数据
-			},{
-				field : 'station',
-				title : '查询车站',
-				width : 20,
-				sortable : true,
-				formatter : function(value, row, index) {
-					return row.station;
-				} //需要formatter一下才能显示正确的数据
-			},{
-				field : 'near',
-				title : '周边站点',
-				width : 20,
-				formatter : function(value, row, index) {
-					return row.near;
-				} //需要formatter一下才能显示正确的数据
-			},{
-				field : 'line',
-				title : '周边路线',
-				width : 20,
-				sortable : true,
-				formatter : function(value, row, index) {
-					return row.line;
+					return row.query;
 				} //需要formatter一下才能显示正确的数据
 			},{
 				field : 'walk',

@@ -13,25 +13,13 @@ public class CityListVO {
 	 */
 	private String typeName;
 	/**
-	 * 名称查询
+	 * 换乘
 	 */
-	private int name;
+	private int transfer;
 	/**
-	 * 站点查询
+	 * 公交查询
 	 */
-	private int poi;
-	/**
-	 * 查询车站
-	 */
-	private int station;
-	/**
-	 * 周边站点
-	 */
-	private int near;
-	/**
-	 * 周边路线
-	 */
-	private int line;
+	private int query;
 	/**
 	 * 步行导航
 	 */
@@ -46,16 +34,10 @@ public class CityListVO {
 	private int total;
 	
 	public void putTotal(String serverName,int timetotal){
-		if("name".equals(serverName)){
-			this.name+=timetotal;
-		}else if("poi".equals(serverName)){
-			this.poi+=timetotal;
-		}else if("station".equals(serverName)){
-			this.station+=timetotal;
-		}else if("near".equals(serverName)){
-			this.near+=timetotal;
-		}else if("line".equals(serverName)){
-			this.line+=timetotal;
+		if("transfer".equals(serverName)){
+			this.transfer+=timetotal;
+		}else if("query".equals(serverName)){
+			this.query+=timetotal;
 		}else if("walk".equals(serverName)){
 			this.walk+=timetotal;
 		}
@@ -78,44 +60,20 @@ public class CityListVO {
 		this.typeName = typeName;
 	}
 
-	public int getName() {
-		return name;
+	public int getTransfer() {
+		return transfer;
 	}
 
-	public void setName(int name) {
-		this.name = name;
+	public void setTransfer(int transfer) {
+		this.transfer = transfer;
 	}
 
-	public int getPoi() {
-		return poi;
+	public int getQuery() {
+		return query;
 	}
 
-	public void setPoi(int poi) {
-		this.poi = poi;
-	}
-
-	public int getStation() {
-		return station;
-	}
-
-	public void setStation(int station) {
-		this.station = station;
-	}
-
-	public int getNear() {
-		return near;
-	}
-
-	public void setNear(int near) {
-		this.near = near;
-	}
-
-	public int getLine() {
-		return line;
-	}
-
-	public void setLine(int line) {
-		this.line = line;
+	public void setQuery(int query) {
+		this.query = query;
 	}
 
 	public int getWalk() {
@@ -141,4 +99,5 @@ public class CityListVO {
 	public void setTotal(int total) {
 		this.total = total;
 	}
+
 }

@@ -26,6 +26,6 @@ public class AnalysisCityTest{
 	}
 	@Test
 	public void testfindByNameOrCode(){
-//		areaDao.findByNameOrCode("北京%");
+		areaDao.findByCode(010);
 	}
 }

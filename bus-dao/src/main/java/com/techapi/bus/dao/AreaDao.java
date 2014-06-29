@@ -13,6 +13,6 @@ public interface AreaDao extends PagingAndSortingRepository<Area, String>{
 	@Query("select c from Area c where c.areaName like :cityCodeName")
 	List<Area> findByName(@Param("cityCodeName") String cityCodeName);
 	
-	@Query("select c from Area c where c.adCode= :cityCode")
+	@Query("select c from Area c where c.areaCode= :cityCode and areaType=1")
 	List<Area> findByCode(@Param("cityCode") int cityCode);
 }
