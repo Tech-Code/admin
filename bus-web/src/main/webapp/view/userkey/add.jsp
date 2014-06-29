@@ -16,77 +16,56 @@
 </style>
 </head>
 <body>
-	<form action="" class="formular" id="taxiForm">
-		<input type="hidden" id="id" name="id" value="${taxi.id }" />
+	<form action="" class="formular" id="userKeyForm">
+		<input type="hidden" id="id" name="id" value="${userKey.id }" />
 
 		<fieldset>
 			<legend> 基础信息 </legend>
-			<div style="width:39%;height:830px;float: left">
+			<div style="width:39%;height:600px;float: left">
 				<label>
-					<span>城市代码</span>
-					<input name="cityCode" id="cityCode" value="${taxi.cityCode }" class="text-input"/>
+					<span>业务名称</span>
+					<input name="businessName" id="businessName" value="${userKey.businessName }" class="text-input"/>
 				</label>
 				<label>
-					<span>城市名称</span>
-                    <input name="cityName" id="cityName" value="${taxi.cityName }" class="text-input"/>
+					<span>业务子名称</span>
+                    <input name="businessSubName" id="businessSubName" value="${userKey.businessSubName }" class="text-input"/>
                 </label>
                 <label>
-					<span>日间时间区间</span>
-                    <input name="d_timesection" id="d_timesection" value="${taxi.d_timesection }" class="text-input"/>
+					<span>业务标识</span>
+                    <input name="businessFlag" id="businessFlag" value="${userKey.businessFlag }" class="text-input"/>
                 </label>
                 <label>
-					<span>起步公里数</span>
-                    <input name="d_s_miles" id="d_s_miles" value="${taxi.d_s_miles }" class="text-input"/>
+					<span>业务分类</span>
+                    <input name="businessType" id="businessType" value="${userKey.businessType }" class="text-input"/>
                 </label>
                 <label>
-					<span>起步价</span>
-                    <input name="d_s_cost" id="d_s_cost" value="${taxi.d_s_cost }" class="text-input"/>
+					<span>使用API</span>
+                    <input name="usedApi" id="usedApi" value="${userKey.usedApi }" class="text-input"/>
                 </label>
                 <label>
-					<span>超出起步单价</span>
-                    <input name="d_exceed_s_cost" id="d_exceed_s_cost" value="${taxi.d_exceed_s_cost }" class="text-input"/>
+					<span>省份</span>
+                    <input name="province" id="province" value="${userKey.province }" class="text-input"/>
                 </label>
                 <label>
-					<span>超出规定距离单价</span>
-                    <input name="d_s_exceed_d_cost" id="d_s_exceed_d_cost" value="${taxi.d_s_exceed_d_cost }" class="text-input"/>
+					<span>状态</span>
+                    <input name="status" id="status" value="${userKey.status }" class="text-input"/>
                 </label>
                 <label>
-					<span>夜间时间区间</span>
-                    <input name="n_timesection" id="n_timesection" value="${taxi.n_timesection }" class="text-input"/>
+					<span>厂商</span>
+                    <input name="firm" id="firm" value="${userKey.firm }" class="text-input"/>
                 </label>
                 <label>
-					<span>夜间起步公里数</span>
-                    <input name="n_s_miles" id="n_s_miles" value="${taxi.n_s_miles }" class="text-input"/>
+					<span>业务地址</span>
+                    <input name="businessUrl" id="businessUrl" value="${userKey.businessUrl }" class="text-input"/>
                 </label>
                 <label>
-					<span>夜间起步价(元)</span>
-                    <input name="n_s_cost" id="n_s_cost" value="${taxi.n_s_cost }" class="text-input"/>
+					<span>联系人</span>
+                    <input name="contact" id="contact" value="${userKey.contact }" class="text-input"/>
                 </label>
                 <label>
-					<span>夜间超出起步单价</span>
-                    <input name="n_exceed_s_cost" id="n_exceed_s_cost" value="${taxi.n_exceed_s_cost }" class="text-input"/>
+					<span>资源</span>
+                    <input name="businessResource" id="businessResource" value="${userKey.businessResource }" class="text-input"/>
                 </label>
-                <label>
-					<span>夜间超出规定距离单价</span>
-                    <input name="n_s_exceed_d_cost" id="n_s_exceed_d_cost" value="${taxi.n_s_exceed_d_cost }" class="text-input"/>
-                </label>
-                <label>
-					<span>日间燃油税</span>
-                    <input name="d_bas" id="d_bas" value="${taxi.d_bas }" class="text-input"/>
-                </label>
-                <label>
-					<span>夜间燃油税</span>
-                    <input name="n_bas" id="n_bas" value="${taxi.n_bas }" class="text-input"/>
-                </label>
-                <label>
-					<span>日间规定距离</span>
-                    <input name="d_exceed_distance" id="d_exceed_distance" value="${taxi.d_exceed_distance }" class="text-input"/>
-                </label>
-                <label>
-					<span>夜间规定距离</span>
-                    <input name="n_exceed_distance" id="n_exceed_distance" value="${taxi.n_exceed_distance }" class="text-input"/>
-                </label>
-
 			</div>
 		</fieldset>
 		<input id="save" type="button" value="保存"
@@ -94,62 +73,18 @@
 	</form>
 </body>
 <script type="text/javascript">
-    $('#cityCode').validatebox({
+    $('#businessUrl').validatebox({
         required: true
     });
-    $('#cityName').validatebox({
-        required: true
-    });
-    $('#d_timesection').validatebox({
-        required: true
-    });
-    $('#d_s_miles').validatebox({
-        required: true
-    });
-    $('#d_s_cost').validatebox({
-        required: true
-    });
-    $('#d_exceed_s_cost').validatebox({
-        required: true
-    });
-    $('#d_s_exceed_d_cost').validatebox({
-        required: true
-    });
-    $('#n_timesection').validatebox({
-        required: true
-    });
-    $('#n_s_miles').validatebox({
-        required: true
-    });
-    $('#n_s_cost').validatebox({
-        required: true
-    });
-    $('#n_exceed_s_cost').validatebox({
-        required: true
-    });
-    $('#n_s_exceed_d_cost').validatebox({
-        required: true
-    });
-    $('#d_bas').validatebox({
-        required: true
-    });
-    $('#n_bas').validatebox({
-        required: true
-    });
-    $('#d_exceed_distance').validatebox({
-        required: true
-    });
-    $('#n_exceed_distance').validatebox({
-        required: true
-    });
+
 
 
 	function add() {
-        var isValid = $('#taxiForm').form('validate');
+        var isValid = $('#userKeyForm').form('validate');
         if (!isValid) {
             $.messager.alert('提示', "信息不完整，请补全！", 'info');
         } else {
-            $.post("${ctx}/taxi/add", $("#taxiForm").serializeArray(),
+            $.post("${ctx}/userkey/add", $("#userKeyForm").serializeArray(),
                     function (data) {
                         $.messager.alert('提示', "操作成功", 'info');
                     });

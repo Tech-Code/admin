@@ -80,24 +80,28 @@ public class CityStationDaoTest extends BaseQuery{
         cityStation.setTransdetail("111");
         cityStation.setTransType("11");
         dao.save(cityStation);
-        updateBean(cityStation);
+        //updateBean(cityStation);
     }
 
     @Test
     public void queryCityStation() {
         String q = "cityStationName:北京";
 
-        List<CityStation> list = (List<CityStation>) queryBeans(
-                q, 0, 10,
-                CityStation.class);
+        //List<CityStation> list = (List<CityStation>) queryBeans(
+        //        q, 0, 10,
+        //        CityStation.class);
+    }
 
-        System.out.println("1111");
+    @Test
+    public void deleteCityStationFromSolr() {
+        String q = "cityStationName:北京";
+        deleteBean(q);
     }
 
     @Test
     @Rollback(false)
     public void importCityStationData() {
-        File file = new File("/Users/xuefei/Desktop/BUS_CITYSTATION.csv");
+        File file = new File("/Users/xuefei/Desktop/BUS_CITYSTATION_new.csv");
 
         try {
             List<String> lines = org.apache.commons.io.FileUtils.readLines(file);
@@ -108,17 +112,29 @@ public class CityStationDaoTest extends BaseQuery{
                 CityStation cityStation = new CityStation();
                 cityStation.setCityCode(cityStationData[0]);
                 cityStation.setCityName(cityStationData[1]);
-                cityStation.setTransType(cityStationData[2]);
-                cityStation.setStationName(cityStationData[3]);
+                cityStation.setTransType(cityStationData[3]);
+                cityStation.setStationName(cityStationData[2]);
                 cityStation.setTransdetail(cityStationData[4]);
                 cityStation.setCoordinate((cityStationData[5]+ "," + cityStationData[6]).replace("\"",""));
                 cityStationList.add(cityStation);
             }
 
             dao.save(cityStationList);
+            updateBeans(cityStationList);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    @Rollback(false)
+    public void importSingleCityStationData() {
+
+            CityStation cityStation = new CityStation();
+            cityStation.setId("ff80808146dd472e0146dd478a500003");
+            cityStation.setStationName("北京西站");
+            updateBean(cityStation);
+
     }
 
 }

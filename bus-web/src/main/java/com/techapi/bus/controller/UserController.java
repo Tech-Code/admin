@@ -1,20 +1,19 @@
 package com.techapi.bus.controller;
 
-import javax.annotation.Resource;
-
+import com.techapi.bus.entity.User;
+import com.techapi.bus.service.UserService;
+import com.techapi.bus.util.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.techapi.bus.entity.User;
-import com.techapi.bus.service.UserService;
-import com.techapi.bus.util.Constants;
+import javax.annotation.Resource;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
-
-	@Resource
+    public static final String 用户名或者密码错误 = "用户名或者密码错误";
+    @Resource
 	private UserService userService;
 	
 	@RequestMapping("/login")
@@ -24,8 +23,9 @@ public class UserController {
 			model.addAttribute(Constants.USER_INFO_SESSION, user);
 			return "main";
 		} else {
-			model.addAttribute("message", "用户名或者密码错误");
+			model.addAttribute("message", 用户名或者密码错误);
 			return "login";
 		}
 	}
+
 }

@@ -30,7 +30,7 @@
                 title : '交通工具类型',
 				width : 20,
                 formatter : function(value, row, index) {
-                    return row.transType;
+                    return row.cityStation.transType;
                 } //需要formatter一下才能显示正确的数据
             },
 			{
@@ -47,7 +47,7 @@
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.transDetail;
+					return row.cityStation.transdetail;
 				} //需要formatter一下才能显示正确的数据
 			},{
 				field : 'cityCode',
@@ -55,7 +55,7 @@
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.cityCode;
+					return row.cityStation.cityCode;
 				} //需要formatter一下才能显示正确的数据
 			},{
 				field : 'station',
@@ -63,7 +63,7 @@
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.station;
+					return row.cityStation.stationName;
 				} //需要formatter一下才能显示正确的数据
 			},{
                     field : 'stationOrder',
@@ -79,7 +79,7 @@
                     width : 20,
                     sortable : true,
                     formatter : function(value, row, index) {
-                        return row.coordinate;
+                        return row.cityStation.coordinate;
                     } //需要formatter一下才能显示正确的数据
             },{
                     field : 'arriveTime',
@@ -181,7 +181,7 @@
 				});
 				$.post('<%=root%>/transstation/delete' + ps, function() {
 					$('#tsTable').datagrid('reload');
-					$.messager.alert('删除', '删除已成功', 'info');
+					$.messager.alert('删除', data.mes, 'info');
 				});
 			}
 		});

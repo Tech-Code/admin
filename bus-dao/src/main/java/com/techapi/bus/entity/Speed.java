@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name="BUS_SPEED")
 public class Speed implements java.io.Serializable {
 
-	@Id
+    @Id
     @GeneratedValue(generator = "UUIDGenerator")
     @GenericGenerator(name="UUIDGenerator",strategy="uuid")
     private String id;
@@ -68,5 +68,18 @@ public class Speed implements java.io.Serializable {
 
     public void setTransportType(int transportType) {
         this.transportType = transportType;
+    }
+
+    @Override
+    public String toString() {
+        return "Speed{" +
+                "id='" + id + '\'' +
+                ", tranSportation='" + tranSportation + '\'' +
+                ", tranSportDes='" + tranSportDes + '\'' +
+                ", speed=" + speed +
+                ", cityCode='" + cityCode + '\'' +
+                ", cityName='" + cityName + '\'' +
+                ", transportType=" + transportType +
+                '}';
     }
 }

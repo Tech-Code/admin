@@ -104,16 +104,17 @@ public class SpeedService {
         return (List<Speed>) speedDao.findAll(ids);
     }
 
-    public void update(String id) {
-        //SpeedDao.updateSpeed("010","北京");
-        //SpeedDao.save();
-    }
-
     public void deleteOne(String id) {
         speedDao.delete(id);
     }
 
     public void deleteMany(List<Speed> speedList) {
+        for(Speed speed : speedList) {
+            if(speed != null) {
+                String speedcache = String.format(BusConstants.BUS_SPEED_TYPE_CODE, speed.getTransportType());
+                cacheProxy.delete(speedcache);
+            }
+        }
         speedDao.delete(speedList);
     }
 

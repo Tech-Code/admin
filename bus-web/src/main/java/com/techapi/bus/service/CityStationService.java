@@ -1,5 +1,6 @@
 package com.techapi.bus.service;
 
+import com.techapi.bus.BusConstants;
 import com.techapi.bus.dao.CityStationDao;
 import com.techapi.bus.entity.CityStation;
 import com.techapi.bus.solr.BaseQuery;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,16 +26,31 @@ public class CityStationService extends BaseQuery{
 	@Resource
 	private CityStationDao cityStationDao;
 
-    public void addOrUpdate(CityStation cityStation) {
-        // search data row by cityCode
-//        if (!StringUtils.isEmpty(cityStation.getCityCode())) {
-//            List<CityStation> cityStationList = cityStationDao.findByCityCode(cityStation.getCityCode());
-//            if (cityStationList.size() > 0) {
-//
-//            }
-//        }
-        cityStationDao.save(cityStation);
+    public Map<String, String> addOrUpdate(CityStation cityStation) {
+        Map<String, String> resultMap = new HashMap<>();
+        String id = cityStation.getId();
+        List<CityStation> cityStationList = cityStationDao.findByStationName(cityStation.getStationName());
+        if (id == null || id.isEmpty()) {
+            if (cityStationList.size() > 0) {
+                resultMap.put("id", cityStationList.get(0).getId());
+                resultMap.put("result", BusConstants.RESULT_REPEAT);
+                resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_STR);
+                return resultMap;
+            }
+        } else {
+            if (cityStationList.size() > 0) {
+                resultMap.put("result", BusConstants.RESULT_REPEAT_STATION);
+                resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_STATION_STR);
+                return resultMap;
+            }
+        }
+        cityStation = cityStationDao.save(cityStation);
+
+        resultMap.put("id", cityStation.getId());
+        resultMap.put("result", BusConstants.RESULT_SUCCESS);
+        resultMap.put("alertInfo", BusConstants.RESULT_SUCCESS_STR);
         updateBean(cityStation);
+        return resultMap;
     }
 
 	/**
@@ -48,7 +65,6 @@ public class CityStationService extends BaseQuery{
     public Map<String, Object> findSection(int page, int rows) {
         Pageable pager = new PageRequest(page - 1, rows);
         Page<CityStation> cityStationList = cityStationDao.findAll(pager);
-
         return PageUtils.getPageMap(cityStationList);
     }
 

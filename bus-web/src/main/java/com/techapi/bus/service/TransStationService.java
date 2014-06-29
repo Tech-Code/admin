@@ -1,5 +1,7 @@
 package com.techapi.bus.service;
 
+import com.techapi.bus.BusConstants;
+import com.techapi.bus.dao.CityStationDao;
 import com.techapi.bus.dao.TransstationDao;
 import com.techapi.bus.entity.CityStation;
 import com.techapi.bus.entity.Transstation;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,16 +29,56 @@ public class TransStationService extends BaseQuery {
 	@Resource
 	private TransstationDao transStationDao;
 
-    public void addOrUpdate(Transstation transstation) {
-        // search data row by cityCode
-        transStationDao.save(transstation);
+    @Resource
+    private CityStationDao cityStationDao;
+
+    public Map<String, String> addOrUpdate(Transstation transstation) {
+        Map<String, String> resultMap = new HashMap<>();
+        // 判断站点是否存在
+        // 直接手动填写了不存在的站点
+        CityStation filledCityStation = transstation.getCityStation();
+        if (filledCityStation == null ||
+                filledCityStation.getId() == null ||
+                filledCityStation.getId().isEmpty()) {
+            resultMap.put("result", BusConstants.RESULT_NOTEXIST);
+            resultMap.put("alertInfo", BusConstants.RESULT_NOTEXIST_STR);
+            return resultMap;
+        }
+
+        // 站点选择，后期修改为不存在站点
+        CityStation selectedCityStation = cityStationDao.findOne(filledCityStation.getId());
+        if(selectedCityStation.getStationName() != filledCityStation.getStationName()) {
+            resultMap.put("result", BusConstants.RESULT_NOTEXIST);
+            resultMap.put("alertInfo", BusConstants.RESULT_NOTEXIST_STR);
+            return resultMap;
+        }
+
+        String id = transstation.getId();
+        // 新增
+        if (id == null || id.isEmpty()) {
+            CityStation cityStation = cityStationDao.findOne(transstation.getCityStation().getId());
+
+            List<Transstation> transStationList = transStationDao.findByTripsAndStationName(transstation.getTrips(), cityStation.getStationName());
+            if (transStationList.size() > 0) {
+                resultMap.put("id", transStationList.get(0).getId());
+                resultMap.put("result", BusConstants.RESULT_REPEAT);
+                resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_STR);
+                return resultMap;
+            }
+        }
+        transstation = transStationDao.save(transstation);
+
+        resultMap.put("id", transstation.getId());
+        resultMap.put("result", BusConstants.RESULT_SUCCESS);
+        resultMap.put("alertInfo", BusConstants.RESULT_SUCCESS_STR);
+        return resultMap;
     }
 
 	/**
 	 * @return
 	 */
 	public Map<String,Object> findAll() {
-        //cityStationDao.updateCityStation("010","北京");
+        //transStationDao.updateCityStation("010","北京");
 		List<Transstation>transStationList = (List<Transstation>) transStationDao.findAll();
         return PageUtils.getPageMap(transStationList);
 	}
@@ -61,8 +104,6 @@ public class TransStationService extends BaseQuery {
     }
 
     public void update(String id) {
-        //transStationDao.updateCityStation("010","北京");
-        //transStationDao.save();
     }
 
     public void deleteOne(String id) {
@@ -76,5 +117,13 @@ public class TransStationService extends BaseQuery {
     public List<CityStation> suggetList(String q) {
         List<CityStation> cityStationNameList = (ArrayList) queryBeans(q, 0, 10, CityStation.class);
         return cityStationNameList;
+    }
+
+    public List<Transstation> findTransstationByCityStationIds(List<String> cityStationIds) {
+        String[] idArray = cityStationIds.toArray(new String[0]);
+        if(idArray != null || idArray.length > 0) {
+            return transStationDao.findTransstationByCityStationId(idArray);
+        }
+        return null;
     }
 }

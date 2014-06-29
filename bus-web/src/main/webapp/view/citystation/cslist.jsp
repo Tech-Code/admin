@@ -150,9 +150,9 @@
 					else
 						ps += "&id=" + n.id;
 				});
-				$.post('<%=root%>/citystation/delete' + ps, function() {
+				$.post('<%=root%>/citystation/delete' + ps, function(data) {
 					$('#csTable').datagrid('reload');
-					$.messager.alert('删除', '删除已成功', 'info');
+					$.messager.alert('删除', data.mes, 'info');
 				});
 			}
 		});
@@ -163,7 +163,6 @@
 <body>
 	<div style="padding: 10" id="tabdiv">
 		<table id="csTable"></table>
-        <div id="dd"></div>
 	</div>
 </body>
 </html>

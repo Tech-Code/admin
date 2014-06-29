@@ -3,11 +3,11 @@ package com.techapi.bus.utils;
 import com.techapi.bus.BusConstants;
 import com.techapi.bus.annotation.CacheProxy;
 import com.techapi.bus.dao.PoiDao;
+import com.techapi.bus.data.ImportPoiService;
 import com.techapi.bus.entity.Poi;
 import com.techapi.bus.entity.PoiType;
 import com.techapi.bus.entity.Station;
 import com.techapi.bus.util.FileUtils;
-import com.techapi.bus.util.ImportPoi;
 import com.techapi.bus.util.TTL;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by CH on 4/17/14.
@@ -30,6 +33,9 @@ public class ImportPoiTest {
 	
     @Resource
     private PoiDao dao;
+
+    @Resource
+    private ImportPoiService importPoiService;
 
     @Autowired
     public CacheProxy cacheProxy;
@@ -52,7 +58,7 @@ public class ImportPoiTest {
             while (start < stationList.size()) {
                 List<Station> subStationList = FileUtils.splitListWithStep(stationList, start, 1);
                 if (subStationList != null) {
-                    Map<String,List<Poi>> stationIdPoiListMap = ImportPoi.importPoi(cityName, subStationList, poiTypeMap);
+                    Map<String,List<Poi>> stationIdPoiListMap = importPoiService.getStationIdPoiListMap(cityName, subStationList, poiTypeMap);
                     Iterator stationIdIterator = stationIdPoiListMap.keySet().iterator();
                     while (stationIdIterator.hasNext()) {
                         String stationId = stationIdIterator.next().toString();

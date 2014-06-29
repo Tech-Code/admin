@@ -1,9 +1,11 @@
 package com.techapi.bus.service;
 
+import com.techapi.bus.BusConstants;
 import com.techapi.bus.annotation.CacheProxy;
 import com.techapi.bus.annotation.ServiceCache;
 import com.techapi.bus.dao.PoiDao;
 import com.techapi.bus.entity.Poi;
+import com.techapi.bus.util.ExcelUtils;
 import com.techapi.bus.util.PageUtils;
 import com.techapi.bus.util.TTL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Description:
@@ -29,18 +30,27 @@ public class PoiService {
     @Autowired
     public CacheProxy cacheProxy;
 
-    @ServiceCache(TTL._30M)
-    public void addOrUpdate(Poi poi) {
-        poiDao.save(poi);
+    private static Map<String,Map<String,List<String>>> poiTypeMap = new TreeMap<>();
+
+    public Map<String, Map<String, List<String>>> getPoiTypeData() {
+        if(poiTypeMap == null || poiTypeMap.size() == 0) {
+            poiTypeMap = ExcelUtils.readPoiType();
+        }
+        return poiTypeMap;
     }
 
-	/**
-	 * @return
-	 */
-	public Map<String,Object> findAll() {
-		List<Poi>poiList = (List<Poi>) poiDao.findAll();
-        return PageUtils.getPageMap(poiList);
-	}
+    @ServiceCache(TTL._30M)
+    public void addOrUpdate(Poi poi) {
+        String poicache = String.format(BusConstants.BUS_POI_STATIONID, poi.getPoiPK().getStationId());
+        if (poi != null) {
+            //补cache
+            cacheProxy.put(poicache, poi);
+        } else {
+            //增加null，防止击穿cache，压力数据库
+            cacheProxy.put(poicache, new Poi(), TTL._10M.getTime());
+        }
+        poiDao.save(poi);
+    }
 
     public Map<String, Object> findSection(int page, int rows) {
         Pageable pager = new PageRequest(page-1, rows);
@@ -68,6 +78,12 @@ public class PoiService {
     }
 
     public void deleteMany(List<Poi> poiList) {
+        for (Poi poi : poiList) {
+            if (poi != null) {
+                String poicache = String.format(BusConstants.BUS_POI_STATIONID, poi.getPoiPK().getStationId());
+                cacheProxy.delete(poicache);
+            }
+        }
         poiDao.delete(poiList);
 
     }

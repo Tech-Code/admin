@@ -1,7 +1,9 @@
 package com.techapi.bus.controller;
 
 import com.techapi.bus.entity.CityStation;
+import com.techapi.bus.entity.Transstation;
 import com.techapi.bus.service.CityStationService;
+import com.techapi.bus.service.TransStationService;
 import com.techapi.bus.util.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,22 +24,23 @@ public class CityStationController{
 	@Resource
 	private CityStationService cityStationService;
 
+    @Resource
+    private TransStationService transStationService;
+
     @RequestMapping(value = "/add")
     @ResponseBody
     public Map<String, String> add(CityStation cityStation, HttpServletRequest request)
             throws Exception {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map;
 
         try {
-            cityStationService.addOrUpdate(cityStation);
-            map.put("mes", "操作成功");
+            map = cityStationService.addOrUpdate(cityStation);
+            return map;
         } catch (Exception e) {
             e.printStackTrace();
-            map.put("mes", "操作失败");
             throw e;
         }
 
-        return map;
     }
 
 	@RequestMapping("/list")
@@ -60,8 +63,15 @@ public class CityStationController{
         Map<String, String> map = new HashMap<String, String>();
         try {
             List<CityStation> cityStationList = cityStationService.findByIds(ids);
-            cityStationService.deleteMany(cityStationList);
-            map.put("mes", "删除成功");
+
+            List<Transstation> transstationList =transStationService.findTransstationByCityStationIds(ids);
+
+            if(transstationList.size() > 0) {
+                map.put("mes", "包含城际站点依赖ID，不能删除!");
+            } else {
+                cityStationService.deleteMany(cityStationList);
+                map.put("mes", "删除成功");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             map.put("mes", "删除失败");

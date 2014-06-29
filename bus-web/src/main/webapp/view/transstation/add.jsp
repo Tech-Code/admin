@@ -19,48 +19,23 @@
 <body>
 	<form action="" class="formular" id="tsForm">
         <input type="hidden" id="id" name="id" value="${ts.id }" />
+        <input type="hidden" id="cityStationId" name="cityStation.id"/>
 
 		<fieldset>
 			<legend> 基础信息 </legend>
 			<div style="width:39%;height:600px;float: left">
-                <label>
-                    <span>交通工具类型</span>
-                    <select name="transType" class="text-input" >
-                    <option value="火车" <c:if test="${ts.transType=='火车' }" >selected</c:if>>火车</option>
-                    <option value="飞机" <c:if test="${ts.transType=='飞机' }" >selected</c:if>>飞机</option>
-                    <option value="轮渡" <c:if test="${ts.transType=='轮渡' }" >selected</c:if>>轮渡</option>
-                    </select>
-                </label>
 				<label>
 					<span>班次</span>
                     <input name="trips" id="trips" value="${ts.trips }" class="text-input"/>
                 </label>
-                <label>
-                    <span>交通工具小类</span>
-                    <select name="transDetail" class="text-input">
-                        <option value="高铁" <c:if test="${ts.transDetail=='高铁' }">selected</c:if>>高铁</option>
-                        <option value="动车" <c:if test="${ts.transDetail=='动车' }">selected</c:if>>动车</option>
-                        <option value="特快" <c:if test="${ts.transDetail=='特快' }">selected</c:if>>特快</option>
-                        <option value="普快" <c:if test="${ts.transDetail=='普快' }">selected</c:if>>普快</option>
-                        <option value="直达" <c:if test="${ts.transDetail=='直达' }">selected</c:if>>直达</option>
-                    </select>
-                </label>
-				<label>
-					<span>城市代码</span>
-                    <input name="cityCode" id="cityCode" value="${ts.cityCode }" class="text-input"/>
-                </label>
 				<label>
 					<span>站点</span>
-                    <input name="station" value="${ts.station }" class="text-input" id="stationName"/>
+                    <input name="cityStation.stationName" value="${ts.cityStation.stationName}" class="text-input" id="stationName"/>
                     <div id="divAutoList"></div>
                 </label>
 				<label>
 					<span>站序</span>
                     <input name="stationOrder" id="stationOrder" value="${ts.stationOrder }" class="text-input"/>
-                </label>
-				<label>
-					<span>站点坐标</span>
-                    <input name="coordinate" id="coordinate" value="${ts.coordinate }" class="text-input"/>
                 </label>
 				<label>
 					<span>到达时间</span>
@@ -88,16 +63,10 @@
     $('#trips').validatebox({
         required: true
     });
-    $('#cityCode').validatebox({
-        required: true
-    });
     $('#stationName').validatebox({
         required: true
     });
     $('#stationOrder').validatebox({
-        required: true
-    });
-    $('#coordinate').validatebox({
         required: true
     });
     $('#arriveTime').validatebox({
@@ -119,11 +88,20 @@
         } else {
             $.post("${ctx}/transstation/add", $("#tsForm").serializeArray(),
                     function (data) {
-                        $.messager.alert('提示', "操作成功", 'info');
-
+                        if (data.result == '0' || data.result == '2' || data.result == '3') $.messager.alert('提示', data.alertInfo, 'info');
+                        if (data.result == '1') $.messager.confirm('提示', '确定要覆盖吗?', function (result) {
+                            if (result) {
+                                $('#id').val(data.id);
+                                $.post("${ctx}/transstation/add", $("#tsForm").serializeArray(),
+                                        function (data) {
+                                            $.messager.alert('提示', data.alertInfo, 'info');
+                                            $('#id').val('');
+                                        });
+                            }
+                        });
                     });
-        }
-	}
+	    }
+    }
 	
 </script>
 </html>

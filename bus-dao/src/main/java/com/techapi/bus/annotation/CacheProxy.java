@@ -27,7 +27,11 @@ public interface CacheProxy {
 	 */
 	public boolean put(String key, Object value, int expires);
 
+	public boolean put(String key, Object value, int expires,int index);
+
 	public boolean delete(String key);
+
+    public boolean delete(String key, int index);
 
 	/**
 	 * 

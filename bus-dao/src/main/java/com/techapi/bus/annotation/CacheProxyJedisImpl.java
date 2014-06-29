@@ -1,18 +1,13 @@
 package com.techapi.bus.annotation;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+
+import java.util.*;
 
 //@Component("cacheProxy")
 public class CacheProxyJedisImpl implements CacheProxy {
@@ -140,26 +135,37 @@ public class CacheProxyJedisImpl implements CacheProxy {
 
 	@Override
 	public boolean put(String key, Object value) {
-		return put(key, value, -1);
+		return put(key, value, -1, 0);
 	}
+
+    @Override
+    public boolean put(String key, Object value, int expires) {
+        return put(key, value, expires, 0);
+    }
+
+    @Override
+    public boolean delete(String key, int index) {
+        if (StringUtils.isNotBlank(key)) {
+            Jedis j = null;
+            JedisPool jp = getJedisPool();
+            try {
+                j = jp.getResource();
+                j.select(index);
+                j.del(key);
+                j.del(key.getBytes());
+                jp.returnResource(j);
+                return true;
+            } catch (Exception e) {
+                jp.returnBrokenResource(j);
+                log.error(e.getMessage(), e);
+            }
+        }
+        return false;
+    }
 
 	@Override
 	public boolean delete(String key) {
-		if (StringUtils.isNotBlank(key)) {
-			Jedis j = null;
-			JedisPool jp = getJedisPool();
-			try {
-				j = jp.getResource();
-				j.del(key);
-				j.del(key.getBytes());
-				jp.returnResource(j);
-				return true;
-			} catch (Exception e) {
-				jp.returnBrokenResource(j);
-				log.error(e.getMessage(), e);
-			}
-		}
-		return false;
+        return delete(key,0);
 	}
 
 	@Override
@@ -204,7 +210,7 @@ public class CacheProxyJedisImpl implements CacheProxy {
 	}
 
 	@Override
-	public boolean put(String key, Object value, int expires) {
+	public boolean put(String key, Object value, int expires ,int index) {
 		if (StringUtils.isNotBlank(key) && value != null) {
 			Jedis j = null;
 			JedisPool jp = getJedisPool();
@@ -213,9 +219,11 @@ public class CacheProxyJedisImpl implements CacheProxy {
 				if (value instanceof String) {
 					if (expires > 0) {
 						j = jp.getResource();
+                        j.select(index);
 						j.setex(key, expires, value.toString());
 					} else {
 						j = jp.getResource();
+                        j.select(index);
 						j.set(key, value.toString());
 					}
 				} else {
@@ -223,9 +231,11 @@ public class CacheProxyJedisImpl implements CacheProxy {
 					byte[] bytesKey = key.getBytes();
 					if (expires > 0) {
 						j = jp.getResource();
+                        j.select(index);
 						j.setex(bytesKey, expires, bytesValue);
 					} else {
 						j = jp.getResource();
+                        j.select(index);
 						j.set(bytesKey, bytesValue);
 					}
 				}

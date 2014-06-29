@@ -20,6 +20,10 @@
 		<input type="hidden" id="orientation" name="orientation" value="${poi.orientation }" />
 		<input type="hidden" id="id" name="id" value="${poi.id }" />
 
+        <input type="hidden" id="poiType1Temp" name="poiType1Temp" value="${poi.poiType1 }"/>
+        <input type="hidden" id="poiType2Temp" name="poiType2Temp" value="${poi.poiType2 }"/>
+        <input type="hidden" id="poiType3Temp" name="poiType3Temp" value="${poi.poiType3 }"/>
+
 		<fieldset>
 			<legend> 基础信息 </legend>
 			<div style="width:39%;height:520px;float: left">
@@ -41,15 +45,24 @@
                 </label>
                 <label>
 					<span>地标点大类型</span>
-                    <input name="poiType1" id="poiType1" value="${poi.poiType1 }" class="text-input"/>
+                    <%--<input name="poiType1" id="poiType1" value="${poi.poiType1 }" class="text-input"/>--%>
+                    <select id="poiType1" onchange="onPoiType1Changed()" name="poiType1">
+                        <option value="0">===请选择===</option>
+                    </select>
                 </label>
                 <label>
 					<span>地标点中类型</span>
-                    <input name="poiType2" id="poiType2" value="${poi.poiType2 }" class="text-input"/>
+                    <%--<input name="poiType2" id="poiType2" value="${poi.poiType2 }" class="text-input"/>--%>
+                    <select id="poiType2" onchange="onPoiType2Changed()" name="poiType2">
+                        <option value="0">===请选择===</option>
+                    </select>
                 </label>
                 <label>
 					<span>地标点小类型</span>
-                    <input name="poiType3" id="poiType3" value="${poi.poiType3 }" class="text-input"/>
+                    <%--<input name="poiType3" id="poiType3" value="${poi.poiType3 }" class="text-input"/>--%>
+                    <select id="poiType3" name="poiType3">
+                        <option value="0">===请选择===</option>
+                    </select>
                 </label>
                 <label>
 					<span>地标点坐标</span>
@@ -70,6 +83,29 @@
 	</form>
 </body>
 <script type="text/javascript">
+
+    $(function () {
+        var poiType1 = $("#poiType1Temp").val();
+        var poiType2 = $("#poiType2Temp").val();
+        var poiType3 = $("#poiType3Temp").val();
+
+        $.post("${ctx}/poi/getPoiType1", function (data) {
+            data.poiType1List.forEach(function (value) {
+                if(poiType1 == value) {
+                    $("<option value='" + value + "' selected=true>" + value + "</option>").appendTo("#poiType1");
+                } else {
+                    $("<option value='" + value + "'>" + value + "</option>").appendTo("#poiType1");
+                }
+            });
+        });
+        onPoiType1Changed(poiType1,poiType2);
+        onPoiType2Changed(poiType1, poiType2, poiType3);
+
+    });
+
+
+
+
     $('#cityCode').validatebox({
         required: true
     });
@@ -108,5 +144,50 @@
         }
 
 	}
+
+    function onPoiType1Changed(selectPoiType1, selectedPoiType2) {
+
+        $("#poiType2 option").each(function () {
+            $(this).remove();   //移除原有项
+        });
+
+        if(typeof(selectPoiType1) == "undefined" || selectPoiType1 == "") {
+            selectPoiType1 = $("#poiType1").find("option:selected").text();
+        }
+
+        $.post("${ctx}/poi/getPoiType2",{poiType1: selectPoiType1},function (data) {
+            data.poiType2List.forEach(function (value) {
+                if(typeof(selectedPoiType2) != "undefined" && selectedPoiType2 == value) {
+                    $("<option value='" + value + "' selected=true>" + value + "</option>").appendTo("#poiType2");
+                } else {
+                    $("<option value='" + value + "'>" + value + "</option>").appendTo("#poiType2");
+                }
+            });
+        });
+    }
+
+    function onPoiType2Changed(selectPoiType1, selectPoiType2, selectPoiType3) {
+
+        $("#poiType3 option").each(function () {
+            $(this).remove();   //移除原有项
+        });
+        if (typeof(selectPoiType1) == "undefined" || selectPoiType1 == "") {
+            selectPoiType1 = $("#poiType1").find("option:selected").text();
+        }
+        if (typeof(selectPoiType2) == "undefined" || selectPoiType2 == "") {
+            selectPoiType2 = $("#poiType2").find("option:selected").text();
+        }
+        $.post("${ctx}/poi/getPoiType3", {poiType1: selectPoiType1, poiType2: selectPoiType2}, function (data) {
+            data.poiType3List.forEach(function (value) {
+                if (typeof(selectedPoiType3) != "undefined" && selectedPoiType3 == value) {
+                    $("<option value='" + value + "' selected=true>" + value + "</option>").appendTo("#poiType3");
+                } else {
+                    $("<option value='" + value + "'>" + value + "</option>").appendTo("#poiType3");
+                }
+            });
+        });
+    }
+
 </script>
+
 </html>
