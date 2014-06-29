@@ -14,7 +14,7 @@
 			fitColumns : true, //自动调整各列，用了这个属性，下面各列的宽度值就只是一个比例。
 			striped : true, //奇偶行颜色不同
 			collapsible : true,//可折叠
-			url : "${ctx}/analysis/namelist?name=all&startTime="+getPreMonth(getToDay())+"&endTime="+getToDay(), //数据来源
+			url : "${ctx}/analysis/grouplist?position=16&name=all&startTime="+getPreMonth(getToDay())+"&endTime="+getToDay(), //数据来源
 			sortOrder : 'desc', //倒序
 			idField:'id', //主键字段
 			remoteSort : true, //服务器端排序
@@ -25,7 +25,6 @@
 				field : 'minute',
 				title : '日期',
 				width : 20,
-				sortable : true,
 				formatter : function(value, row, index) {
 					return row.minute;
 				} //需要formatter一下才能显示正确的数据
@@ -33,7 +32,6 @@
 				field : 'name',
 				title : '业务名称',
 				width : 20,
-				sortable : true,
 				formatter : function(value, row, index) {
 					return row.name;
 				} //需要formatter一下才能显示正确的数据
@@ -41,7 +39,6 @@
 				field : 'total',
 				title : '业务总量',
 				width : 20,
-				sortable : true,
 				formatter : function(value, row, index) {
 					return row.total;
 				} //需要formatter一下才能显示正确的数据
@@ -52,14 +49,22 @@
 			}
 		});
 		
-		
+		//业务名称
 		$('#selectType').combobox({ 
-			url:"${ctx}/analysis/name",
+			url:"${ctx}/analysis/typename",
 			valueField:'id', 
 			textField:'text' 
 			}); 
 		
-		$('#selectType').combobox('setValue','all');
+		//分段类型
+		$('#selectgroup').combobox({ 
+			url:"${ctx}/analysis/timetype",
+			valueField:'id', 
+			textField:'text' 
+			});
+		
+		$('#selectType').combobox('setValue','全部');
+		$('#selectgroup').combobox('setValue','分');
 		$('#beginTime').datebox('setValue',getPreMonth(getToDay()));
 		$('#endTime').datebox('setValue',getToDay());
 	});
@@ -68,7 +73,14 @@
 		var btime =$('#beginTime').datebox('getValue');
 		var etime = $('#endTime').datebox('getValue');
 		var selectType = $('#selectType').combobox('getValue');
-		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/namelist?",queryParams:{startTime:btime,endTime:etime,name:selectType},method:"post"});
+		if(selectType=="全部"){
+			selectType="all";
+		}
+		var selectgroup = $('#selectgroup').combobox('getValue');
+		if(selectgroup=="分"){
+			selectgroup=16;
+		}
+		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/grouplist?",queryParams:{startTime:btime,endTime:etime,name:selectType,position:selectgroup},method:"post"});
 	}
 	
 	 function getToDay(){
@@ -122,10 +134,10 @@
 
 <body >
 <div style="margin:20px 0 10px 0;">
-<input class="easyui-datetimebox" id="beginTime" />
+<input class="easyui-datetimebox" id="beginTime" data-options="required:true,showSeconds:false"/>
 <input class="easyui-datetimebox" id="endTime" data-options="required:true,showSeconds:false" />
- <input class="easyui-combobox"  id="selectType" style="width:200px;" />
- 
+<input class="easyui-combobox"  id="selectType" style="width:200px;" />
+<input class="easyui-combobox"  id="selectgroup" style="width:80px;" />
  <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>  
 </div>
 	<div style="padding: 10" id="tabdiv">

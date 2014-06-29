@@ -14,7 +14,7 @@
 			fitColumns : true, //自动调整各列，用了这个属性，下面各列的宽度值就只是一个比例。
 			striped : true, //奇偶行颜色不同
 			collapsible : true,//可折叠
-			url : "${ctx}/analysis/typelist?type=all&name=all&startTime="+getPreMonth(getToDay())+"&endTime="+getToDay(), //数据来源
+			url : "${ctx}/analysis/namelist?name=all&startTime="+getPreMonth(getToDay())+"&endTime="+getToDay(), //数据来源
 			sortOrder : 'desc', //倒序
 			idField:'id', //主键字段
 			remoteSort : true, //服务器端排序
@@ -27,13 +27,6 @@
 				width : 30,
 				formatter : function(value, row, index) {
 					return row.name;
-				} //需要formatter一下才能显示正确的数据
-			},{
-				field : 'type',
-				title : '服务类型',
-				width : 30,
-				formatter : function(value, row, index) {
-					return row.type;
 				} //需要formatter一下才能显示正确的数据
 			},{
 				field : 'total',
@@ -57,15 +50,7 @@
 			textField:'text' 
 			}); 
 		
-		//服务类型
-		$('#selectName').combobox({ 
-			url:"${ctx}/analysis/servicename",
-			valueField:'id', 
-			textField:'text' 
-			});
-		
 		$('#selectType').combobox('setValue','全部');
-		$('#selectName').combobox('setValue','全部');
 		$('#beginTime').datebox('setValue',getPreMonth(getToDay()));
 		$('#endTime').datebox('setValue',getToDay());
 	});
@@ -77,11 +62,7 @@
 		if(selectType=="全部"){
 			selectType="all";
 		}
-		var selectName = $('#selectName').combobox('getValue');
-		if(selectName=="全部"){
-			selectName="all";
-		}
-		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/typelist?",queryParams:{startTime:btime,endTime:etime,type:selectType,name:selectName},method:"post"});
+		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/namelist?",queryParams:{startTime:btime,endTime:etime,name:selectType},method:"post"});
 	}
 	
 	 function getToDay(){
@@ -140,7 +121,6 @@
 <input class="easyui-datebox" id="beginTime" />
 <input class="easyui-datebox" id="endTime" data-options="required:true,showSeconds:false" />
  <input class="easyui-combobox"  id="selectType" style="width:200px;" />
- <input class="easyui-combobox"  id="selectName" style="width:200px;" />
  <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>  
 </div>
 	<div style="padding: 10" id="tabdiv">

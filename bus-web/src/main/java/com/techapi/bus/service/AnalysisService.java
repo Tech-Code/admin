@@ -1,26 +1,36 @@
 package com.techapi.bus.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.techapi.bus.dao.AnalysisCityDao;
 import com.techapi.bus.dao.AnalysisGroupDao;
 import com.techapi.bus.dao.AnalysisTypeDao;
+import com.techapi.bus.dao.AreaDao;
+import com.techapi.bus.dao.ServiceDictDao;
+import com.techapi.bus.dao.UserKeyDao;
 import com.techapi.bus.entity.AnalysisCity;
 import com.techapi.bus.entity.AnalysisGroup;
 import com.techapi.bus.entity.AnalysisType;
+import com.techapi.bus.entity.Area;
+import com.techapi.bus.entity.ServiceDict;
+import com.techapi.bus.entity.UserKey;
 import com.techapi.bus.util.PageUtils;
+import com.techapi.bus.vo.CityListVO;
 import com.techapi.bus.vo.SpringMap;
 
 /***
  * 日志分析的服务
- * 
  * @author jiayusun
  */
 @Service
@@ -31,44 +41,81 @@ public class AnalysisService {
 	private AnalysisTypeDao analysisTypeDao;
 	@Resource
 	private AnalysisGroupDao analysisGroupDao;
+	@Resource
+	public UserKeyDao userKeyDao;
+	@Resource
+	public ServiceDictDao serviceDictDao;
+	@Resource
+	public AreaDao areaDao;
+	
 
-	/***
-	 * 按指定时间段及业务账号统计业务量，即统计每个业务的公交换乘服务、公交查询（站点、线路）服务的调用量
-	 * @param type
-	 * @param startTime
-	 * @param endTime
-	 * @return
-	 */
-	public Map<String, Object> findAnalysisTypeByTimeAndType(String type,String startTime,String endTime) {
-		List<AnalysisType> analysisType=null;
-		if(StringUtils.isBlank(type)){
-			analysisType = (List<AnalysisType>) analysisTypeDao.findAll();
-		}else if("all".equals(type)){
-			analysisType = (List<AnalysisType>) analysisTypeDao.findByTime(startTime, endTime);
+	public Map<String, Object> findAnalysisTypeByTimeAndName(int page,int rows,String name,String startTime,String endTime) {
+		Pageable pager = new PageRequest(page-1, rows);
+		List<AnalysisType> analysisType= new ArrayList<AnalysisType>();
+		List<Object[]> ato=null;
+	    if("all".equals(name)){
+			ato =  analysisTypeDao.findByTimeForName(startTime, endTime);
 		}else{
-			analysisType = (List<AnalysisType>) analysisTypeDao.findByTimeAndType(type, startTime, endTime);
+			ato =  analysisTypeDao.findByTimeAndNameForName(name,startTime, endTime);
 		}
-		
-		return PageUtils.getPageMap(analysisType);
+		/**
+		 *替换字典数据 
+		 */
+		Map<String,UserKey> suMap = getKeyMap();
+		for(Object[] o:ato){
+			AnalysisType at = new AnalysisType();
+			String nameo = o[0].toString();
+			if(suMap.get(nameo)!=null){
+				at.setName(suMap.get(nameo).getBusinessName());
+			}else{
+				at.setName("未知业务");
+			}
+			at.setTotal(o[1].toString());
+			analysisType.add(at);
+		}
+		return PageUtils.getPageMap(analysisType,pager);
 	}
 	
-	/**
-	 * 服务类型
+	/***
+	 * 按指定时间段及业务账号统计业务量，即统计每个业务的公交换乘服务、公交查询（站点、线路）服务的调用量
+	 * type:服务，name:业务
 	 */
-	public List<SpringMap> findTypeAll(){
-		List<String> stype = analysisTypeDao.findTypeAll();
-		List<SpringMap> lm = new ArrayList<SpringMap>();
-		for(String s:stype){
-			SpringMap sm = new SpringMap();
-			sm.setId(s);
-			sm.setText(s);
-			lm.add(sm);
+	public Map<String, Object> findAnalysisTypeByTimeAndType(int page,int rows,String type,String name,String startTime,String endTime) {
+		Pageable pager = new PageRequest(page-1, rows);
+		List<AnalysisType> analysisType= new ArrayList<AnalysisType>();
+		List<Object[]> ato=null;
+		if("all".equals(type)&&"all".equals(name)){
+			ato =  analysisTypeDao.findByTime(startTime, endTime);
+		}else if("all".equals(type)){
+			ato = analysisTypeDao.findByTimeAndName(name,startTime, endTime);
+		}else if("all".equals(name)){
+			ato =  analysisTypeDao.findByTimeAndName(type, startTime, endTime);
+		}else{
+			ato =  analysisTypeDao.findByTimeAndNameAndType(type, name,startTime, endTime);
 		}
-		SpringMap sm = new SpringMap();
-		sm.setId("all");
-		sm.setText("all");
-		lm.add(sm);
-		return lm;
+		/**
+		 *替换字典数据 
+		 */
+		Map<String,UserKey> suMap = getKeyMap();
+		Map<String,ServiceDict> sdMap = getServiceDictMap();
+		for(Object[] o:ato){
+			AnalysisType at = new AnalysisType();
+			String nameo = o[0].toString();
+			if(suMap.get(nameo)!=null){
+				at.setName(suMap.get(nameo).getBusinessName());
+			}else{
+				at.setName("未知业务");
+			}
+			String typeo = o[1].toString();
+			if(sdMap.get(typeo)!=null){
+				at.setType(sdMap.get(typeo).getServiceName());
+			}else{
+				at.setType("未知服务");
+			}
+			at.setTotal(o[2].toString());
+			analysisType.add(at);
+		}
+		return PageUtils.getPageMap(analysisType,pager);
 	}
 	
 	/***
@@ -78,36 +125,104 @@ public class AnalysisService {
 	 * @param endTime
 	 * @return
 	 */
-	public Map<String, Object> findAnalysisCityByTimeAndName(String name,String startTime,String endTime) {
-		System.out.println("name:"+name+",startTime:"+startTime+",endTime:"+endTime);
-		List<AnalysisCity> analysisCity=null;
-		if(StringUtils.isBlank(name)){
-			analysisCity =  (List<AnalysisCity>) analysisCityDao.findAll();
-		}else if("all".equals(name)){
-			analysisCity = analysisCityDao.findByTime(startTime, endTime);
+	public Map<String, Object> findAnalysisCityByTimeAndName(int page,int rows,String name,String cityName,String startTime,String endTime) {
+		System.out.println("name:"+name+"---------:cityName"+cityName+"-----,startTime:"+startTime+"----,endTime:"+endTime);
+		Pageable pager = new PageRequest(page-1, rows);
+		List<Object[]> oTimeAndType=null;
+		if("all".equals(name)){
+			oTimeAndType =analysisCityDao.findByTime(startTime, endTime);
 		}else{
-			analysisCity = analysisCityDao.findByTimeAndType(name, startTime, endTime);
+			oTimeAndType =analysisCityDao.findByTimeAndType(name, startTime, endTime);
 		}
-		return PageUtils.getPageMap(analysisCity);
-	}
-	 /***
-	  * 城市名称
-	  */
-	public List<SpringMap> findCityAll(){
-		List<String> stype = analysisCityDao.findTypeAll();
-		List<SpringMap> lm = new ArrayList<SpringMap>();
-		for(String s:stype){
-			SpringMap sm = new SpringMap();
-			sm.setId(s);
-			sm.setText(s);
-			lm.add(sm);
+		
+		/***
+		 * 标准城市名称，List<城市实体>
+		 */
+		Map<String,List<AnalysisCity>> acListMap = new HashMap<String,List<AnalysisCity>>();
+		for(Object[] o:oTimeAndType){
+			AnalysisCity analysisCity = new AnalysisCity();
+			String cityname = o[0]==null?"unknown":o[0].toString();
+			String oname = o[1]==null?"unknown":o[1].toString();
+			String total = o[2]==null?"0":o[2].toString();
+			String servername = o[3]==null?"unknown":o[3].toString();
+			analysisCity.setCityName(cityname);
+			analysisCity.setType(oname);
+			analysisCity.setTotal(total);
+			analysisCity.setName(servername);
+			if(StringUtils.isNotBlank(cityname)){
+				List<Area> areaList = null;
+				if(cityname.matches("[0-9]+")){
+					int citycode = Integer.parseInt(cityname);
+					areaList =areaDao.findByCode(citycode);
+				}else{
+					areaList = areaDao.findByName(cityname+"%");
+				}
+				if(areaList!=null&&areaList.size()>0){
+					Area area =	areaList.get(0);
+				    if(acListMap.containsKey(area.getAreaName())){
+				    	acListMap.get(area.getAreaName()).add(analysisCity);
+				    }else{
+				    	List<AnalysisCity> ac = new ArrayList<AnalysisCity>();
+				    	ac.add(analysisCity);
+				    	acListMap.put(area.getAreaName(), ac);
+				    }
+				}else{
+					if(acListMap.containsKey("未知城市")){
+				    	acListMap.get("未知城市").add(analysisCity);
+				    }else{
+				    	List<AnalysisCity> ac = new ArrayList<AnalysisCity>();
+				    	ac.add(analysisCity);
+				    	acListMap.put("未知城市", ac);
+				    }
+				}
+			}
 		}
-		SpringMap sm = new SpringMap();
-		sm.setId("all");
-		sm.setText("all");
-		lm.add(sm);
-		return lm;
+		/***
+		 * 根据城市查询
+		 */
+		Map<String,List<AnalysisCity>> acListMapTemp = new HashMap<String,List<AnalysisCity>>();
+		if("all".equals(cityName)){
+			acListMapTemp=acListMap;
+		}else{
+			acListMapTemp.put(cityName, acListMap.get(cityName));
+		}
+		/***
+		 * Map<业务+城市，返回实体>
+		 */
+		Map<String,CityListVO> scmap = new HashMap<String,CityListVO>();
+		Map<String,UserKey> suKeymap = getKeyMap();
+		for(Entry<String, List<AnalysisCity>> ml:acListMapTemp.entrySet()){
+			List<AnalysisCity> acList = ml.getValue();
+			for(AnalysisCity ac:acList){
+				String servName=ac.getName();
+				String oName=ac.getType();
+				int total=0;
+				if(StringUtils.isNotBlank(ac.getTotal())){
+					total=Integer.parseInt(ac.getTotal());
+				}
+				if(scmap.containsKey(oName+ml.getKey())){
+					CityListVO cv =scmap.get(oName+ml.getKey());
+					cv.putTotal(servName, total);
+				}else{
+					CityListVO cv= new CityListVO();
+					cv.setCity(ml.getKey());
+					if(suKeymap.containsKey(oName)){
+						cv.setTypeName(suKeymap.get(oName).getBusinessName());
+					}else{
+						cv.setTypeName("未知业务");
+					}
+					cv.putTotal(servName, total);
+					scmap.put(oName+ml.getKey(), cv);
+				}
+			}
+		}
+		List<CityListVO> ctVOList = new ArrayList<CityListVO>();
+		for(Entry<String,CityListVO> cvo:scmap.entrySet()){
+			ctVOList.add(cvo.getValue());
+		}
+		return PageUtils.getPageMap(ctVOList,pager);
 	}
+	 
 	/**
 	 * 按业务账号分时段（每天、每小时、每分钟）统计业务量（GroupBy），即统计业务账号指定时间段内每天（小时或分钟）的调用量。
 	 * @param name
@@ -115,35 +230,152 @@ public class AnalysisService {
 	 * @param endTime
 	 * @return
 	 */
-	public Map<String, Object> findAnalysisGroupByTimeAndType(String name,String startTime,String endTime) {
-		List<AnalysisGroup> analysisGroup=null;
-		if(StringUtils.isBlank(name)){
-			analysisGroup =   (List<AnalysisGroup>) analysisGroupDao.findAll();
-		}else if("all".equals(name)){
-			analysisGroup = analysisGroupDao.findByTime(startTime, endTime);
+	public Map<String, Object> findAnalysisGroupByTimeAndType(int page,int rows,Integer position,String name,String startTime,String endTime) {
+		 Pageable pager = new PageRequest(page-1, rows);
+		List<Object[]>	analysisGroupO=null;
+		if(StringUtils.isBlank(name)||"all".equals(name)){
+			if(position==7){
+				analysisGroupO = analysisGroupDao.findByPosition7(startTime, endTime);
+			}else if(position==10){
+				analysisGroupO = analysisGroupDao.findByPosition10(startTime, endTime);
+			}else if(position==10){
+				analysisGroupO = analysisGroupDao.findByPosition13(startTime, endTime);
+			}else{
+				analysisGroupO = analysisGroupDao.findByPosition16(startTime, endTime);
+			}
+				
 		}else{
-			analysisGroup = analysisGroupDao.findByTimeAndName(name, startTime, endTime);
+			if(position==7){
+				analysisGroupO = analysisGroupDao.findByPositionAndName7(name, startTime, endTime);
+			}else if(position==10){
+				analysisGroupO = analysisGroupDao.findByPositionAndName10(name, startTime, endTime);
+			}else if(position==10){
+				analysisGroupO = analysisGroupDao.findByPositionAndName13(name, startTime, endTime);
+			}else{
+				analysisGroupO = analysisGroupDao.findByPositionAndName16(name, startTime, endTime);
+			}
 		}
-		return PageUtils.getPageMap(analysisGroup);
+		List<AnalysisGroup> agList = new ArrayList<AnalysisGroup>(); 
+		Map<String,UserKey> suMap =getKeyMap();
+		for(Object[] o:analysisGroupO){
+			AnalysisGroup ag = new AnalysisGroup();
+			ag.setId("1");
+			if(suMap.get(o[0].toString())!=null){
+				ag.setName(suMap.get(o[0].toString()).getBusinessName());
+			}else{
+				ag.setName("未知业务");
+			}
+			ag.setMinute(o[1].toString());
+			ag.setTotal(o[2].toString());
+			agList.add(ag);
+		}
+		return PageUtils.getPageMap(agList,pager);
 	}
 
+	
 	/***
 	 * 查询业务账号
 	 */
 	public List<SpringMap> findNameAll(){
-		List<String> stype = analysisGroupDao.findNameAll();
+		Iterable<UserKey> stype = userKeyDao.findAll();
 		List<SpringMap> lm = new ArrayList<SpringMap>();
-		for(String s:stype){
+		for(UserKey s:stype){
 			SpringMap sm = new SpringMap();
-			sm.setId(s);
-			sm.setText(s);
+			sm.setId(s.getKey());
+			sm.setText(s.getBusinessName());
 			lm.add(sm);
 		}
 		SpringMap sm = new SpringMap();
 		sm.setId("all");
-		sm.setText("all");
+		sm.setText("全部");
 		lm.add(sm);
 		return lm;
 	}
-
+	/**
+	 * 服务类型
+	 */
+	public List<SpringMap> findTypeAll(){
+		List<ServiceDict> stype = (List<ServiceDict>) serviceDictDao.findAll();
+		List<SpringMap> lm = new ArrayList<SpringMap>();
+		for(ServiceDict s:stype){
+			SpringMap sm = new SpringMap();
+			sm.setId(s.getServiceId()+"");
+			sm.setText(s.getServiceName());
+			lm.add(sm);
+		}
+		SpringMap sm = new SpringMap();
+		sm.setId("all");
+		sm.setText("全部");
+		lm.add(sm);
+		return lm;
+	}
+	
+	/***
+	  * 城市名称
+	  */
+	public List<SpringMap> findCityAll(){
+		List<Area> stype = (List<Area>) areaDao.findAll();
+		List<SpringMap> lm = new ArrayList<SpringMap>();
+		for(Area s:stype){
+			SpringMap sm = new SpringMap();
+			sm.setId(s.getAreaName()+"");
+			sm.setText(s.getAreaName());
+			lm.add(sm);
+		}
+		SpringMap sm = new SpringMap();
+		sm.setId("all");
+		sm.setText("全部");
+		lm.add(sm);
+		return lm;
+	}
+	
+	/***
+	 * 分段类型
+	 */
+	public List<SpringMap> findTimeType(){
+		List<SpringMap> lm = new ArrayList<SpringMap>();
+			SpringMap Msm = new SpringMap();
+			Msm.setId("7");
+			Msm.setText("月");
+			lm.add(Msm);
+			SpringMap dsm = new SpringMap();
+			dsm.setId("10");
+			dsm.setText("日");
+			lm.add(dsm);
+			SpringMap hsm = new SpringMap();
+			hsm.setId("14");
+			hsm.setText("时");
+			lm.add(hsm);
+			SpringMap fsm = new SpringMap();
+			fsm.setId("17");
+			fsm.setText("分");
+			lm.add(fsm);
+			return lm;
+		}
+	
+	/***
+	 * 通过key获得用于权限信息
+	 * @return
+	 */
+	public Map<String,UserKey> getKeyMap(){
+		List<UserKey> ukList =(List<UserKey>) userKeyDao.findAll();
+		Map<String,UserKey> map = new HashMap<String,UserKey>();
+		for(UserKey uk:ukList){
+			map.put(uk.getKey(), uk);
+		}
+		return map;
+	}
+	
+	/***
+	 * 通过key获得用于权限信息
+	 * @return
+	 */
+	public Map<String,ServiceDict> getServiceDictMap(){
+		List<ServiceDict> ukList =(List<ServiceDict>) serviceDictDao.findAll();
+		Map<String,ServiceDict> map = new HashMap<String,ServiceDict>();
+		for(ServiceDict uk:ukList){
+			map.put(uk.getServiceId()+"", uk);
+		}
+		return map;
+	}
 }

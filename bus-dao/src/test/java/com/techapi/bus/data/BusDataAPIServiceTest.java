@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.experimental.categories.Categories.IncludeCategory;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -25,7 +26,6 @@ public class BusDataAPIServiceTest {
 	public BusDataAPIService busDataAPIService;
 
 	@Test
-	@Ignore
 	public void testGetAllCityTransstation() {
 		busDataAPIService.getAllCityTransstation();
 	}
@@ -61,6 +61,7 @@ public class BusDataAPIServiceTest {
 	}
 
 	@Test
+	@Ignore
 	public void testfindPoiBystationIDList() {
 		List<String> ids = new ArrayList<String>();
 		Map<String, List<Poi>> mp = busDataAPIService

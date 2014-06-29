@@ -14,7 +14,7 @@
 			fitColumns : true, //自动调整各列，用了这个属性，下面各列的宽度值就只是一个比例。
 			striped : true, //奇偶行颜色不同
 			collapsible : true,//可折叠
-			url : "${ctx}/analysis/citylist?city=all&startTime="+getPreMonth(getToDay())+"&endTime="+getToDay(), //数据来源
+			url : "${ctx}/analysis/citylist?name=all&city=all&startTime="+getPreMonth(getToDay())+"&endTime="+getToDay(), //数据来源
 			sortOrder : 'desc', //倒序
 			idField:'id', //主键字段
 			remoteSort : true, //服务器端排序
@@ -22,28 +22,64 @@
 			rownumbers : true, //显示行号
 			columns : [ [ 
 			{
-				field : 'day',
-				title : '日期',
+				field : 'typeName',
+				title : '业务',
+				width : 20,
+				formatter : function(value, row, index) {
+					return row.typeName;
+				} //需要formatter一下才能显示正确的数据
+			},{
+				field : 'name',
+				title : '名称查询',
+				width : 20,
+				formatter : function(value, row, index) {
+					return row.name;
+				} //需要formatter一下才能显示正确的数据
+			},{
+				field : 'poi',
+				title : '站点查询',
+				width : 20,
+				formatter : function(value, row, index) {
+					return row.poi;
+				} //需要formatter一下才能显示正确的数据
+			},{
+				field : 'station',
+				title : '查询车站',
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.day;
+					return row.station;
 				} //需要formatter一下才能显示正确的数据
 			},{
-				field : 'cityName',
+				field : 'near',
+				title : '周边站点',
+				width : 20,
+				formatter : function(value, row, index) {
+					return row.near;
+				} //需要formatter一下才能显示正确的数据
+			},{
+				field : 'line',
+				title : '周边路线',
+				width : 20,
+				sortable : true,
+				formatter : function(value, row, index) {
+					return row.line;
+				} //需要formatter一下才能显示正确的数据
+			},{
+				field : 'walk',
+				title : '步行导航',
+				width : 20,
+				sortable : true,
+				formatter : function(value, row, index) {
+					return row.walk;
+				} //需要formatter一下才能显示正确的数据
+			},{
+				field : 'city',
 				title : '城市名称',
 				width : 20,
 				sortable : true,
 				formatter : function(value, row, index) {
-					return row.cityName;
-				} //需要formatter一下才能显示正确的数据
-			},{
-				field : 'type',
-				title : '服务类型',
-				width : 20,
-				sortable : true,
-				formatter : function(value, row, index) {
-					return row.type;
+					return row.city;
 				} //需要formatter一下才能显示正确的数据
 			},{
 				field : 'total',
@@ -60,14 +96,22 @@
 			}
 		});
 		
+		//城市名称
+		$('#selectCity').combobox({ 
+			url:"${ctx}/analysis/cityname",
+			valueField:'id', 
+			textField:'text' 
+			});
 		
+		//业务名称
 		$('#selectType').combobox({ 
-			url:"${ctx}/analysis/city",
+			url:"${ctx}/analysis/typename",
 			valueField:'id', 
 			textField:'text' 
 			}); 
 		
-		$('#selectType').combobox('setValue','all');
+		$('#selectCity').combobox('setValue','全部');
+		$('#selectType').combobox('setValue','全部');
 		$('#beginTime').datebox('setValue',getPreMonth(getToDay()));
 		$('#endTime').datebox('setValue',getToDay());
 	});
@@ -76,7 +120,14 @@
 		var btime =$('#beginTime').datebox('getValue');
 		var etime = $('#endTime').datebox('getValue');
 		var selectType = $('#selectType').combobox('getValue');
-		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/citylist?",queryParams:{startTime:btime,endTime:etime,city:selectType},method:"post"});
+		if(selectType=="全部"){
+			selectType="all";
+		}
+		var selectCity = $('#selectCity').combobox('getValue');
+		if(selectCity=="全部"){
+			selectCity="all";
+		}
+		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/citylist?",queryParams:{startTime:btime,endTime:etime,city:selectCity,name:selectType},method:"post"});
 	}
 	
 	 function getToDay(){
@@ -130,9 +181,10 @@
 
 <body >
 <div style="margin:20px 0 10px 0;">
-<input class="easyui-datebox" id="beginTime" />
+<input class="easyui-datebox" id="beginTime" data-options="required:true,showSeconds:false"/>
 <input class="easyui-datebox" id="endTime" data-options="required:true,showSeconds:false" />
  <input class="easyui-combobox"  id="selectType" style="width:200px;" />
+ <input class="easyui-combobox"  id="selectCity" style="width:200px;" />
  
  <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>  
 </div>

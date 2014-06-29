@@ -19,6 +19,8 @@ public class AnalysisCity implements java.io.Serializable{
 	private String cityName;
 	@Column(name="DAY")
 	private String day;
+	@Column(name="Name")
+	private String name;
 	@Column(name="TYPE")
 	private String type;
 	@Column(name="TOTAL")
@@ -52,5 +54,11 @@ public class AnalysisCity implements java.io.Serializable{
 	}
 	public void setTotal(String total) {
 		this.total = total;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 }

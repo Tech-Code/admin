@@ -18,39 +18,77 @@ public class AnalysisController {
 	@Resource
 	public AnalysisService analysisService;
 	
-	@RequestMapping("/typelist")
+	
+	
+	@RequestMapping("/namelist")
     @ResponseBody
-	public Map<String, Object> typeList(@RequestParam(value="type",required = false) String type,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
-		return analysisService.findAnalysisTypeByTimeAndType(type, startTime, endTime);
+	public Map<String, Object> namelist(int page, int rows,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
+		System.out.println("page:"+page+"rows:"+rows+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
+		return analysisService.findAnalysisTypeByTimeAndName(page,rows,name, startTime, endTime);
 	}
 	
-	@RequestMapping("/type")
+	@RequestMapping("/typelist")
     @ResponseBody
-	public List<SpringMap> type() throws Exception {
-		return analysisService.findTypeAll();
+	public Map<String, Object> typeList(int page, int rows,@RequestParam(value="type",required = false) String type,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
+		System.out.println("page:"+page+"rows:"+rows+"type:"+type+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
+		return analysisService.findAnalysisTypeByTimeAndType(page,rows,type,name, startTime, endTime);
 	}
 	
 	@RequestMapping("/citylist")
     @ResponseBody
-	public Map<String, Object> cityList(@RequestParam(value="city",required = false) String city,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
-		return analysisService.findAnalysisCityByTimeAndName(city, startTime, endTime);
+	public Map<String, Object> cityList(int page, int rows,@RequestParam(value="name",required = false) String name,@RequestParam(value="city",required = false) String city,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
+		System.out.println("page:"+page+"rows:"+rows+"city:"+city+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
+		return analysisService.findAnalysisCityByTimeAndName(page,rows,name,city, startTime, endTime);
 	}
 	
-	@RequestMapping("/city")
+	@RequestMapping("/grouplist")
     @ResponseBody
-	public List<SpringMap> city() throws Exception {
+	public Map<String, Object> grouplist(int page, int rows,@RequestParam(value="position",required = false) String position,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
+		System.out.println("page:"+page+"rows:"+rows+"positin:"+position+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
+		return analysisService.findAnalysisGroupByTimeAndType(page,rows,position==null?17:Integer.parseInt(position),name, startTime, endTime);
+	}
+	
+	
+	/***
+	 * 服务类型
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/servicename")
+    @ResponseBody
+	public List<SpringMap> servicename() throws Exception {
+		return analysisService.findTypeAll();
+	}
+	/***
+	 * 业务名称
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/typename")
+    @ResponseBody
+	public List<SpringMap> typename() throws Exception {
+		return analysisService.findNameAll();
+	}
+	
+	/***
+	 * 时间分段类型
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/timetype")
+    @ResponseBody
+	public List<SpringMap> timetype() throws Exception {
+		return analysisService.findTimeType();
+	}
+	/***
+	 * 城市名称
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/cityname")
+    @ResponseBody
+	public List<SpringMap> cityname() throws Exception {
 		return analysisService.findCityAll();
 	}
 	
-	@RequestMapping("/namelist")
-    @ResponseBody
-	public Map<String, Object> nameList(@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
-		return analysisService.findAnalysisGroupByTimeAndType(name, startTime, endTime);
-	}
-	
-	@RequestMapping("/name")
-    @ResponseBody
-	public List<SpringMap> name() throws Exception {
-		return analysisService.findNameAll();
-	}
 }

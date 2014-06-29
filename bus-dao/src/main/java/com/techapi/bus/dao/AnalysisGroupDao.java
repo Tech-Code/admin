@@ -7,15 +7,31 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.techapi.bus.entity.AnalysisGroup;
-
 public interface AnalysisGroupDao extends PagingAndSortingRepository<AnalysisGroup, String>{
 
-	@Query("select a from AnalysisGroup a where a.name = :name and a.minute >=:startTime and a.minute<=:endTime")
-	public List<AnalysisGroup> findByTimeAndName(@Param("name") String name,@Param("startTime") String startTime,@Param("endTime") String endTime);
-
-	@Query("select a from AnalysisGroup a where a.minute >=:startTime and a.minute<=:endTime")
-	public List<AnalysisGroup> findByTime(@Param("startTime") String startTime,@Param("endTime") String endTime);
+	@Query(value="select name,substr(minute,0,7) minute,sum(total) total from analysis_group a where  a.minute >=:startTime and a.minute<=:endTime group by name,substr(minute,0,7) order by name asc,substr(minute,0,7) desc",nativeQuery=true)
+	public List<Object[]> findByPosition7(@Param("startTime") String startTime,@Param("endTime") String endTime);
 	
-	@Query("select distinct a.name from AnalysisGroup a")
-	public List<String> findNameAll();
+	@Query(value="select name,substr(minute,0,10) minute,sum(total) total from analysis_group a where  a.minute >=:startTime and a.minute<=:endTime group by name,substr(minute,0,10) order by name asc,substr(minute,0,10) desc",nativeQuery=true)
+	public List<Object[]> findByPosition10(@Param("startTime") String startTime,@Param("endTime") String endTime);
+	
+	@Query(value="select name,substr(minute,0,13) minute,sum(total) total from analysis_group a where  a.minute >=:startTime and a.minute<=:endTime group by name,substr(minute,0,13) order by name asc,substr(minute,0,13) desc",nativeQuery=true)
+	public List<Object[]> findByPosition13(@Param("startTime") String startTime,@Param("endTime") String endTime);
+	
+	@Query(value="select name,substr(minute,0,16) minute,sum(total) total from analysis_group a where  a.minute >=:startTime and a.minute<=:endTime group by name,substr(minute,0,16) order by name asc,substr(minute,0,16) desc",nativeQuery=true)
+	public List<Object[]> findByPosition16(@Param("startTime") String startTime,@Param("endTime") String endTime);
+	
+	
+	@Query(value="select name,substr(minute,0,7) minute,sum(total) total from analysis_group a where  a.minute >=:startTime and a.minute<=:endTime and a.name=:name group by name,substr(minute,0,7) order by name asc,substr(minute,0,7) desc",nativeQuery=true)
+	public List<Object[]> findByPositionAndName7(@Param("name") String name,@Param("startTime") String startTime,@Param("endTime") String endTime);
+	
+	@Query(value="select name,substr(minute,0,10) minute,sum(total) total from analysis_group a where  a.minute >=:startTime and a.minute<=:endTime and a.name=:name group by name,substr(minute,0,10) order by name asc,substr(minute,0,10) desc",nativeQuery=true)
+	public List<Object[]> findByPositionAndName10(@Param("name") String name,@Param("startTime") String startTime,@Param("endTime") String endTime);
+	
+	@Query(value="select name,substr(minute,0,13) minute,sum(total) total from analysis_group a where  a.minute >=:startTime and a.minute<=:endTime and a.name=:name group by name,substr(minute,0,13) order by name asc,substr(minute,0,13) desc",nativeQuery=true)
+	public List<Object[]> findByPositionAndName13(@Param("name") String name,@Param("startTime") String startTime,@Param("endTime") String endTime);
+	
+	@Query(value="select name,substr(minute,0,16) minute,sum(total) total from analysis_group a where  a.minute >=:startTime and a.minute<=:endTime and a.name=:name group by name,substr(minute,0,16) order by name asc,substr(minute,0,16) desc",nativeQuery=true)
+	public List<Object[]> findByPositionAndName16(@Param("name") String name,@Param("startTime") String startTime,@Param("endTime") String endTime);
+	
 }
