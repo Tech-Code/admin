@@ -3,8 +3,8 @@ package com.techapi.bus.annotation;
 
 import java.lang.reflect.Method;
 
-import javax.annotation.Resource;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -24,6 +24,8 @@ import com.techapi.bus.util.TTL;
 @Aspect
 public class ServiceAspect {
 
+	private static final Log log = LogFactory.getLog(CacheProxyJedisImpl.class);
+	
     public static final Model m = Model.ON;
     @Autowired
     public CacheProxy cacheProxy;
@@ -45,7 +47,7 @@ public class ServiceAspect {
             try {
             	cacheProxy.put(key, retVal,getMethodTTL(pjp.getTarget().getClass(),methodName).getTime());
             } catch (Exception e) {
-//                logger.error("memcache set error: key is {}",key,e);
+            	log.error("redis set error: key is "+key,e);
             }
             return retVal;
         }
@@ -54,7 +56,7 @@ public class ServiceAspect {
     public String createMemacheKey(String methodName,Object[] arg){
         StringBuffer sb = new StringBuffer(methodName);
         for(Object o :arg){
-            sb.append("_");
+            sb.append(":");
             if(o==null){
                 sb.append("++");
             }else{
