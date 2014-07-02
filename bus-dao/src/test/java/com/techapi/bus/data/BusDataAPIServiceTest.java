@@ -27,7 +27,8 @@ public class BusDataAPIServiceTest {
 
 	@Test
 	public void testGetAllCityTransstation() {
-		busDataAPIService.getAllCityTransstation();
+		List<CityTransstationRelation> ctrList = busDataAPIService.getAllCityTransstation();
+		System.out.println(ctrList.get(0).getTranstype());
 	}
 
 	@Test
@@ -38,7 +39,6 @@ public class BusDataAPIServiceTest {
 	}
 
 	@Test
-	@Ignore
 	public void testFindOneTaxiByCityName() {
 		Taxi t = busDataAPIService.findOneTaxiByCityName("北京市");
 		System.out.println("test");

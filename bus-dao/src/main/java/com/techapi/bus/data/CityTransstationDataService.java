@@ -27,18 +27,17 @@ public class CityTransstationDataService implements java.io.Serializable{
 		List<CityTransstationRelation> ctrList = new ArrayList<CityTransstationRelation>();
 		
 		Map<String, Map<String,List<TransstationInformation>>> slMap = new ConcurrentHashMap<String, Map<String,List<TransstationInformation>>>();
-		List<Object[]> cityTransstationList = this.dao
-				.findCityAndTransstation();
+		List<Object[]> cityTransstationList = this.dao.findCityAndTransstation();
 		for (Object[] o : cityTransstationList) {
-			String transtype = (String) o[0];
-			String trips = (String) o[1];
-			String transdetail = (String) o[2];
-			String citycode = (String) o[3];
-			String station = (String) o[4];
-			String stationorder = (String) o[5];
-			String coordinate = (String) o[6];
-			String arrivetime = (String) o[7];
-			String departtime = (String) o[8];
+			String transtype = (o[0]==null?"":o[0].toString());
+			String trips = (o[1]==null?"":o[1].toString());
+			String transdetail = (o[2]==null?"":o[2].toString());
+			String citycode = (o[3]==null?"":o[3].toString());
+			String station = (o[4]==null?"":o[4].toString());
+			String stationorder =  (o[5]==null?"":o[5].toString());
+			String coordinate = (o[6]==null?"":o[6].toString());
+			String arrivetime = (o[7]==null?"":o[7].toString());
+			String departtime = (o[8]==null?"":o[8].toString());
 			Double miles = Double.valueOf(o[9].toString());
 			Double price = Double.valueOf(o[10].toString());
 			String cityname = (String) o[11];

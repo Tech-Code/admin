@@ -30,7 +30,8 @@ public interface CityStationDao extends PagingAndSortingRepository<CityStation, 
      * 原生sql，解析时需要按顺序
      * @return
      */
-    @Query(value="select t.TRANSTYPE, t.TRIPS, t.TRANSDETAIL,t.CITYCODE, t.STATION, t.STATIONORDER, t.COORDINATE, t.ARRIVETIME, t.DEPARTTIME, t.MILES, t.PRICE, c.cityName from BUS_TRANSSTATION t inner join BUS_CITYSTATION c on T.STATION = C.stationName order by t.STATIONORDER",nativeQuery=true)
+//    @Query(value="select t.TRANSTYPE, t.TRIPS, t.TRANSDETAIL,t.CITYCODE, t.STATION, t.STATIONORDER, t.COORDINATE, t.ARRIVETIME, t.DEPARTTIME, t.MILES, t.PRICE, c.cityName from BUS_TRANSSTATION t inner join BUS_CITYSTATION c on T.STATION = C.stationName order by t.STATIONORDER",nativeQuery=true)
+    @Query(value="select c.TRANSTYPE, t.TRIPS, c.TRANSDETAIL,c.CITYCODE, t.STATION, t.STATIONORDER, c.COORDINATE, t.ARRIVETIME, t.DEPARTTIME, t.MILES, t.PRICE, c.cityName from BUS_TRANSSTATION t inner join BUS_CITYSTATION c on T.citystationid = C.id order by t.STATIONORDER",nativeQuery=true)
     public List<Object[]> findCityAndTransstation();
 
 
