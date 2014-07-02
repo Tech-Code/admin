@@ -238,7 +238,7 @@ public class AnalysisService {
 				analysisGroupO = analysisGroupDao.findByPosition7(startTime, endTime);
 			}else if(position==10){
 				analysisGroupO = analysisGroupDao.findByPosition10(startTime, endTime);
-			}else if(position==10){
+			}else if(position==13){
 				analysisGroupO = analysisGroupDao.findByPosition13(startTime, endTime);
 			}else{
 				analysisGroupO = analysisGroupDao.findByPosition16(startTime, endTime);
@@ -249,7 +249,7 @@ public class AnalysisService {
 				analysisGroupO = analysisGroupDao.findByPositionAndName7(name, startTime, endTime);
 			}else if(position==10){
 				analysisGroupO = analysisGroupDao.findByPositionAndName10(name, startTime, endTime);
-			}else if(position==10){
+			}else if(position==13){
 				analysisGroupO = analysisGroupDao.findByPositionAndName13(name, startTime, endTime);
 			}else{
 				analysisGroupO = analysisGroupDao.findByPositionAndName16(name, startTime, endTime);
@@ -343,11 +343,11 @@ public class AnalysisService {
 			dsm.setText("日");
 			lm.add(dsm);
 			SpringMap hsm = new SpringMap();
-			hsm.setId("14");
+			hsm.setId("13");
 			hsm.setText("时");
 			lm.add(hsm);
 			SpringMap fsm = new SpringMap();
-			fsm.setId("17");
+			fsm.setId("16");
 			fsm.setText("分");
 			lm.add(fsm);
 			return lm;
