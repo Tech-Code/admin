@@ -15,7 +15,7 @@ public class AnalysisCity implements java.io.Serializable{
     @GeneratedValue(generator = "UUIDGenerator")
     @GenericGenerator(name="UUIDGenerator",strategy="uuid")
 	private String id;
-	@Column(name="CITY_NAME ")
+	@Column(name="CITY_NAME")
 	private String cityName;
 	@Column(name="DAY")
 	private String day;

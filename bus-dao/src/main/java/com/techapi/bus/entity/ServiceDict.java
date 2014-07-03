@@ -17,7 +17,7 @@ public class ServiceDict implements java.io.Serializable{
     @GeneratedValue(generator = "UUIDGenerator")
     @GenericGenerator(name="UUIDGenerator",strategy="uuid")
 	private String id;
-	@Column(name="SERVICE_NAME ")
+	@Column(name="SERVICE_NAME")
 	private String serviceName;
 	@Column(name="SERVICE_ID")
 	private String serviceId;
