@@ -26,14 +26,12 @@ public class TaxiController {
     @ResponseBody
     public Map<String, String> add(Taxi taxi, HttpServletRequest request)
             throws Exception {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map;
 
         try {
-            taxiService.addOrUpdate(taxi);
-            map.put("mes", "操作成功");
+            map = taxiService.addOrUpdate(taxi);
         } catch (Exception e) {
             e.printStackTrace();
-            map.put("mes", "操作失败");
             throw e;
         }
 

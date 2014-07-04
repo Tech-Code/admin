@@ -198,7 +198,7 @@
 					else
 						ps += "&id=" + n.id;
 				});
-				$.post('<%=root%>/poi/delete' + ps, function() {
+				$.post('<%=root%>/poi/delete' + ps, function(data) {
 					$('#poiTable').datagrid('reload');
 					$.messager.alert('删除', data.mes, 'info');
 				});

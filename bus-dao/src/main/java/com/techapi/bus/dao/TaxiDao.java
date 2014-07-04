@@ -13,4 +13,8 @@ public interface TaxiDao extends PagingAndSortingRepository<Taxi, String>{
 	@Query("select c from Taxi c "
 			+ "where c.cityName = :cityname")
 	public List<Taxi> findBycityName(@Param("cityname") String cityname);
+
+    @Query("select c from Taxi c "
+            + "where c.cityName = :cityName or c.cityCode = :cityCode")
+    public List<Taxi> findByCityNameAndCityCode(@Param("cityName") String cityName, @Param("cityCode") String cityCode);
 }

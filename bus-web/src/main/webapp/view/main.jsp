@@ -3,7 +3,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>实时公交管理系统</title>
+<title>移动位置平台公交管理系统</title>
 <script type="text/javascript">
 	$(function() {
 		$('#centerTab').tabs({
@@ -68,25 +68,15 @@
 <body class="easyui-layout">
 	<!-- 正上方panel -->
 	<div region="north" style="height: 80px; padding: 5px;background:url(<%=root%>/img/top.jpg);overflow:hidden">
-		<h1 style="margin-left:10px ">实时公交应用系统</h1>
+		<h1 style="margin-left:10px ">移动位置平台公交管理系统</h1>
 	</div>
 	<!-- 正左边panel -->
 	<div region="west" title="菜单栏" split="true"
 		style="width: 280px; padding1: 1px; overflow: hidden;">
 		<div class="easyui-accordion" fit="true" border="false">
 			<!-- selected -->
-			<div title="系统管理" selected="true">
-				<ul>
-					<li><a   
-						href="javascript:addTab('tabId_userlist','系统用户管理','<%=root%>/view/user/list.jsp');">系统用户管理</a></li>
-				</ul>
-				<ul>
-					<li><a   
-						href="javascript:addTab('tabId_reglist','注册用户管理','<%=root%>/view/user/reglist.jsp');">注册用户管理</a></li>
-				</ul>
-			</div>
 
-            <div title="城际换成" style="overflow: hidden;">
+            <div title="城际换乘" style="overflow: hidden;">
                 <ul>
                     <li>
                         <a href="javascript:addTab('tabId_cslist','城市交通站点管理','<%=root%>/view/citystation/cslist.jsp');">城市交通站点管理</a>
@@ -99,12 +89,12 @@
                 </ul>
                 <ul>
                     <li>
-                        <a href="javascript:addTab('tabId_poilist','公交站点地标管理','<%=root%>/view/poi/poilist.jsp');">公交站点地标管理</a>
+                        <a href="javascript:addTab('tabId_poilist','地标点管理','<%=root%>/view/poi/poilist.jsp');">地标点管理</a>
                     </li>
                 </ul>
                 <ul>
                     <li>
-                        <a href="javascript:addTab('tabId_bclist','公交车费用配置管理','<%=root%>/view/taxi/taxilist.jsp');">公交车费用配置管理</a>
+                        <a href="javascript:addTab('tabId_bclist','出租车费用管理','<%=root%>/view/taxi/taxilist.jsp');">出租车费用管理</a>
                     </li>
                 </ul>
                 <ul>
@@ -120,40 +110,6 @@
 
             </div>
 
-
-			<div title="数据管理" style="overflow: hidden;">
-				<ul>
-					<li>
-						<a href="javascript:addTab('tabId_adlist','广告数据管理','<%=root%>/view/ad/adlist.jsp');">广告数据管理</a>
-					</li>
-				</ul>
-				<ul>
-					<li>
-						<a href="javascript:addTab('tabId_match_list','路线匹配管理','<%=root%>/view/line/mlist.jsp');">路线匹配管理</a>
-					</li>
-				</ul>
-				<ul>
-					<li>
-						<a href="javascript:addTab('tabId_feed_tab','反馈意见管理','<%=root%>/view/feed/list.jsp');">反馈意见管理</a>
-					</li>
-				</ul>
-				<ul>
-					<li>
-						<a href="javascript:addTab('tabId_notice_tab','公告数据管理','<%=root%>/view/notice/list.jsp');">公告数据管理</a>
-					</li>
-				</ul>
-				<ul>
-					<li>
-						<a href="javascript:addTab('tabId_update_tab','更新数据管理','<%=root%>/view/update/list.jsp');">更新数据管理</a>
-					</li>
-				</ul>
-				<ul>
-					<li>
-						<a href="javascript:addTab('tabId_bus_gps','GPS数据管理','<%=root%>/view/gps/busGPS.jsp');">GPS数据管理</a>
-					</li>
-				</ul>
-			</div>
-			
 			<div title="日志查询" style="overflow: hidden;">
 				<ul>
 					<li>

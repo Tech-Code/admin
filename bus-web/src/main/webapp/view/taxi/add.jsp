@@ -151,8 +151,10 @@
         } else {
             $.post("${ctx}/taxi/add", $("#taxiForm").serializeArray(),
                     function (data) {
-                        $.messager.alert('提示', "操作成功", 'info');
+                        if (data.result == '0' || data.result == '2' || data.result == '6')
+                            $.messager.alert('提示', data.alertInfo, 'info');
                     });
+
         }
 	}
 </script>

@@ -16,7 +16,7 @@
 			collapsible : true,//可折叠
 			url : "${ctx}/citystation/list", //数据来源
 			sortOrder : 'desc', //倒序
-			idField:'cityCode', //主键字段
+			idField:'id', //主键字段
 			remoteSort : true, //服务器端排序
 			pagination : true, //显示分页
 			rownumbers : true, //显示行号

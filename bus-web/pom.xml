@@ -7,7 +7,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>bus-web</artifactId>
+	<artifactId>bus-admin</artifactId>
 	<packaging>war</packaging>
 	<name>bus-web</name>
 

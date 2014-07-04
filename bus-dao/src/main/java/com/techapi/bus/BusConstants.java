@@ -45,6 +45,9 @@ public final class BusConstants {
     public static final String RESULT_ERROR = "2";
     public static final String RESULT_NOTEXIST = "3";
     public static final String RESULT_REPEAT_STATION = "4"; // 站点重复记录
+    public static final String RESULT_REPEAT_POI = "5"; // 地标点重复记录
+    public static final String RESULT_REPEAT_TAXI = "6"; // 出租车重复记录
+    public static final String RESULT_REPEAT_SPEED = "7"; // 出租车重复记录
 
     /**
      * 返回状态文字
@@ -55,6 +58,9 @@ public final class BusConstants {
     public static final String RESULT_NOTEXIST_STR = "站点不存在!";
     public static final String RESULT_REPEAT_STATION_STR = "站点在记录中已存在!";
 
+    public static final String RESULT_REPEAT_POI_STR = "该地标点已存在!";
+    public static final String RESULT_REPEAT_TAXI_STR = "城市费用已存在!";
+    public static final String RESULT_REPEAT_SPEED_STR = "该城市车速已存在!";
 
     /** redis Index */
     public static final int REDIS_INDEX_KEY = 2;

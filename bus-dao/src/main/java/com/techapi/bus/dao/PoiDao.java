@@ -21,4 +21,9 @@ public interface PoiDao extends PagingAndSortingRepository<Poi, String>{
             + "where c.id in :ids")
     public List<Poi> findByids(@Param("ids") String[] ids);
 
+    @Query("select c from Poi c "
+            + "where c.poiPK.stationId = :stationId and c.poiPK.poiId = :poiId")
+    public Poi findBystationIDAndPoiId(@Param("stationId") String stationId,
+                                             @Param("poiId") String poiId);
+
 }

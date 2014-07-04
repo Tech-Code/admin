@@ -16,7 +16,7 @@
 			collapsible : true,//可折叠
 			url : "${ctx}/transstation/list", //数据来源
 			sortOrder : 'desc', //倒序
-			idField:'cityCode', //主键字段
+			idField:'id', //主键字段
 			remoteSort : true, //服务器端排序
 			pagination : true, //显示分页
 			rownumbers : true, //显示行号
@@ -179,7 +179,7 @@
 					else
 						ps += "&id=" + n.id;
 				});
-				$.post('<%=root%>/transstation/delete' + ps, function() {
+				$.post('<%=root%>/transstation/delete' + ps, function(data) {
 					$('#tsTable').datagrid('reload');
 					$.messager.alert('删除', data.mes, 'info');
 				});

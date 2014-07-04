@@ -11,7 +11,7 @@ var grayCss = { background: "#cef", cursor: " pointer" };
 var upDownGrayCss = { background: "#cef" };
 var upDownWhiteCss = { background: "white" };
 
-var ajaxProcessUrl = "/transstation/suggestlist"; //发送ajax请求调用处理url
+var ajaxProcessUrl = "<%=root%>/transstation/suggestlist"; //发送ajax请求调用处理url
 
 $(document).ready(function () {
     var wordInput = $("#stationName");

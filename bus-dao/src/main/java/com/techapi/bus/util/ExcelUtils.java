@@ -72,7 +72,7 @@ public class ExcelUtils {
     public static List<UserKey> readKey() {
         List<UserKey> userKeyList = new ArrayList<>();
         try {
-            Workbook workbook = Workbook.getWorkbook(new File("/Users/xuefei/Documents/MyDocument/Fun/bus/key生成策略及现有KEY/key生成策略及现有KEY/高德GIS业务现有KEY.xls"));
+            Workbook workbook = Workbook.getWorkbook(new File(ConfigUtils.BUS_KEY_DATA));
             Sheet sheet = workbook.getSheet(0);
 
             int rows = sheet.getRows();
@@ -107,7 +107,7 @@ public class ExcelUtils {
 
     public static Map<String,Map<String,List<String>>> readPoiType() {
         try {
-            Workbook workbook = Workbook.getWorkbook(new File("/Users/xuefei/Documents/MyDocument/Fun/bus/GIS地标分类表-typemap.xls"));
+            Workbook workbook = Workbook.getWorkbook(new File(ConfigUtils.BUS_POITYPE_DATA_XLS));
             Sheet sheet = workbook.getSheet(0);
 
             int rows = sheet.getRows();

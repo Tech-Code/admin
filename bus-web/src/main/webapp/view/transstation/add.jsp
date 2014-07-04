@@ -19,7 +19,7 @@
 <body>
 	<form action="" class="formular" id="tsForm">
         <input type="hidden" id="id" name="id" value="${ts.id }" />
-        <input type="hidden" id="cityStationId" name="cityStation.id"/>
+        <input type="hidden" id="cityStationId" name="cityStation.id" value="${ts.cityStation.id}"/>
 
 		<fieldset>
 			<legend> 基础信息 </legend>
@@ -88,17 +88,18 @@
         } else {
             $.post("${ctx}/transstation/add", $("#tsForm").serializeArray(),
                     function (data) {
-                        if (data.result == '0' || data.result == '2' || data.result == '3') $.messager.alert('提示', data.alertInfo, 'info');
-                        if (data.result == '1') $.messager.confirm('提示', '确定要覆盖吗?', function (result) {
-                            if (result) {
-                                $('#id').val(data.id);
-                                $.post("${ctx}/transstation/add", $("#tsForm").serializeArray(),
-                                        function (data) {
-                                            $.messager.alert('提示', data.alertInfo, 'info');
-                                            $('#id').val('');
-                                        });
-                            }
-                        });
+                        if (data.result == '0' || data.result == '2' || data.result == '3' || data.result == '1')
+                            $.messager.alert('提示', data.alertInfo, 'info');
+                        <%--if (data.result == '1') $.messager.confirm('提示', '确定要覆盖吗?', function (result) {--%>
+                            <%--if (result) {--%>
+                                <%--$('#id').val(data.id);--%>
+                                <%--$.post("${ctx}/transstation/add", $("#tsForm").serializeArray(),--%>
+                                        <%--function (data) {--%>
+                                            <%--$.messager.alert('提示', data.alertInfo, 'info');--%>
+                                            <%--$('#id').val('');--%>
+                                        <%--});--%>
+                            <%--}--%>
+                        <%--});--%>
                     });
 	    }
     }

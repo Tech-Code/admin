@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,16 +33,19 @@ public class CityStationService extends BaseQuery{
         List<CityStation> cityStationList = cityStationDao.findByStationName(cityStation.getStationName());
         if (id == null || id.isEmpty()) {
             if (cityStationList.size() > 0) {
-                resultMap.put("id", cityStationList.get(0).getId());
-                resultMap.put("result", BusConstants.RESULT_REPEAT);
-                resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_STR);
+                resultMap.put("result", BusConstants.RESULT_REPEAT_STATION);
+                resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_STATION_STR);
                 return resultMap;
             }
         } else {
             if (cityStationList.size() > 0) {
-                resultMap.put("result", BusConstants.RESULT_REPEAT_STATION);
-                resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_STATION_STR);
-                return resultMap;
+                CityStation editCityStation = cityStationDao.findOne(id);
+                if(!editCityStation.getStationName().trim().equals(cityStation.getStationName().trim())) {
+                    resultMap.put("result", BusConstants.RESULT_REPEAT_STATION);
+                    resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_STATION_STR);
+                    return resultMap;
+                }
+
             }
         }
         cityStation = cityStationDao.save(cityStation);
@@ -81,16 +85,16 @@ public class CityStationService extends BaseQuery{
         return (List<CityStation>)cityStationDao.findAll(ids);
     }
 
-    public void update(String id) {
-        //cityStationDao.updateCityStation("010","北京");
-        //cityStationDao.save();
-    }
-
     public void deleteOne(String id) {
         cityStationDao.delete(id);
     }
 
     public void deleteMany(List<CityStation> cityStationList) {
+        List<String> ids = new ArrayList<>();
+        for(CityStation cityStation : cityStationList) {
+            ids.add(cityStation.getId());
+        }
+        deleteBeanByIds(ids);
         cityStationDao.delete(cityStationList);
     }
 

@@ -3,11 +3,14 @@ package com.techapi.bus.data;
 import com.techapi.bus.BusConstants;
 import com.techapi.bus.annotation.CacheProxy;
 import com.techapi.bus.dao.PoiDao;
+import com.techapi.bus.dao.StationDao;
 import com.techapi.bus.entity.Poi;
 import com.techapi.bus.entity.PoiPK;
 import com.techapi.bus.entity.PoiType;
 import com.techapi.bus.entity.Station;
 import com.techapi.bus.util.*;
+import com.techapi.bus.util.XMLUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,27 +21,35 @@ import java.util.*;
 public class ImportPoiService {
 
     @Resource
-    private PoiDao dao;
+    private PoiDao poiDao;
+
+    @Resource
+    private StationDao stationDao;
 
     @Autowired
     private CacheProxy cacheProxy;
 
+    protected static Logger log = Logger.getLogger(ImportPoiService.class);
+
     public void importPoi() {
+        log.debug("--------------------开始导入POI--------------------");
         // 读站点信息表  Map<cityName,List<StationObject>>
-        Map<String, List<Station>> cityStationMap = FileUtils.getStationData("/Users/xuefei/Documents/MyDocument/Fun/bus/站点数据-20140609/text");
-
+        log.debug("开始获取站点数据....");
+        Map<String, List<Station>> cityStationMap = FileUtils.getStationData(ConfigUtils.BUS_STATION_DATA);
+        log.debug("获取站点数据完毕....");
         // 读取poi类别表
-        Map<String, PoiType> poiTypeMap = FileUtils.getPoiType("/Users/xuefei/Documents/MyDocument/Fun/bus/GIS地标分类表-typemap.csv");
-
+        log.debug("开始获取地标点类别....");
+        Map<String, PoiType> poiTypeMap = FileUtils.getPoiType(ConfigUtils.BUS_POITYPE_DATA_CSV);
+        log.debug("获取地标点类别完毕....");
         Iterator cityNameIterator = cityStationMap.keySet().iterator();
-
+        log.debug("开始获取站点周边POI....");
         while (cityNameIterator.hasNext()) {
             String cityName = cityNameIterator.next().toString();
             int start = 0;
             List<Station> stationList = cityStationMap.get(cityName);
 
             while (start < stationList.size()) {
-                List<Station> subStationList = FileUtils.splitListWithStep(stationList, start, 100);
+                List<Station> subStationList = FileUtils.splitListWithStep(stationList, start, 10);
                 if (subStationList != null) {
                     Map<String, List<Poi>> stationIdPoiListMap = getStationIdPoiListMap(cityName, subStationList, poiTypeMap);
                     Iterator stationIdIterator = stationIdPoiListMap.keySet().iterator();
@@ -56,28 +67,31 @@ public class ImportPoiService {
                                 cacheProxy.put(stationcache, new ArrayList<Poi>(), TTL._10M.getTime());
                             }
                         }
-                        dao.save(poiList);
+                        poiDao.save(poiList);
 
                     }
                 }
-                start += 100;
+                // 存入站点信息
+                stationDao.save(subStationList);
+                start += 10;
             }
         }
+        log.debug("获取站点周边POI完毕....");
 
 	}
 
     public Map<String, List<Poi>> getStationIdPoiListMap(String cityName, List<Station> stationList,
                                                    Map<String, PoiType> poiTypeMap) {
-        System.out.println("BEGIN -- CityName: " + cityName);
-        System.out.println("********************************");
+        log.debug("BEGIN -- CityName: " + cityName);
+        log.debug("********************************");
         int lineCount = 1;
         Map<String, List<Poi>> stationPoiListMap = new HashMap<>();
         for (Station station : stationList) {
             List<Poi> poiList = new ArrayList<>();
-            System.out.println("BEGIN -- CityName: " + cityName + ",StationName: " + station.getStationName() + "行数: " + lineCount++);
-            System.out.println("--------------------------------");
+            log.debug("BEGIN -- CityName: " + cityName + ",StationName: " + station.getStationName() + "行数: " + lineCount++);
+            log.debug("--------------------------------");
             for (int pageNum = 1; pageNum < 5; pageNum++) {
-                System.out.println("第" + pageNum + "页");
+                log.debug("第" + pageNum + "页");
 
                 Map<String, String> paraMap = new HashMap<>();
 
@@ -94,17 +108,13 @@ public class ImportPoiService {
                 paraMap.put("geotype", "rectangle");
                 paraMap.put("display_type", "1");
                 // 调用接口 cityCode为三位，按照cityCode处理
-                String response = HttpUtils.URLGet("http://221.180.144.45:9092/CMPOISearch2/lnm_sisserver.php?", paraMap, "UTF-8");
+                String response = HttpUtils.URLGet(ConfigUtils.BUS_POI_SEARCH_URL, paraMap, "UTF-8");
                 // 解析json/xml
                 Map result = XMLUtils.readPoiXMLToMap(response);
 
 
                 List<Map<String, String>> poilistMap = (List) result.get("poilist");
                 for (Map<String, String> poiMap : poilistMap) {
-
-//                    System.out.println("BEGIN -- CityName: " + cityName + ",StationName: " + station.getStationName() + ",PoiName:" + poiMap.get("name").toString());
-//                    System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-
                     if (poiList.size() == 5) break;
                     String poiid = poiMap.get("poiid").toString();
                     String name = poiMap.get("name").toString();
@@ -167,10 +177,10 @@ public class ImportPoiService {
                 }
             }
             stationPoiListMap.put(station.getStationId(), poiList);
-            System.out.println("--------------------------------");
+            log.debug("--------------------------------");
         }
 
-        System.out.println("********************************");
+        log.debug("********************************");
 
 
         return stationPoiListMap;

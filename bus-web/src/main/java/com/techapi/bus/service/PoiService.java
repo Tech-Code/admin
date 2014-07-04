@@ -4,8 +4,11 @@ import com.techapi.bus.BusConstants;
 import com.techapi.bus.annotation.CacheProxy;
 import com.techapi.bus.annotation.ServiceCache;
 import com.techapi.bus.dao.PoiDao;
+import com.techapi.bus.dao.StationDao;
 import com.techapi.bus.entity.Poi;
+import com.techapi.bus.entity.Station;
 import com.techapi.bus.util.ExcelUtils;
+import com.techapi.bus.util.MapUtil;
 import com.techapi.bus.util.PageUtils;
 import com.techapi.bus.util.TTL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +18,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @Description:
@@ -27,6 +33,8 @@ public class PoiService {
 
 	@Resource
 	private PoiDao poiDao;
+    @Resource
+    private StationDao stationDao;
     @Autowired
     public CacheProxy cacheProxy;
 
@@ -40,7 +48,56 @@ public class PoiService {
     }
 
     @ServiceCache(TTL._30M)
-    public void addOrUpdate(Poi poi) {
+    public Map<String, String> addOrUpdate(Poi poi) {
+
+        Map<String, String> resultMap = new HashMap<>();
+        String poiId = poi.getPoiPK().getPoiId();
+        String stationId = poi.getPoiPK().getStationId();
+        String id = poi.getId();
+        Poi existedPoi;
+
+        if (id == null || id.isEmpty()) {
+            existedPoi = poiDao.findBystationIDAndPoiId(stationId, poiId);
+            if (existedPoi != null) {
+                resultMap.put("result", BusConstants.RESULT_REPEAT_POI);
+                resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_POI_STR);
+                return resultMap;
+            }
+        } else {
+            existedPoi = poiDao.findOneById(id);
+            if (existedPoi != null) {
+                if (!existedPoi.getPoiPK().getPoiId().trim().equals(poi.getPoiPK().getPoiId().trim()) ||
+                        !existedPoi.getPoiPK().getStationId().trim().equals(poi.getPoiPK().getStationId().trim())) {
+                    resultMap.put("result", BusConstants.RESULT_REPEAT_POI);
+                    resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_POI_STR);
+                    return resultMap;
+                }
+
+            }
+        }
+
+        // 添加方位与距离计算
+        Station station = stationDao.findOne(stationId);
+        String poiCoordinate = poi.getPoiCoordinate();
+        String[] poiLonLat = poiCoordinate.split(",");
+        String direction = MapUtil.getDirection(Double.parseDouble(station.getStationLon()),
+                Double.parseDouble(station.getStationLat()),
+                Double.parseDouble(poiLonLat[0]),
+                Double.parseDouble(poiLonLat[1]));
+        double distance = MapUtil.getDistance(Double.parseDouble(station.getStationLon()),
+                Double.parseDouble(station.getStationLat()),
+                Double.parseDouble(poiLonLat[0]),
+                Double.parseDouble(poiLonLat[1]));
+        poi.setWalkDistance(distance);
+        poi.setOrientation(direction);
+
+        poiDao.save(poi);
+
+        resultMap.put("id", poi.getId());
+        resultMap.put("result", BusConstants.RESULT_SUCCESS);
+        resultMap.put("alertInfo", BusConstants.RESULT_SUCCESS_STR);
+
+        // 写redis
         String poicache = String.format(BusConstants.BUS_POI_STATIONID, poi.getPoiPK().getStationId());
         if (poi != null) {
             //补cache
@@ -49,7 +106,8 @@ public class PoiService {
             //增加null，防止击穿cache，压力数据库
             cacheProxy.put(poicache, new Poi(), TTL._10M.getTime());
         }
-        poiDao.save(poi);
+
+        return resultMap;
     }
 
     public Map<String, Object> findSection(int page, int rows) {

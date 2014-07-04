@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,37 @@ public class TaxiService {
     @Autowired
     private CacheProxy cacheProxy;
 
-    public void addOrUpdate(Taxi taxi) {
+    public Map<String, String> addOrUpdate(Taxi taxi) {
+        Map<String, String> resultMap = new HashMap<>();
+        String id = taxi.getId();
+        List<Taxi> existedTaxi = taxiDao.findByCityNameAndCityCode(taxi.getCityName(), taxi.getCityCode());
+        if (id == null || id.isEmpty()) {
+
+            if (existedTaxi != null && existedTaxi.size() > 0) {
+                resultMap.put("result", BusConstants.RESULT_REPEAT_TAXI);
+                resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_TAXI_STR);
+                return resultMap;
+            }
+        } else {
+            Taxi editTaxi = taxiDao.findOne(id);
+            if (existedTaxi != null && existedTaxi.size() > 1) {
+                resultMap.put("result", BusConstants.RESULT_REPEAT_TAXI);
+                resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_TAXI_STR);
+                return resultMap;
+            }
+            if (existedTaxi != null && existedTaxi.size() == 1) {
+
+                if (!existedTaxi.get(0).getCityName().trim().equals(editTaxi.getCityName().trim()) ||
+                        !existedTaxi.get(0).getCityCode().trim().equals(editTaxi.getCityCode().trim())) {
+                    resultMap.put("result", BusConstants.RESULT_REPEAT_TAXI);
+                    resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_TAXI_STR);
+                    return resultMap;
+                }
+
+            }
+        }
+        taxiDao.save(taxi);
+
         String taxicache = String.format(BusConstants.BUS_TAXI_CITYCODE, taxi.getCityCode());
         if (taxi != null) {
             //补cache
@@ -39,7 +70,11 @@ public class TaxiService {
             //增加null，防止击穿cache，压力数据库
             cacheProxy.put(taxicache, new Taxi(), TTL._10M.getTime());
         }
-        taxiDao.save(taxi);
+
+        resultMap.put("id", taxi.getId());
+        resultMap.put("result", BusConstants.RESULT_SUCCESS);
+        resultMap.put("alertInfo", BusConstants.RESULT_SUCCESS_STR);
+        return resultMap;
     }
 
 	/**
