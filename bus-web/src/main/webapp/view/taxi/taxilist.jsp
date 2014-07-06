@@ -6,7 +6,7 @@
 <script type="text/javascript">
 	jQuery(function($) {
 		$('#taxiTable').datagrid({
-			title : '公交车费用配置表', //标题
+			title : '出租车费用配置表', //标题
 			method : 'post',
 			iconCls : 'icon-edit', //图标
 			singleSelect : false, //多选
@@ -178,7 +178,7 @@
 	});
 	//新增
 	function addrow() {
-		parent.addTab('tabId_taxi_add','添加公交车费用','<%=root%>/view/taxi/add.jsp');
+		parent.addTab('tabId_taxi_add','添加出租车费用','<%=root%>/view/taxi/add.jsp');
 
 	}
 	//更新
@@ -186,11 +186,11 @@
 		var rows = $('#taxiTable').datagrid('getSelections');
 		//这里有一个jquery easyui datagrid的一个小bug，必须把主键单独列出来，要不然不能多选
 		if (rows.length == 0) {
-			$.messager.alert('提示', "请选择你要更新的公交车费用", 'info');
+			$.messager.alert('提示', "请选择需要更新的出租车费用", 'info');
 			return;
 		}
 		if (rows.length > 1) {
-			$.messager.alert('提示', "只能选择一个公交车费用进行更新", 'info');
+			$.messager.alert('提示', "只能选择一个出租车费用进行更新", 'info');
 			return;
 		}
 
@@ -202,7 +202,7 @@
 		
 		var url = '<%=root%>/taxi/update' + ps;
 
-		parent.addTab('tabId_bc_update','更新公交车费用',url);
+		parent.addTab('tabId_bc_update','更新出租车费用',url);
 	}
 
  	//删除

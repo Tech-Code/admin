@@ -92,7 +92,7 @@
 	});
 	//新增
 	function addrow() {
-		parent.addTab('tabId_speed_add','添加时速配置','<%=root%>/view/speed/add.jsp');
+		parent.addTab('tabId_speed_add','添加时速配置信息','<%=root%>/view/speed/add.jsp');
 
 	}
 	//更新
@@ -100,7 +100,7 @@
 		var rows = $('#speedTable').datagrid('getSelections');
 		//这里有一个jquery easyui datagrid的一个小bug，必须把主键单独列出来，要不然不能多选
 		if (rows.length == 0) {
-			$.messager.alert('提示', "请选择你要更新的时速配置信息", 'info');
+			$.messager.alert('提示', "请选择需要更新的时速配置信息", 'info');
 			return;
 		}
 		if (rows.length > 1) {
@@ -116,7 +116,7 @@
 		
 		var url = '<%=root%>/speed/update' + ps;
 
-		parent.addTab('tabId_speed_update','更新城际站点信息',url);
+		parent.addTab('tabId_speed_update','更新时速配置信息',url);
 	}
 
  	//删除

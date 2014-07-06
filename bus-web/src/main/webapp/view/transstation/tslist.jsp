@@ -6,7 +6,7 @@
 <script type="text/javascript">
 	jQuery(function($) {
 		$('#tsTable').datagrid({
-			title : '城际站点表', //标题
+			title : '城际交通站点表', //标题
 			method : 'post',
 			iconCls : 'icon-edit', //图标
 			singleSelect : false, //多选
@@ -140,7 +140,7 @@
 	});
 	//新增
 	function addrow() {
-		parent.addTab('tabId_ts_add','添加城际站点','<%=root%>/view/transstation/add.jsp');
+		parent.addTab('tabId_ts_add','添加城际交通站点','<%=root%>/view/transstation/add.jsp');
 
 	}
 	//更新
@@ -148,11 +148,11 @@
 		var rows = $('#tsTable').datagrid('getSelections');
 		//这里有一个jquery easyui datagrid的一个小bug，必须把主键单独列出来，要不然不能多选
 		if (rows.length == 0) {
-			$.messager.alert('提示', "请选择你要更新的城际站点", 'info');
+			$.messager.alert('提示', "请选择需要更新的城际交通站点", 'info');
 			return;
 		}
 		if (rows.length > 1) {
-			$.messager.alert('提示', "只能选择一个城际站点进行更新", 'info');
+			$.messager.alert('提示', "只能选择一个城际交通站点进行更新", 'info');
 			return;
 		}
 
@@ -164,7 +164,7 @@
 		
 		var url = '<%=root%>/transstation/update' + ps;
 
-		parent.addTab('tabId_ts_update','更新城际站点信息',url);
+		parent.addTab('tabId_ts_update','更新城际交通站点信息',url);
 	}
 
  	//删除
