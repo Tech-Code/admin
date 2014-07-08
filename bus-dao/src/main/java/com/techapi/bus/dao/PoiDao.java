@@ -21,4 +21,16 @@ public interface PoiDao extends PagingAndSortingRepository<Poi, String>{
             + "where c.id in :ids")
     public List<Poi> findByids(@Param("ids") String[] ids);
 
+    @Query("select c from Poi c "
+            + "where c.poiPK.stationId = :stationId and c.poiPK.poiId = :poiId")
+    public Poi findBystationIDAndPoiId(@Param("stationId") String stationId,
+                                             @Param("poiId") String poiId);
+
+    @Query("select count(c) from Poi c"
+            + " where c.poiPK.stationId like :cityCode ")
+    public int findCountByCityCode(@Param("cityCode") String cityCode);
+
+    @Query(value = "SELECT * FROM(SELECT A.*, rownum r FROM(SELECT * FROM bus_poi) A WHERE rownum <= ?2) B WHERE r > ?1", nativeQuery = true)
+    public List<Poi> findByCityCode(int pageStart,int pageEnd);
+
 }

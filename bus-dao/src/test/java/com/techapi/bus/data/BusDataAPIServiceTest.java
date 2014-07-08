@@ -1,22 +1,19 @@
 package com.techapi.bus.data;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
+import com.techapi.bus.entity.Poi;
+import com.techapi.bus.entity.Speed;
+import com.techapi.bus.entity.Taxi;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.experimental.categories.Categories.IncludeCategory;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.techapi.bus.entity.Poi;
-import com.techapi.bus.entity.Speed;
-import com.techapi.bus.entity.Taxi;
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:META-INF/applicationContext-bus-dao-oracle.xml")

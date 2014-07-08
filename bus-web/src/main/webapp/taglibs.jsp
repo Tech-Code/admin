@@ -20,3 +20,11 @@ response.setDateHeader("Expires",0);
 <script type="text/javascript" src="<%=root%>/js/easyui/js/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="<%=root%>/js/easyui/validate/easyui_validate.js"></script>
 <script type="text/javascript" src="<%=root%>/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    function getContextPath() {
+        var pathName = document.location.pathname;
+        var index = pathName.substr(1).indexOf("/");
+        var result = pathName.substr(0, index + 1);
+        return result;
+    }
+</script>

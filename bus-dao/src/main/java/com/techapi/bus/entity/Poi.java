@@ -51,6 +51,10 @@ public class Poi implements java.io.Serializable{
         this.id = UUID.randomUUID().toString();
     }
 
+    public void setId(String id){
+        this.id = id;
+    }
+
     public String getCityCode() {
 		return cityCode;
 	}

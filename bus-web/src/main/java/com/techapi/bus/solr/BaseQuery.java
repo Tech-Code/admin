@@ -45,6 +45,11 @@ public class BaseQuery {
 	protected void updateBeans(List<?> list) {
 		// TODO Auto-generated method stub
 		try {
+            List<String> ids = new ArrayList<>();
+            for(Object cs : list) {
+                ids.add(((CityStation) cs).getId());
+            }
+            server.deleteById(ids);
 			server.addBeans(list);
 			server.commit();
 		} catch (SolrServerException e) {
@@ -77,7 +82,6 @@ public class BaseQuery {
 		query.setStart(start);
 		query.setRows(rows);
 		try {
-            //System.out.println("query : " + q);
             QueryResponse response = server.query(query);
 			List<Object> result = new ArrayList<Object>();
 			SolrDocumentList list = response.getResults();
@@ -101,6 +105,28 @@ public class BaseQuery {
 
 		return null;
 	}
+
+    public void deleteBeanById(String id) {
+        try {
+            server.deleteById(id);
+            server.commit();
+        } catch (SolrServerException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteBeanByIds(List<String> ids) {
+        try {
+            server.deleteById(ids);
+            server.commit();
+        } catch (SolrServerException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void deleteBean(String query) {
         try {

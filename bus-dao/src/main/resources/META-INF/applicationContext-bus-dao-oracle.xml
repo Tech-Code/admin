@@ -19,7 +19,7 @@
 
 	<jpa:repositories base-package="com.techapi.bus.dao" />
 	
-	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <!-- 指定连接数据库的驱动 -->
        <property name="driverClassName" value="${db.driverClassName}"/>
        <!-- 指定连接数据库的URL -->
@@ -36,11 +36,11 @@
         <!--&lt;!&ndash; 指定连接数据库的驱动 &ndash;&gt;-->
         <!--<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>-->
         <!--&lt;!&ndash; 指定连接数据库的URL &ndash;&gt;-->
-        <!--<property name="url" value="jdbc:oracle:thin:@180.184.33.137:1521:APPDB"/>-->
+        <!--<property name="url" value="jdbc:oracle:thin:@(DESCRIPTION_LIST=(LOAD_BALANCE=no)(FAILOVER=on)(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=10.64.63.106)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=appdb)(INSTANCE_NAME=appdb1)))(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=10.64.63.107)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=appdb)(INSTANCE_NAME=appdb2))))"/>-->
         <!--&lt;!&ndash; 指定连接数据库的用户名 &ndash;&gt;-->
-        <!--<property name="username" value="system"/>-->
+        <!--<property name="username" value="bustransuser"/>-->
         <!--&lt;!&ndash; 指定连接数据库的密码 &ndash;&gt;-->
-        <!--<property name="password" value="123456"/>-->
+        <!--<property name="password" value="bustr8745"/>-->
         <!--<property name="maxTotal" value="10"/>-->
         <!--<property name="maxWaitMillis" value="100"/>-->
     <!--</bean>-->
@@ -84,7 +84,7 @@
 		<!--<property name="jpaProperties">-->
 			<!--<props>-->
 				<!--<prop key="hibernate.format_sql">true</prop>-->
-				<!--<prop key="hibernate.hbm2ddl.auto">update</prop>-->
+				<!--<prop key="hibernate.hbm2ddl.auto">none</prop>-->
                 <!--<prop key="hibernate.show_sql">true</prop>-->
 				<!--<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>-->
 			<!--</props>-->
@@ -103,7 +103,7 @@
 	</bean>
 
     <!--<bean id="cacheProxy" class="com.techapi.bus.annotation.CacheProxyJedisImpl">-->
-            <!--<constructor-arg index="0" value="180.184.33.132"/>-->
+            <!--<constructor-arg index="0" value="127.0.0.1"/>-->
             <!--<constructor-arg index="1" value="JL8qEYSCq7" />-->
             <!--<constructor-arg index="2" value="6379"/>-->
             <!--<constructor-arg index="3" value="200"/>-->

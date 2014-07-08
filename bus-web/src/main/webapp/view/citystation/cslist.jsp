@@ -6,7 +6,7 @@
 <script type="text/javascript">
 	jQuery(function($) {
 		$('#csTable').datagrid({
-			title : '城市站点列表', //标题
+			title : '城市交通站点列表', //标题
 			method : 'post',
 			iconCls : 'icon-edit', //图标
 			singleSelect : false, //多选
@@ -16,7 +16,7 @@
 			collapsible : true,//可折叠
 			url : "${ctx}/citystation/list", //数据来源
 			sortOrder : 'desc', //倒序
-			idField:'cityCode', //主键字段
+			idField:'id', //主键字段
 			remoteSort : true, //服务器端排序
 			pagination : true, //显示分页
 			rownumbers : true, //显示行号
@@ -100,7 +100,7 @@
 	});
 	//新增
 	function addrow() {
-		parent.addTab('tabId_cs_add','添加城际站点','<%=root%>/view/citystation/add.jsp');
+		parent.addTab('tabId_cs_add','添加城市交通站点','<%=root%>/view/citystation/add.jsp');
 
 	}
 	//更新
@@ -108,11 +108,11 @@
 		var rows = $('#csTable').datagrid('getSelections');
 		//这里有一个jquery easyui datagrid的一个小bug，必须把主键单独列出来，要不然不能多选
 		if (rows.length == 0) {
-			$.messager.alert('提示', "请选择你要更新的城市站点", 'info');
+			$.messager.alert('提示', "请选择需要更新的城市交通站点", 'info');
 			return;
 		}
 		if (rows.length > 1) {
-			$.messager.alert('提示', "只能选择一个城市站点进行更新", 'info');
+			$.messager.alert('提示', "只能选择一个城市交通站点进行更新", 'info');
 			return;
 		}
 
@@ -135,7 +135,7 @@
 //        });
         //$('#dd').dialog('refresh', 'new_content.php');
 
-		parent.addTab('tabId_cs_update','更新城市站点信息',url);
+		parent.addTab('tabId_cs_update','更新城市交通站点信息',url);
 	}
 
  	//删除

@@ -47,23 +47,34 @@ public class TransStationService extends BaseQuery {
 
         // 站点选择，后期修改为不存在站点
         CityStation selectedCityStation = cityStationDao.findOne(filledCityStation.getId());
-        if(selectedCityStation.getStationName() != filledCityStation.getStationName()) {
+        if(!selectedCityStation.getStationName().equals(filledCityStation.getStationName())) {
             resultMap.put("result", BusConstants.RESULT_NOTEXIST);
             resultMap.put("alertInfo", BusConstants.RESULT_NOTEXIST_STR);
             return resultMap;
         }
 
         String id = transstation.getId();
+
+        CityStation cityStation = cityStationDao.findOne(transstation.getCityStation().getId());
+
+        List<Transstation> transStationList = transStationDao.findByTripsAndStationName(transstation.getTrips(), cityStation.getStationName());
+
         // 新增
         if (id == null || id.isEmpty()) {
-            CityStation cityStation = cityStationDao.findOne(transstation.getCityStation().getId());
-
-            List<Transstation> transStationList = transStationDao.findByTripsAndStationName(transstation.getTrips(), cityStation.getStationName());
-            if (transStationList.size() > 0) {
-                resultMap.put("id", transStationList.get(0).getId());
+           if (transStationList.size() > 0) {
                 resultMap.put("result", BusConstants.RESULT_REPEAT);
                 resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_STR);
                 return resultMap;
+            }
+        } else {
+            if (transStationList.size() > 0) {
+                Transstation editTransstation = transStationDao.findOne(id);
+                if (!editTransstation.getTrips().trim().equals(transStationList.get(0).getTrips().trim()) ||
+                        !editTransstation.getCityStation().getStationName().equals(transStationList.get(0).getCityStation().getStationName())) {
+                    resultMap.put("result", BusConstants.RESULT_REPEAT);
+                    resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_STR);
+                    return resultMap;
+                }
             }
         }
         transstation = transStationDao.save(transstation);

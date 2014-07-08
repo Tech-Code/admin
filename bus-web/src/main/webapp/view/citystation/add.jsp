@@ -119,16 +119,16 @@
                         function (data) {
                             if (data.result == '0' || data.result == '2' || data.result == '4') $.messager.alert('提示', data.alertInfo, 'info');
 
-                            if (data.result == '1') $.messager.confirm('提示', '确定要覆盖吗?', function (result) {
-                                if (result) {
-                                    $('#id').val(data.id);
-                                    $.post("${ctx}/citystation/add", $("#csForm").serializeArray(),
-                                            function (data) {
-                                                $.messager.alert('提示', data.alertInfo, 'info');
-                                                $('#id').val('');
-                                            });
-                                }
-                            });
+                            <%--if (data.result == '1') $.messager.confirm('提示', '确定要覆盖吗?', function (result) {--%>
+                                <%--if (result) {--%>
+                                    <%--$('#id').val(data.id);--%>
+                                    <%--$.post("${ctx}/citystation/add", $("#csForm").serializeArray(),--%>
+                                            <%--function (data) {--%>
+                                                <%--$.messager.alert('提示', data.alertInfo, 'info');--%>
+                                                <%--$('#id').val('');--%>
+                                            <%--});--%>
+                                <%--}--%>
+                            <%--});--%>
 
                         });
 

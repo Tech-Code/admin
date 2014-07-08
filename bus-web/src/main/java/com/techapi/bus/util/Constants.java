@@ -13,5 +13,8 @@ public class Constants {
 	public final static String SPEED_INFO_SESSION = "speed";
 	public final static String KEY_INFO_SESSION = "userKey";
 
+
 	public final static String MODEL_INFO_SESSION = "model";
+
+
 }

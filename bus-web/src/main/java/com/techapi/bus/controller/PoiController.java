@@ -27,18 +27,16 @@ public class PoiController {
     @ResponseBody
     public Map<String, String> add(Poi poi, HttpServletRequest request)
             throws Exception {
-        Map<String, String> map = new HashMap<>();
-
+        Map<String, String> map;
         try {
-            poiService.addOrUpdate(poi);
-            map.put("mes", "操作成功");
+            map = poiService.addOrUpdate(poi);
+            return map;
         } catch (Exception e) {
             e.printStackTrace();
-            map.put("mes", "操作失败");
             throw e;
         }
 
-        return map;
+
     }
 
     @RequestMapping("/list")

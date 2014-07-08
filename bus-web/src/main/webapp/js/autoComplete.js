@@ -11,7 +11,7 @@ var grayCss = { background: "#cef", cursor: " pointer" };
 var upDownGrayCss = { background: "#cef" };
 var upDownWhiteCss = { background: "white" };
 
-var ajaxProcessUrl = "/transstation/suggestlist"; //发送ajax请求调用处理url
+var ajaxProcessUrl = getContextPath() + "/transstation/suggestlist"; //发送ajax请求调用处理url
 
 $(document).ready(function () {
     var wordInput = $("#stationName");
@@ -147,5 +147,7 @@ $(document).ready(function () {
     $("#stationName").blur(function () {
         $("#divAutoList").hide();
     });
+
+
 
 });

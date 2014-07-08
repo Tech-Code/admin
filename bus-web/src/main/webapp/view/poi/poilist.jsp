@@ -6,7 +6,7 @@
 <script type="text/javascript">
 	jQuery(function($) {
 		$('#poiTable').datagrid({
-			title : '公交站点地标表', //标题
+			title : '地标点表', //标题
 			method : 'post',
 			iconCls : 'icon-edit', //图标
 			singleSelect : false, //多选
@@ -148,7 +148,7 @@
 	});
 	//新增
 	function addrow() {
-		parent.addTab('tabId_poi_add','添加站点地标点','<%=root%>/view/poi/add.jsp');
+		parent.addTab('tabId_poi_add','添加地标点','<%=root%>/view/poi/add.jsp');
 
 	}
 	//更新
@@ -156,11 +156,11 @@
 		var rows = $('#poiTable').datagrid('getSelections');
 		//这里有一个jquery easyui datagrid的一个小bug，必须把主键单独列出来，要不然不能多选
 		if (rows.length == 0) {
-			$.messager.alert('提示', "请选择你要更新的站点地标点", 'info');
+			$.messager.alert('提示', "请选择需要更新的地标点", 'info');
 			return;
 		}
 		if (rows.length > 1) {
-			$.messager.alert('提示', "只能选择一个站点地标点进行更新", 'info');
+			$.messager.alert('提示', "只能选择一个地标点进行更新", 'info');
 			return;
 		}
 
@@ -183,7 +183,7 @@
 //        });
         //$('#dd').dialog('refresh', 'new_content.php');
 
-		parent.addTab('tabId_poi_update','更新城际站点信息',url);
+		parent.addTab('tabId_poi_update','更新地标点信息',url);
 	}
 
  	//删除
@@ -198,7 +198,7 @@
 					else
 						ps += "&id=" + n.id;
 				});
-				$.post('<%=root%>/poi/delete' + ps, function() {
+				$.post('<%=root%>/poi/delete' + ps, function(data) {
 					$('#poiTable').datagrid('reload');
 					$.messager.alert('删除', data.mes, 'info');
 				});
