@@ -131,6 +131,11 @@
 						<a href="javascript:addTab('tabId_group_tab','时段统计','<%=root%>/view/analysis/grouplist.jsp');">时段统计</a>
 					</li>
 				</ul>
+				<ul>
+					<li>
+						<a href="javascript:addTab('tabId_time_log','访问日志','<%=root%>/view/analysis/timelog.jsp');">访问日志</a>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</div>

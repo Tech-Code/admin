@@ -34,6 +34,14 @@ public class PageUtils {
         return result;
     }
     
+    public static <T> Map<String, Object> getPageMap(long total,List<T> list) {
+        // TODO Auto-generated method stub
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("total", total);
+        result.put("rows", list);
+        return result;
+    }
+    
     /**
 	 * @param list
 	 * @return

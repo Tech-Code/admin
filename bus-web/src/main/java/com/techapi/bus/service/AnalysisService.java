@@ -5,22 +5,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import javax.annotation.Resource;
-
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.techapi.bus.dao.AnalysisCityDao;
 import com.techapi.bus.dao.AnalysisGroupDao;
+import com.techapi.bus.dao.AnalysisManageDao;
 import com.techapi.bus.dao.AnalysisTypeDao;
 import com.techapi.bus.dao.AreaDao;
 import com.techapi.bus.dao.ServiceDictDao;
 import com.techapi.bus.dao.UserKeyDao;
 import com.techapi.bus.entity.AnalysisCity;
 import com.techapi.bus.entity.AnalysisGroup;
+import com.techapi.bus.entity.AnalysisManage;
 import com.techapi.bus.entity.AnalysisType;
 import com.techapi.bus.entity.Area;
 import com.techapi.bus.entity.ServiceDict;
@@ -47,6 +48,8 @@ public class AnalysisService {
 	public ServiceDictDao serviceDictDao;
 	@Resource
 	public AreaDao areaDao;
+	@Resource
+	public AnalysisManageDao analysisManageDao;
 	
 
 	public Map<String, Object> findAnalysisTypeByTimeAndName(int page,int rows,String name,String startTime,String endTime) {
@@ -270,6 +273,44 @@ public class AnalysisService {
 			agList.add(ag);
 		}
 		return PageUtils.getPageMap(agList,pager);
+	}
+	/***
+	 * 查询详细的访问log日志
+	 */
+	public Map<String, Object> findLogByTimeAndType(int page,int rows,String keyword,String name,String startTime,String endTime) {
+		 Pageable pageable = new PageRequest(page-1, rows);
+		 Page<AnalysisManage> am = null;
+
+		 if(StringUtils.isBlank(keyword)&&"all".equals(name)){//既无关键字也无类型查询
+			 am = analysisManageDao.findByTimePage(startTime, endTime,pageable);
+		 }else if(StringUtils.isBlank(keyword)&&!"all".equals(name)){ //类型查询
+			 am = analysisManageDao.findByTimeAndName(startTime, endTime, name, pageable); 
+		 }else if(StringUtils.isNotBlank(keyword)&&"all".equals(name)){//关键字查询
+			 am = analysisManageDao.findByTimeAndSearchKey(startTime, endTime, keyword, pageable);
+		 }else if(StringUtils.isNotBlank(keyword)&&!"all".equals(name)){//关键字类型查询
+			 am = analysisManageDao.findByTimeAndNameAndSearchKey(startTime, endTime, name, keyword, pageable);
+		 }
+		 if(am!=null){
+			long total = am.getTotalElements();
+			List<AnalysisManage> AnalysisManageList =am.getContent();
+			Map<String,UserKey> suMap =getKeyMap();
+			for(AnalysisManage aam :AnalysisManageList){
+				if(suMap.get(aam.getName())!=null){
+					aam.setName(suMap.get(aam.getName()).getBusinessName());
+				}else{
+					aam.setName("未知业务");
+				}
+				if(aam.getUrl()!=null){
+					aam.setUrl(aam.getUrl().replaceAll("\\-", "&"));
+				}else{
+					aam.setUrl("无效访问");
+				}
+			}
+			return PageUtils.getPageMap(total,AnalysisManageList);
+		 }
+		 
+		 
+		return PageUtils.getPageMap(am);
 	}
 
 	

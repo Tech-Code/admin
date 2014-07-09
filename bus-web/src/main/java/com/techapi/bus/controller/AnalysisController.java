@@ -49,6 +49,14 @@ public class AnalysisController {
 	}
 	
 	
+	@RequestMapping("/loglist")
+    @ResponseBody
+	public Map<String, Object> loglist(int page, int rows,@RequestParam(value="keyword",required = false) String keyword,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
+		System.out.println("page:"+page+"rows:"+rows+"keyword:"+keyword+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
+		return analysisService.findLogByTimeAndType(page,rows,keyword,name, startTime, endTime);
+	}
+	
+	
 	/***
 	 * 服务类型
 	 * @return
