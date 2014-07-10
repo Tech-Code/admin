@@ -9,7 +9,7 @@
 		$('#analysistypeTable').datagrid({
 			method : 'post',
 			iconCls : 'icon-edit', //图标
-			singleSelect : false, //多选
+			singleSelect : true, //多选
 			height : 360, //高度
 			fitColumns : true, //自动调整各列，用了这个属性，下面各列的宽度值就只是一个比例。
 			striped : true, //奇偶行颜色不同
@@ -20,24 +20,11 @@
 			remoteSort : true, //服务器端排序
 			pagination : true, //显示分页
 			rownumbers : true, //显示行号
-			detailFormatter: function(rowIndex, rowData){
-                return '<table><tr>' +
-                        '<td style="border:0;padding-right:10px">' +
-                        '<p>Name: ' + 1111 + '</p>' +
-                        '<p>Amount: ' + 22222+ '</p>' +
-                        '</td>' +
-                        '<td style="border:0">' +
-                        '<p>Price: ' + 11111 + '</p>' +
-                        '<p>Cost: ' + 22222+ '</p>' +
-                        '</td>' +
-                        '</tr></table>';
-            },
 			columns : [ [ 
 			{
 				field : 'name',
 				title : '业务',
 				width : 20,
-				
 				formatter : function(value, row, index) {
 					return row.name;
 				} //需要formatter一下才能显示正确的数据
@@ -55,6 +42,7 @@
 				formatter : function(value, row, index) {
 					return row.url;
 				} //需要formatter一下才能显示正确的数据
+			
 			},{
 				field : 'statusCode',
 				title : '状态码',
@@ -66,6 +54,14 @@
 			
 			onLoadSuccess : function() {
 				$('#analysistypeTable').datagrid('clearSelections'); //一定要加上这一句，要不然datagrid会记住之前的选择状态，删除时会出问题
+			},
+			onClickRow:function(rowIndex, rowData){
+				$.messager.show({
+					height:100,
+					width:400,
+					msg:rowData.url,
+					timeout:30000
+				})
 			}
 		});
 		
