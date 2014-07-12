@@ -5,7 +5,6 @@
 <head>
 <script type="text/javascript">
 	jQuery(function($) {
-		
 		$('#analysistypeTable').datagrid({
 			method : 'post',
 			iconCls : 'icon-edit', //图标
@@ -14,7 +13,7 @@
 			fitColumns : true, //自动调整各列，用了这个属性，下面各列的宽度值就只是一个比例。
 			striped : true, //奇偶行颜色不同
 			collapsible : true,//可折叠
-			url : "${ctx}/analysis/grouplist?position=16&name=all&startTime="+getPreMonth(getToDay())+"&endTime="+getToDay(), //数据来源
+			url : "${ctx}/analysis/grouplist?position=10&name=all&startTime="+getPreMonth(getToDay())+"&endTime="+getToDay(), //数据来源
 			sortOrder : 'desc', //倒序
 			idField:'id', //主键字段
 			remoteSort : true, //服务器端排序
@@ -22,11 +21,18 @@
 			rownumbers : true, //显示行号
 			columns : [ [ 
 			{
-				field : 'minute',
-				title : '日期',
+				field : 'startTime',
+				title : '开始时间段',
 				width : 20,
 				formatter : function(value, row, index) {
-					return row.minute;
+					return row.startTime;
+				} //需要formatter一下才能显示正确的数据
+			},{
+				field : 'endTime',
+				title : '结束时间段',
+				width : 20,
+				formatter : function(value, row, index) {
+					return row.endTime;
 				} //需要formatter一下才能显示正确的数据
 			},{
 				field : 'name',
@@ -60,13 +66,27 @@
 		$('#selectgroup').combobox({ 
 			url:"${ctx}/analysis/timetype",
 			valueField:'id', 
-			textField:'text' 
+			textField:'text'
 			});
 		
+		
 		$('#selectType').combobox('setValue','全部');
-		$('#selectgroup').combobox('setValue','分');
-		$('#beginTime').datebox('setValue',getPreMonth(getToDay()));
-		$('#endTime').datebox('setValue',getToDay());
+		$('#selectgroup').combobox('setValue','日');
+		
+		$('#beginTime').datetimebox({   
+			 showSeconds:false,  
+             formatter: formatDateText,  
+             parser: parseDate
+		  });
+		
+		$('#endTime').datetimebox({   
+			 showSeconds:false,  
+            formatter: formatDateText,  
+            parser: parseDate
+		  });  
+		
+		$('#beginTime').datetimebox('setValue',getPreMonth(getToDay()));
+		$('#endTime').datetimebox('setValue',getToDay());
 	});
 	//更新
 	function select() {
@@ -77,8 +97,8 @@
 			selectType="all";
 		}
 		var selectgroup = $('#selectgroup').combobox('getValue');
-		if(selectgroup=="分"){
-			selectgroup=16;
+		if(selectgroup=="日"){
+			selectgroup=10;
 		}
 		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/grouplist?",queryParams:{startTime:btime,endTime:etime,name:selectType,position:selectgroup},method:"post"});
 	}
@@ -92,7 +112,7 @@
          newdate = new Date(nowYear,nowMonth,nowDate);
          nowMonth = doHandleMonth(nowMonth + 1);
          nowDate = doHandleMonth(nowDate);
-         return nowYear+"-"+nowMonth+"-"+nowDate+" 00:00:00";
+         return nowYear+"-"+nowMonth+"-"+nowDate;
     }
    
     //----修改日期格式填充零
@@ -125,17 +145,90 @@
         if (month2 < 10) {
             month2 = '0' + month2;
         }
-        var t2 = year2 + '-' + month2 + '-' + day2+" 00:00:00";
+        var t2 = year2 + '-' + month2 + '-' + day2;
         return t2;
     }
+    
+    
+    function formatDateText(date) { 
+    	var test = $('#selectgroup').combobox('getValue');
+    	var rainType =test;
+        if(rainType=='日'){
+        	rainType=10;
+        }
+        if(rainType==16){
+       	 return date.formatDate("yyyy-MM-dd hh:mm");  
+       }else if(rainType==13){
+       	 return date.formatDate("yyyy-MM-dd hh");  
+       }else if(rainType==10){
+       	return date.formatDate("yyyy-MM-dd");
+       }else{
+       	 return date.formatDate("yyyy-MM"); 
+       }
+    }
+    
+  //把时间格式字符串转化为时间  
+  //如下格式  
+  //2006  
+  //2006-01  
+  //2006-01-01  
+  //2006-01-01 12  
+  //2006-01-01 12:12  
+  //2006-01-01 12:12:12  
+  function parseDate(dateStr) {  
+      var regexDT = /(\d{4})-?(\d{2})?-?(\d{2})?\s?(\d{2})?:?(\d{2})?:?(\d{2})?/g;  
+      var matchs = regexDT.exec(dateStr);  
+      var date = new Array();  
+      for (var i = 1; i < matchs.length; i++) {  
+          if (matchs[i]!=undefined) {  
+              date[i] = matchs[i];  
+          } else {  
+              if (i<=3) {  
+                  date[i] = '01';  
+              } else {  
+                  date[i] = '00';  
+              }  
+          }  
+      }  
+      return new Date(date[1], date[2]-1, date[3], date[4], date[5],date[6]);  
+  }  
+    
+//为date类添加一个format方法  
+//yyyy 年  
+//MM 月  
+//dd 日  
+//hh 小时  
+//mm 分  
+//ss 秒  
+//qq 季度  
+//S  毫秒  
+Date.prototype.formatDate = function (format) //author: meizz  
+{  
+    var o = {  
+        "M+": this.getMonth() + 1, //month  
+        "d+": this.getDate(),    //day  
+        "h+": this.getHours(),   //hour  
+        "m+": this.getMinutes(), //minute  
+        "s+": this.getSeconds(), //second  
+        "q+": Math.floor((this.getMonth() + 3) / 3),  //quarter  
+        "S": this.getMilliseconds() //millisecond  
+    }  
+    if (/(y+)/.test(format)) format = format.replace(RegExp.$1,  
+    (this.getFullYear() + "").substr(4 - RegExp.$1.length));  
+    for (var k in o) if (new RegExp("(" + k + ")").test(format))  
+        format = format.replace(RegExp.$1,  
+      RegExp.$1.length == 1 ? o[k] :  
+        ("00" + o[k]).substr(("" + o[k]).length));  
+    return format;  
+} 
 
 </script>
 </head>
 
 <body >
-<div style="margin:20px 0 10px 0;">
-<input class="easyui-datetimebox" id="beginTime" data-options="required:true,showSeconds:false"/>
-<input class="easyui-datetimebox" id="endTime" data-options="required:true,showSeconds:false" />
+<div style="margin:1px 0 10px 0;">
+<input class="easyui-datetimebox" id="beginTime" />
+<input class="easyui-datetimebox" id="endTime" />
 <input class="easyui-combobox"  id="selectType" style="width:200px;" />
 <input class="easyui-combobox"  id="selectgroup" style="width:80px;" />
  <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>  
