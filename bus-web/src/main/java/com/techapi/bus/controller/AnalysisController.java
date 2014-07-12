@@ -24,27 +24,47 @@ public class AnalysisController {
     @ResponseBody
 	public Map<String, Object> namelist(int page, int rows,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
 		System.out.println("page:"+page+"rows:"+rows+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
-		return analysisService.findAnalysisTypeByTimeAndName(page,rows,name, startTime, endTime);
+		return analysisService.findAnalysisTypeByTimeAndName(page,rows,name, startTime+" 00:00:00", endTime+" 23:59:59");
 	}
 	
 	@RequestMapping("/typelist")
     @ResponseBody
 	public Map<String, Object> typeList(int page, int rows,@RequestParam(value="type",required = false) String type,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
 		System.out.println("page:"+page+"rows:"+rows+"type:"+type+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
-		return analysisService.findAnalysisTypeByTimeAndType(page,rows,type,name, startTime, endTime);
+		return analysisService.findAnalysisTypeByTimeAndType(page,rows,type,name, startTime+" 00:00:00", endTime+" 23:59:59");
 	}
 	
 	@RequestMapping("/citylist")
     @ResponseBody
 	public Map<String, Object> cityList(int page, int rows,@RequestParam(value="name",required = false) String name,@RequestParam(value="city",required = false) String city,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
 		System.out.println("page:"+page+"rows:"+rows+"city:"+city+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
-		return analysisService.findAnalysisCityByTimeAndName(page,rows,name,city, startTime, endTime);
+		return analysisService.findAnalysisCityByTimeAndName(page,rows,name,city, startTime+" 00:00:00", endTime+" 23:59:59");
 	}
 	
 	@RequestMapping("/grouplist")
     @ResponseBody
 	public Map<String, Object> grouplist(int page, int rows,@RequestParam(value="position",required = false) String position,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
 		System.out.println("page:"+page+"rows:"+rows+"positin:"+position+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
+		if(startTime.length()==16){
+			startTime+=":00";
+		}else if(startTime.length()==13){
+			startTime+=":00:00";
+		}else if(startTime.length()==10){
+			startTime+=" 00:00:00";
+		}else if(startTime.length()==7){
+			startTime+="-01 00:00:00";
+		}
+		
+		if(endTime.length()==16){
+			endTime+=":59";
+		}else if(endTime.length()==13){
+			endTime+=":59:59";
+		}else if(endTime.length()==10){
+			endTime+=" 23:59:59";
+		}else if(endTime.length()==7){
+			endTime+="-31 23:59:59";
+		}
+		System.out.println("group analysis: startTime"+startTime+" endTime: "+endTime);
 		return analysisService.findAnalysisGroupByTimeAndType(page,rows,position==null?17:Integer.parseInt(position),name, startTime, endTime);
 	}
 	
@@ -52,8 +72,8 @@ public class AnalysisController {
 	@RequestMapping("/loglist")
     @ResponseBody
 	public Map<String, Object> loglist(int page, int rows,@RequestParam(value="keyword",required = false) String keyword,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
-		System.out.println("page:"+page+"rows:"+rows+"keyword:"+keyword+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
-		return analysisService.findLogByTimeAndType(page,rows,keyword,name, startTime, endTime);
+		System.out.println("page:"+page+"rows:"+rows+"keyword:"+keyword+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime+" 23:59:59");
+		return analysisService.findLogByTimeAndType(page,rows,keyword,name, startTime+" 00:00:00", endTime);
 	}
 	
 	

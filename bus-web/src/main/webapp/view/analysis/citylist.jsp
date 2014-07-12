@@ -160,8 +160,9 @@
 <div style="margin:20px 0 10px 0;">
 <input class="easyui-datebox" id="beginTime" data-options="required:true,showSeconds:false"/>
 <input class="easyui-datebox" id="endTime" data-options="required:true,showSeconds:false" />
- <input class="easyui-combobox"  id="selectType" style="width:200px;" />
- <input class="easyui-combobox"  id="selectCity" style="width:200px;" />
+ <input class="easyui-combobox"  id="selectType" style="width:200px" />
+ &nbsp;
+ <input class="easyui-combobox"  id="selectCity" style="width:200px" />
  
  <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>  
 </div>

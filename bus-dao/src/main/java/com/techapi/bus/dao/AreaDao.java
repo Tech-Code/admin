@@ -15,4 +15,11 @@ public interface AreaDao extends PagingAndSortingRepository<Area, String>{
 	
 	@Query("select c from Area c where c.areaCode= :cityCode and areaType=1")
 	List<Area> findByCode(@Param("cityCode") int cityCode);
+	
+	/***
+	 * 查询地级城市
+	 * @return
+	 */
+	@Query("select c from Area c where areaType=1")
+	List<Area> findAllFilterType();
 }

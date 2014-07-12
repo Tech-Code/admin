@@ -85,6 +85,9 @@
 			selectType="all";
 		}
 		var keyword =$('#keyword').val();
+		if(keyword=="模糊关键字"){
+			keyword="";
+		}
 		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/loglist?",queryParams:{startTime:btime,endTime:etime,name:selectType,keyword:keyword},method:"post"});
 	}
 	
@@ -143,7 +146,7 @@
 <input class="easyui-datebox" id="endTime" data-options="required:true,showSeconds:false" />
  <input class="easyui-combobox"  id="selectType" style="width:200px;" />
 <label>
-<input name="keyword" id="keyword" value="查询关键字" class="text-input"/>
+<input name="keyword" id="keyword"  value="模糊关键字" onclick="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" style="color:#999"/>
 </label> 
  <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>  
 </div>

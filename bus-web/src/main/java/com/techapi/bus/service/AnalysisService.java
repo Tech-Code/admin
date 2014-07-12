@@ -1,11 +1,14 @@
 package com.techapi.bus.service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,14 +23,15 @@ import com.techapi.bus.dao.AreaDao;
 import com.techapi.bus.dao.ServiceDictDao;
 import com.techapi.bus.dao.UserKeyDao;
 import com.techapi.bus.entity.AnalysisCity;
-import com.techapi.bus.entity.AnalysisGroup;
 import com.techapi.bus.entity.AnalysisManage;
 import com.techapi.bus.entity.AnalysisType;
 import com.techapi.bus.entity.Area;
 import com.techapi.bus.entity.ServiceDict;
 import com.techapi.bus.entity.UserKey;
+import com.techapi.bus.util.DataUtils;
 import com.techapi.bus.util.PageUtils;
 import com.techapi.bus.vo.CityListVO;
+import com.techapi.bus.vo.GroupListVO;
 import com.techapi.bus.vo.SpringMap;
 
 /***
@@ -69,7 +73,7 @@ public class AnalysisService {
 			AnalysisType at = new AnalysisType();
 			String nameo = o[0].toString();
 			if(suMap.get(nameo)!=null){
-				at.setName(suMap.get(nameo).getBusinessName());
+				at.setName(suMap.get(nameo).getBusinessName()+"-"+suMap.get(nameo).getKey());
 			}else{
 				at.setName("未知业务");
 			}
@@ -105,7 +109,7 @@ public class AnalysisService {
 			AnalysisType at = new AnalysisType();
 			String nameo = o[0].toString();
 			if(suMap.get(nameo)!=null){
-				at.setName(suMap.get(nameo).getBusinessName());
+				at.setName(suMap.get(nameo).getBusinessName()+"-"+suMap.get(nameo).getKey());
 			}else{
 				at.setName("未知业务");
 			}
@@ -210,7 +214,7 @@ public class AnalysisService {
 					CityListVO cv= new CityListVO();
 					cv.setCity(ml.getKey());
 					if(suKeymap.containsKey(oName)){
-						cv.setTypeName(suKeymap.get(oName).getBusinessName());
+						cv.setTypeName(suKeymap.get(oName).getBusinessName()+"-"+suKeymap.get(oName).getKey());
 					}else{
 						cv.setTypeName("未知业务");
 					}
@@ -232,8 +236,9 @@ public class AnalysisService {
 	 * @param startTime
 	 * @param endTime
 	 * @return
+	 * @throws ParseException 
 	 */
-	public Map<String, Object> findAnalysisGroupByTimeAndType(int page,int rows,Integer position,String name,String startTime,String endTime) {
+	public Map<String, Object> findAnalysisGroupByTimeAndType(int page,int rows,Integer position,String name,String startTime,String endTime) throws ParseException {
 		 Pageable pager = new PageRequest(page-1, rows);
 		List<Object[]>	analysisGroupO=null;
 		if(StringUtils.isBlank(name)||"all".equals(name)){
@@ -258,21 +263,35 @@ public class AnalysisService {
 				analysisGroupO = analysisGroupDao.findByPositionAndName16(name, startTime, endTime);
 			}
 		}
-		List<AnalysisGroup> agList = new ArrayList<AnalysisGroup>(); 
+		List<GroupListVO> glList = new ArrayList<GroupListVO>();
 		Map<String,UserKey> suMap =getKeyMap();
 		for(Object[] o:analysisGroupO){
-			AnalysisGroup ag = new AnalysisGroup();
-			ag.setId("1");
+			GroupListVO gl = new GroupListVO();
+			gl.setId("1");
 			if(suMap.get(o[0].toString())!=null){
-				ag.setName(suMap.get(o[0].toString()).getBusinessName());
+				gl.setName(suMap.get(o[0].toString()).getBusinessName()+"-"+o[0].toString());
 			}else{
-				ag.setName("未知业务");
+				gl.setName("未知业务");
 			}
-			ag.setMinute(o[1].toString());
-			ag.setTotal(o[2].toString());
-			agList.add(ag);
+			String minute = o[1].toString();
+			System.out.println(minute);
+			if(position==7){
+				gl.setStartTime(minute.substring(0, 7));
+				gl.setEndTime(DataUtils.parseEndTime(minute,7));
+			}else if(position==10){
+				gl.setStartTime(minute.substring(0, 10));
+				gl.setEndTime(DataUtils.parseEndTime(minute,10));
+			}else if(position==13){
+				gl.setStartTime(minute.substring(0,13));
+				gl.setEndTime(DataUtils.parseEndTime(minute,13));
+			}else{
+				gl.setStartTime(minute.substring(0, 16));
+				gl.setEndTime(DataUtils.parseEndTime(minute,16));
+			}
+			gl.setTotal(o[2].toString());
+			glList.add(gl);
 		}
-		return PageUtils.getPageMap(agList,pager);
+		return PageUtils.getPageMap(glList,pager);
 	}
 	/***
 	 * 查询详细的访问log日志
@@ -296,7 +315,7 @@ public class AnalysisService {
 			Map<String,UserKey> suMap =getKeyMap();
 			for(AnalysisManage aam :AnalysisManageList){
 				if(suMap.get(aam.getName())!=null){
-					aam.setName(suMap.get(aam.getName()).getBusinessName());
+					aam.setName(suMap.get(aam.getName()).getBusinessName()+"-"+aam.getName());
 				}else{
 					aam.setName("未知业务");
 				}
@@ -323,7 +342,7 @@ public class AnalysisService {
 		for(UserKey s:stype){
 			SpringMap sm = new SpringMap();
 			sm.setId(s.getKey());
-			sm.setText(s.getBusinessName());
+			sm.setText(s.getBusinessName()+"-"+s.getKey());
 			lm.add(sm);
 		}
 		SpringMap sm = new SpringMap();
@@ -355,7 +374,7 @@ public class AnalysisService {
 	  * 城市名称
 	  */
 	public List<SpringMap> findCityAll(){
-		List<Area> stype = (List<Area>) areaDao.findAll();
+		List<Area> stype = (List<Area>) areaDao.findAllFilterType();
 		List<SpringMap> lm = new ArrayList<SpringMap>();
 		for(Area s:stype){
 			SpringMap sm = new SpringMap();
