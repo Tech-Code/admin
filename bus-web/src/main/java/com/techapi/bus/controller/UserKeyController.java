@@ -60,8 +60,8 @@ public class UserKeyController {
             throws Exception {
         Map<String, String> map = new HashMap<String, String>();
         try {
-            List<UserKey> poiList = userKeyService.findByIds(ids);
-            userKeyService.deleteMany(poiList);
+            List<UserKey> userKeyList = userKeyService.findByIds(ids);
+            userKeyService.deleteMany(userKeyList);
             map.put("mes", "删除成功");
         } catch (Exception e) {
             e.printStackTrace();

@@ -194,6 +194,14 @@
             ],
             onLoadSuccess: function () {
                 $('#userKeyTable').datagrid('clearSelections'); //一定要加上这一句，要不然datagrid会记住之前的选择状态，删除时会出问题
+            },
+            onClickRow: function (rowIndex, rowData) {
+                $.messager.show({
+                    height: 100,
+                    width: 400,
+                    msg: 'key: ' + rowData.key,
+                    timeout: 30000
+                })
             }
         });
     }

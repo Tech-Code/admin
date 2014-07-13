@@ -4,6 +4,7 @@ import com.techapi.bus.BusConstants;
 import com.techapi.bus.annotation.CacheProxy;
 import com.techapi.bus.entity.Poi;
 import com.techapi.bus.entity.Speed;
+import com.techapi.bus.entity.UserKey;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,19 @@ public class RedisTest {
 
         String poicache = String.format(BusConstants.BUS_CTL_KEY, "2butatc35npio4m88x5sy067x1aael8q628beqgn1qlsotl27b70t19x46syrfg0lb08rf34i6tk255t");
         cacheProxy.delete(poicache, BusConstants.REDIS_INDEX_KEY);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testGetKeyFromRedis() {
+        String keycache = String.format(BusConstants.BUS_CTL_KEY, "r00t4pb83k9t6g931uizluvnkemmlkk0v7mn3ek0zlas998foms0nf8isnhatzeth12zp0tbb23md7f7");
+        Object o = cacheProxy.get(keycache,BusConstants.REDIS_INDEX_KEY);
+        if (o != null) {
+            UserKey userKey = (UserKey) o;
+            System.out.println("userKey.toString():" + userKey.toString());
+        } else {
+            System.out.println("缓存中没有");
+        }
     }
 
 }
