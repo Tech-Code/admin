@@ -96,7 +96,7 @@ public class AnalysisService {
 		}else if("all".equals(type)){
 			ato = analysisTypeDao.findByTimeAndName(name,startTime, endTime);
 		}else if("all".equals(name)){
-			ato =  analysisTypeDao.findByTimeAndName(type, startTime, endTime);
+			ato =  analysisTypeDao.findByTimeAndType(type, startTime, endTime);
 		}else{
 			ato =  analysisTypeDao.findByTimeAndNameAndType(type, name,startTime, endTime);
 		}
@@ -299,15 +299,15 @@ public class AnalysisService {
 	public Map<String, Object> findLogByTimeAndType(int page,int rows,String keyword,String name,String startTime,String endTime) {
 		 Pageable pageable = new PageRequest(page-1, rows);
 		 Page<AnalysisManage> am = null;
-
+		 
 		 if(StringUtils.isBlank(keyword)&&"all".equals(name)){//既无关键字也无类型查询
 			 am = analysisManageDao.findByTimePage(startTime, endTime,pageable);
 		 }else if(StringUtils.isBlank(keyword)&&!"all".equals(name)){ //类型查询
 			 am = analysisManageDao.findByTimeAndName(startTime, endTime, name, pageable); 
 		 }else if(StringUtils.isNotBlank(keyword)&&"all".equals(name)){//关键字查询
-			 am = analysisManageDao.findByTimeAndSearchKey(startTime, endTime, keyword, pageable);
+			 am = analysisManageDao.findByTimeAndSearchKey(startTime, endTime, "%"+keyword+"%", pageable);
 		 }else if(StringUtils.isNotBlank(keyword)&&!"all".equals(name)){//关键字类型查询
-			 am = analysisManageDao.findByTimeAndNameAndSearchKey(startTime, endTime, name, keyword, pageable);
+			 am = analysisManageDao.findByTimeAndNameAndSearchKey(startTime, endTime, name, "%"+keyword+"%", pageable);
 		 }
 		 if(am!=null){
 			long total = am.getTotalElements();

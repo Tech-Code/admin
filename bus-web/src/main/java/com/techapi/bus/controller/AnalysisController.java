@@ -30,8 +30,8 @@ public class AnalysisController {
 	@RequestMapping("/typelist")
     @ResponseBody
 	public Map<String, Object> typeList(int page, int rows,@RequestParam(value="type",required = false) String type,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
-		System.out.println("page:"+page+"rows:"+rows+"type:"+type+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
-		return analysisService.findAnalysisTypeByTimeAndType(page,rows,type,name, startTime+" 00:00:00", endTime+" 23:59:59");
+		System.out.println("page:"+page+"rows:"+rows+"type:"+name+"------name:"+type+"--------startTime:"+startTime+"-------endTime:"+endTime);
+		return analysisService.findAnalysisTypeByTimeAndType(page,rows,name,type, startTime+" 00:00:00", endTime+" 23:59:59");
 	}
 	
 	@RequestMapping("/citylist")
@@ -73,7 +73,7 @@ public class AnalysisController {
     @ResponseBody
 	public Map<String, Object> loglist(int page, int rows,@RequestParam(value="keyword",required = false) String keyword,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
 		System.out.println("page:"+page+"rows:"+rows+"keyword:"+keyword+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime+" 23:59:59");
-		return analysisService.findLogByTimeAndType(page,rows,keyword,name, startTime+" 00:00:00", endTime);
+		return analysisService.findLogByTimeAndType(page,rows,keyword,name, startTime+" 00:00:00", endTime+" 23:59:59");
 	}
 	
 	
