@@ -6,7 +6,9 @@ import com.techapi.bus.dao.UserKeyDao;
 import com.techapi.bus.entity.UserKey;
 import com.techapi.bus.util.Common;
 import com.techapi.bus.util.PageUtils;
+import com.techapi.bus.util.PropertyMapUtils;
 import com.techapi.bus.util.TTL;
+import com.techapi.bus.vo.SpringMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -119,4 +121,30 @@ public class UserKeyService {
     }
 
 
+    public List<SpringMap> findAllBusinessTypes() {
+        Map<String, String> businessTypeMap = PropertyMapUtils.getBusinessTypeMap();
+        Iterator<String> iterator = businessTypeMap.keySet().iterator();
+        List<SpringMap> springMapList = new ArrayList<>();
+        while (iterator.hasNext()) {
+            String businessTypeName = iterator.next();
+            SpringMap springMap = new SpringMap();
+            springMap.setId(businessTypeName);
+            springMap.setText(businessTypeName);
+            springMapList.add(springMap);
+        }
+        SpringMap totalSpringMap = new SpringMap();
+        totalSpringMap.setId("all");
+        totalSpringMap.setText("全部");
+        springMapList.add(totalSpringMap);
+
+        return springMapList;
+    }
+
+    public Map<String, Object> findBySearchBySection(int page, int rows, String businessName, String businessFlag, String selectBusinessType, String province, String businessUrl, String key) {
+        Pageable pager = new PageRequest(page - 1, rows);
+
+        List<UserKey> searchResult = userKeyDao.findBySearch("%" + businessName + "%", "%" + businessFlag + "%", "%" + selectBusinessType + "%", "%" + province + "%", "%" + businessUrl + "%", "%" + key + "%");
+
+        return PageUtils.getPageMap(searchResult, pager);
+    }
 }

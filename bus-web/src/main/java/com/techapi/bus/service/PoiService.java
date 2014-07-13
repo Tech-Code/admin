@@ -146,4 +146,11 @@ public class PoiService {
 
     }
 
+    public Map<String, Object> findBySearchBySection(int page, int rows, String cityCode, String poiName, String stationId) {
+        Pageable pager = new PageRequest(page - 1, rows);
+
+        List<Poi> searchResult = poiDao.findBySearch("%" + cityCode + "%", "%" + poiName + "%", "%" + stationId + "%");
+
+        return PageUtils.getPageMap(searchResult, pager);
+    }
 }

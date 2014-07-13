@@ -1,7 +1,8 @@
 package com.techapi.bus.dao;
 
 import com.techapi.bus.entity.CityStation;
-import com.techapi.bus.solr.BaseQuery;
+import com.techapi.bus.solr.BusUpdate;
+import com.techapi.bus.solr.basic.BaseOperate;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +23,7 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:META-INF/applicationContext-bus-dao-oracle.xml")
 @Transactional
-public class CityStationDaoTest extends BaseQuery{
+public class CityStationDaoTest extends BaseOperate {
 	
     @Resource
     private CityStationDao dao;
@@ -74,7 +75,7 @@ public class CityStationDaoTest extends BaseQuery{
     public void testAddCityStation() {
         CityStation cityStation = new CityStation();
         cityStation.setCityName("北京");
-        cityStation.setStationName("北京南站");
+        cityStation.setCityStationName("北京南站");
         cityStation.setCoordinate("32.232,112.1212");
 //        cityStation.setId("1111");
         cityStation.setTransdetail("111");
@@ -115,14 +116,14 @@ public class CityStationDaoTest extends BaseQuery{
                 cityStation.setCityCode(cityStationData[0]);
                 cityStation.setCityName(cityStationData[1]);
                 cityStation.setTransType(cityStationData[3]);
-                cityStation.setStationName(cityStationData[2]);
+                cityStation.setCityStationName(cityStationData[2]);
                 cityStation.setTransdetail(cityStationData[4]);
                 cityStation.setCoordinate((cityStationData[5]+ "," + cityStationData[6]).replace("\"",""));
                 cityStationList.add(cityStation);
             }
 
             dao.save(cityStationList);
-            updateBeans(cityStationList);
+            new BusUpdate().updateCityStations(cityStationList);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -134,8 +135,8 @@ public class CityStationDaoTest extends BaseQuery{
 
             CityStation cityStation = new CityStation();
             cityStation.setId("ff80808146dd472e0146dd478a500003");
-            cityStation.setStationName("北京西站");
-            updateBean(cityStation);
+            cityStation.setCityStationName("北京西站");
+            new BusUpdate().updateCityStation(cityStation);
 
     }
 

@@ -1,5 +1,6 @@
 package com.techapi.bus.dao;
 
+import com.techapi.bus.entity.CityStation;
 import com.techapi.bus.entity.Poi;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -33,4 +34,22 @@ public interface PoiDao extends PagingAndSortingRepository<Poi, String>{
     @Query(value = "SELECT * FROM(SELECT A.*, rownum r FROM(SELECT * FROM bus_poi) A WHERE rownum <= ?2) B WHERE r > ?1", nativeQuery = true)
     public List<Poi> findByCityCode(int pageStart,int pageEnd);
 
+    //@Query(value = "SELECT * from bus_poi a " +
+    //        " inner join bus_station b on a.stationid = b.STATIONID " +
+    //        " inner join BUS_CITYSTATION c on a.citycode = c.citycode " +
+    //        " where c.cityname like ?3 and a.cityCode like ?1 and a.poiName like ?2 and b.stationName like ?4", nativeQuery = true)
+    //public List<Poi> findBySearch(
+    //        String cityCode,
+    //        String poiName,
+    //        String cityName,
+    //        String stationName);
+
+    @Query("select c from Poi c "
+            + "where c.cityCode like :cityCode "
+            + "and c.poiName like :poiName "
+            + "and c.poiPK.stationId like :stationId ")
+    public List<Poi> findBySearch(
+            @Param("cityCode") String cityCode,
+            @Param("poiName") String poiName,
+            @Param("stationId") String stationId);
 }

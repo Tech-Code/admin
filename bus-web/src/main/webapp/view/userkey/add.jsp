@@ -5,10 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=CCfe935a7c589f7ca959bae20c503de4"></script>
-<script type="text/javascript" src="<%=root%>/js/ueditor/ueditor.config.js"></script>
-<script type="text/javascript" src="<%=root%>/js/ueditor/ueditor.all.min.js"></script>
-<script type="text/javascript" src="<%=root%>/js/ueditor/lang/zh-cn/zh-cn.js"></script>
-<script type="text/javascript" src="../../js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="<%=root%>/js/My97DatePicker/WdatePicker.js"></script>
 <style type="text/css">
 .clear {
 	clear: both;

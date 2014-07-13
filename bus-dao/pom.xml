@@ -285,6 +285,11 @@
             <artifactId>solr-solrj</artifactId>
             <version>4.7.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.chetuobang.common</groupId>
+            <artifactId>common-utils-bean</artifactId>
+            <version>1.0.3</version>
+        </dependency>
 
 	</dependencies>
 </project>

@@ -22,7 +22,8 @@ Class-Path: lib/aspectjweaver-1.7.2.jar lib/commons-pool2-2.2.jar lib/
  .RELEASE.jar lib/aopalliance-1.0.jar lib/commons-lang3-3.3.2.jar lib/
  spring-oxm-3.2.8.RELEASE.jar lib/solr-solrj-4.7.1.jar lib/httpcore-4.
  3.jar lib/jboss-transaction-api_1.2_spec-1.0.0.Final.jar lib/commons-
- codec-1.2.jar lib/commons-lang-2.5.jar lib/commons-dbcp2-2.0.jar bus-
- dao.properties config.properties
-Main-Class: com.techapi.bus.util.ImportPoi
+ codec-1.2.jar lib/commons-lang-2.5.jar lib/commons-dbcp2-2.0.jar lib/
+ common-utils-bean-1.0.3.jar config/bus-dao.properties config/config.p
+ roperties
+Main-Class: com.techapi.bus.tools.FlushSolr
 

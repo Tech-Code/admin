@@ -68,4 +68,13 @@ public class TaxiController {
         return map;// 重定向
     }
 
+    @RequestMapping(value = "/searchlist")
+    @ResponseBody
+    public Map<String, Object> searchList(int page, int rows,
+                                          @RequestParam(value = "cityCode", required = false) String cityCode,
+                                          @RequestParam(value = "cityName", required = false) String cityName) throws Exception {
+        System.out.println("page: " + page + "rows: " + rows + "cityCode: " + cityCode + "------cityName: " + cityName);
+        return taxiService.findBySearchBySection(page, rows, cityCode, cityName);
+    }
+
 }

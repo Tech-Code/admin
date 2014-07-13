@@ -105,4 +105,13 @@ public class PoiController {
         return map;
     }
 
+    @RequestMapping(value = "/searchlist")
+    @ResponseBody
+    public Map<String, Object> searchList(int page, int rows,
+                                          @RequestParam(value = "cityCode", required = false) String cityCode,
+                                          @RequestParam(value = "stationId", required = false) String stationId,
+                                          @RequestParam(value = "poiName", required = false) String poiName) throws Exception {
+        System.out.println("page: " + page + "rows: " + rows + "cityCode: " + cityCode + "--------poiName:" + poiName + "-------stationId:" + stationId);
+        return poiService.findBySearchBySection(page, rows, cityCode, poiName, stationId);
+    }
 }

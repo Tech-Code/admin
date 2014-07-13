@@ -1,8 +1,6 @@
 form.formular, .validationEngineContainer {
 	font-family: tahoma, verdana, "sans-serif";
 	font-size: 12px;
-	padding: 20px;
-	border: 1px solid #A5A8B8;
 	width: auto;
 	margin: 0 auto;
 }
@@ -28,7 +26,6 @@ form.formular, .validationEngineContainer {
 }
 
 .formular input,.formular select,.formular textarea {
-	margin-bottom: 5px;
 }
 
 .formular .text-input {

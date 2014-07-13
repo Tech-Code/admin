@@ -5,6 +5,7 @@ import com.techapi.bus.entity.CityStation;
 import com.techapi.bus.entity.Transstation;
 import com.techapi.bus.service.TransStationService;
 import com.techapi.bus.util.Constants;
+import com.techapi.bus.util.DateTimeUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +51,10 @@ public class TransStationController {
     @RequestMapping("/update")
     public String update(Model model, String id) throws Exception {
         Transstation transStation = transStationService.findById(id);
+
+        transStation.setArriveTime(DateTimeUtils.formatFromIntToTime(Integer.parseInt(transStation.getArriveTime())));
+        transStation.setDepartTime(DateTimeUtils.formatFromIntToTime(Integer.parseInt(transStation.getDepartTime())));
+
         model.addAttribute(Constants.TS_INFO_SESSION, transStation);
         return "transstation/add";
     }
@@ -72,9 +77,8 @@ public class TransStationController {
     }
 
     @RequestMapping(value = "/suggestlist")
-    public
     @ResponseBody
-    Object suggest(@RequestParam("stationName") String stationName)
+    public Object suggest(@RequestParam("cityStationName") String stationName)
             throws Exception {
         JSONObject json = new JSONObject();
         List<CityStation> cityStationNameList;
@@ -97,6 +101,18 @@ public class TransStationController {
             throw e;
         }
         return json;// 重定向
+    }
+
+    @RequestMapping(value = "/searchlist")
+    @ResponseBody
+    public Map<String, Object> searchList(int page, int rows,
+                                          @RequestParam(value = "cityCode", required = false) String cityCode,
+                                          @RequestParam(value = "cityName", required = false) String cityName,
+                                          @RequestParam(value = "selectTransType", required = false) String selectTransType,
+                                          @RequestParam(value = "stationName", required = false) String stationName,
+                                          @RequestParam(value = "trips", required = false) String trips) throws Exception {
+        System.out.println("page: " + page + "rows: " + rows + "cityCode: " + cityCode + "------cityName: " + cityName + "--------selectTransType:" + selectTransType + "-------stationName:" + stationName);
+        return transStationService.findBySearchBySection(page, rows, cityCode, cityName, selectTransType, stationName, trips);
     }
 
 }

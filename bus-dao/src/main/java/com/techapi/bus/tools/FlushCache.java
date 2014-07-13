@@ -1,21 +1,20 @@
-package com.techapi.bus.util;
+package com.techapi.bus.tools;
 
-import com.techapi.bus.data.ImportPoiService;
+import com.techapi.bus.data.FlushCacheService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * Created by xuefei on 6/8/14.
+ * Created by xuefei on 7/4/14.
  */
-public class ImportPoi {
-
+public class FlushCache {
     protected ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
             "classpath:META-INF/applicationContext-bus-dao-oracle.xml");
 
-    public ImportPoiService importPoiService = context
-            .getBean(ImportPoiService.class);
-
+    public FlushCacheService flushCacheService = context
+            .getBean(FlushCacheService.class);
 
     public static void main(String[] args) {
-        new ImportPoi().importPoiService.importPoi();
+
+        new FlushCache().flushCacheService.flushPoi("110100");
     }
 }
