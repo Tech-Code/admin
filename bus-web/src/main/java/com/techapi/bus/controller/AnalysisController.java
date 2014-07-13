@@ -24,21 +24,21 @@ public class AnalysisController {
     @ResponseBody
 	public Map<String, Object> namelist(int page, int rows,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
 		System.out.println("page:"+page+"rows:"+rows+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
-		return analysisService.findAnalysisTypeByTimeAndName(page,rows,name, startTime+" 00:00:00", endTime+" 23:59:59");
+		return analysisService.findAnalysisTypeByTimeAndName(page,rows,name, startTime, endTime);
 	}
 	
 	@RequestMapping("/typelist")
     @ResponseBody
 	public Map<String, Object> typeList(int page, int rows,@RequestParam(value="type",required = false) String type,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
 		System.out.println("page:"+page+"rows:"+rows+"type:"+name+"------name:"+type+"--------startTime:"+startTime+"-------endTime:"+endTime);
-		return analysisService.findAnalysisTypeByTimeAndType(page,rows,name,type, startTime+" 00:00:00", endTime+" 23:59:59");
+		return analysisService.findAnalysisTypeByTimeAndType(page,rows,name,type, startTime, endTime);
 	}
 	
 	@RequestMapping("/citylist")
     @ResponseBody
 	public Map<String, Object> cityList(int page, int rows,@RequestParam(value="name",required = false) String name,@RequestParam(value="city",required = false) String city,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
 		System.out.println("page:"+page+"rows:"+rows+"city:"+city+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
-		return analysisService.findAnalysisCityByTimeAndName(page,rows,name,city, startTime+" 00:00:00", endTime+" 23:59:59");
+		return analysisService.findAnalysisCityByTimeAndName(page,rows,name,city, startTime, endTime);
 	}
 	
 	@RequestMapping("/grouplist")
