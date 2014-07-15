@@ -15,13 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.*;
 
 /**
  * @Description:
@@ -146,11 +148,24 @@ public class PoiService {
 
     }
 
-    public Map<String, Object> findBySearchBySection(int page, int rows, String cityCode, String poiName, String stationId) {
-        Pageable pager = new PageRequest(page - 1, rows);
+    public Map<String, Object> findBySearchBySection(int page, int rows, final String cityCode, final String poiName, final String stationId) {
+        Page<Poi> page1 = poiDao.findAll(new Specification<Poi>() {
+            public Predicate toPredicate(Root<Poi> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                List<Predicate> list = new ArrayList<>();
+                if (cityCode != null && cityCode.trim().length() > 0) {
+                    list.add(cb.like(root.get("cityCode").as(String.class), "%" + cityCode + "%"));
+                }
+                if (poiName != null && poiName.trim().length() > 0) {
+                    list.add(cb.like(root.get("poiName").as(String.class), "%" + poiName + "%"));
+                }
+                if (stationId != null && stationId.trim().length() > 0) {
+                    list.add(cb.like(root.get("poiPK").get("stationId").as(String.class), "%" + stationId + "%"));
+                }
+                Predicate[] p = new Predicate[list.size()];
+                return cb.and(list.toArray(p));
+            }
+        }, new PageRequest(page-1, rows));
 
-        List<Poi> searchResult = poiDao.findBySearch("%" + cityCode + "%", "%" + poiName + "%", "%" + stationId + "%");
-
-        return PageUtils.getPageMap(searchResult, pager);
+        return PageUtils.getPageMap(page1);
     }
 }

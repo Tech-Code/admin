@@ -59,6 +59,7 @@ $(document).ready(function () {
 
                         for(var i=0;i < data.result.length;i++) {
                             var newDivNode = $("<div>").attr("id", data.result[i].id);
+                            newDivNode.attr("coordinate", data.result[i].coordinate);
                             newDivNode.html(data.result[i].cityStationName).appendTo(autoNode);
                             //添加光标进入事件, 高亮节点
                             newDivNode.mouseover(function () {
@@ -81,6 +82,7 @@ $(document).ready(function () {
                                 highlightindex = -1;
                                 $("#cityStationName").val(comText);
                                 $("#cityStationId").val($(this).attr("id"));
+                                addMarker($(this).attr("coordinate"));
                             });
                         }
                         if (wordNodes.length > 0) {

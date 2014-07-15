@@ -26,6 +26,7 @@ public class CityStation implements java.io.Serializable{
 	@Column(name="TRANSDETAIL")
 	private String transdetail;
 	@Column(name="COORDINATE")
+    @Field("coordinate")
 	private String coordinate;
 
     //@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},mappedBy= "cityStation")

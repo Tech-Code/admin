@@ -65,4 +65,8 @@ public final class BusConstants {
     /** redis Index */
     public static final int REDIS_INDEX_KEY = 2;
 
+    /** tools type */
+    public static final String TOOLS_FLUSH_SOLR_POISTATION = "0";// 刷新POISTATION
+    public static final String TOOLS_FLUSH_SOLR_CITYSTATION = "1";// 刷新CITYSTATION
+
 }

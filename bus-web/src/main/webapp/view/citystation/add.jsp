@@ -4,10 +4,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=CCfe935a7c589f7ca959bae20c503de4"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/library/CityList/1.2/src/CityList_min.js"></script>
-<script type="text/javascript" src="../../js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript"
+            src="http://221.180.144.57:17095/gisability?ability=apiserver&abilityuri=webapi/auth.json&t=ajaxmap&v=3.0&key=1617610aa3f930281889eb824d81e3bcc67f4e9781c69212880f2e985e1dedf869c2483ece723d68"></script>
 <style type="text/css">
 .clear {
 	clear: both;
@@ -54,12 +52,41 @@
                     <input name="coordinate" id="coordinate" value="${cs.coordinate }" class="text-input" />
                 </label>
 			</div>
+            <div style="width:60%;height:300px;border: 1px solid gray;float: right;" id="iCenter"></div>
 		</fieldset>
 		<input id="save" type="button" value="保存"
 					onclick="add()" class="easyui-linkbutton" />
 	</form>
 </body>
 <script type="text/javascript">
+    // 显示高德地图
+    var mapObj, toolbar, overview, scale;
+    var opt = {
+        level: 10,//初始地图视野级别
+        center: new MMap.LngLat(116.397428, 39.90923),//设置地图中心点
+        doubleClickZoom: true,//双击放大地图
+        rotateEnable: true,
+        scrollwheel: true//鼠标滚轮缩放地图
+    }
+
+    mapObj = new MMap.Map("iCenter", opt);
+    mapObj.plugin(["MMap.ToolBar", "MMap.OverView", "MMap.Scale"], function () {
+        toolbar = new MMap.ToolBar();
+        toolbar.autoPosition = false; //加载工具条
+        mapObj.addControl(toolbar);
+        overview = new MMap.OverView(); //加载鹰眼
+        mapObj.addControl(overview);
+        scale = new MMap.Scale(); //加载比例尺
+        mapObj.addControl(scale);
+    });
+
+    var inforWindow = new MMap.InfoWindow({content: "这是一个面"});
+    mapObj.bind(mapObj, "click", function (e) {
+        var lonlat = e.lnglat.lng + "," + e.lnglat.lat;
+        document.getElementById("coordinate").value = lonlat;
+        addMarker(lonlat);
+    });
+
     var highlightindex = -1; //定义高亮显示索引,-1代表不高亮任何行
     var timeOutId = null; //定义延迟时间Id
     var delayTime = 2000; //默认延迟0.5秒
@@ -138,7 +165,7 @@
                                     $("#cityName").val($(this).attr("adName"));
                                     $("#coordinate").val($(this).attr("poiCoordinate"));
                                     $("#cityCode").val($(this).attr("adCodeForSolr"));
-
+                                    addMarker($(this).attr("poiCoordinate"));
                                 });
                             }
                             if (wordNodes.length > 0) {
@@ -238,6 +265,19 @@
         }
     }
 
+    function addMarker(lonlat) {
+        //alert(lonlat);
+        var LngLatX = lonlat.split(",")[0]; //获取Lng值
+        var LngLatY = lonlat.split(",")[1]; //获取Lat值
+        marker = new MMap.Marker({id: "m",
+            position: new MMap.LngLat(LngLatX, LngLatY),
+            icon: "http://webapi.amap.com/images/marker_sprite.png"}) //自定义构造MMap.Marker对象
+
+        var arr = new Array();
+        arr.push(marker);
+        mapObj.addOverlays(arr);
+    }
+
 	function add() {
         var isValid = $('#csForm').form('validate');
         if(!isValid) {
@@ -256,18 +296,6 @@
                 $.post("${ctx}/citystation/add", $("#csForm").serializeArray(),
                         function (data) {
                             if (data.result == '0' || data.result == '2' || data.result == '4') $.messager.alert('提示', data.alertInfo, 'info');
-
-                            <%--if (data.result == '1') $.messager.confirm('提示', '确定要覆盖吗?', function (result) {--%>
-                                <%--if (result) {--%>
-                                    <%--$('#id').val(data.id);--%>
-                                    <%--$.post("${ctx}/citystation/add", $("#csForm").serializeArray(),--%>
-                                            <%--function (data) {--%>
-                                                <%--$.messager.alert('提示', data.alertInfo, 'info');--%>
-                                                <%--$('#id').val('');--%>
-                                            <%--});--%>
-                                <%--}--%>
-                            <%--});--%>
-
                         });
 
             }

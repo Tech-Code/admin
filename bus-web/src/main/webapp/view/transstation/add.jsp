@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=CCfe935a7c589f7ca959bae20c503de4"></script>
-<script type="text/javascript" src="<%=root%>/js/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="<%=root%>/js/autoComplete.js"></script>
+<script type="text/javascript"
+            src="http://221.180.144.57:17095/gisability?ability=apiserver&abilityuri=webapi/auth.json&t=ajaxmap&v=3.0&key=1617610aa3f930281889eb824d81e3bcc67f4e9781c69212880f2e985e1dedf869c2483ece723d68"></script>
 <style type="text/css">
 .clear {
 	clear: both;
@@ -17,6 +17,7 @@
 	<form action="" class="formular" id="tsForm">
         <input type="hidden" id="id" name="id" value="${ts.id }" />
         <input type="hidden" id="cityStationId" name="cityStation.id" value="${ts.cityStation.id}"/>
+        <input type="hidden" id="coodinate" name="coodinate" value=""/>
 		<fieldset>
 			<legend> 基础信息 </legend>
 			<div style="width:39%;height:600px;float: left">
@@ -53,12 +54,33 @@
                     <input name="price" id="price" value="${ts.price }" class="text-input"/>
                 </label>
 			</div>
-		</fieldset>
+            <div style="width:60%;height:300px;border: 1px solid gray;float: right;" id="iCenter"></div>
+        </fieldset>
 		<input id="save" type="button" value="保存"
 					onclick="add()" class="easyui-linkbutton" />
 	</form>
 </body>
 <script type="text/javascript">
+    var mapObj, toolbar, overview, scale;
+    var opt = {
+        level: 10,//初始地图视野级别
+        center: new MMap.LngLat(116.397428, 39.90923),//设置地图中心点
+        doubleClickZoom: true,//双击放大地图
+        rotateEnable: true,
+        scrollwheel: true//鼠标滚轮缩放地图
+    }
+
+    mapObj = new MMap.Map("iCenter", opt);
+    mapObj.plugin(["MMap.ToolBar", "MMap.OverView", "MMap.Scale"], function () {
+        toolbar = new MMap.ToolBar();
+        toolbar.autoPosition = false; //加载工具条
+        mapObj.addControl(toolbar);
+        overview = new MMap.OverView(); //加载鹰眼
+        mapObj.addControl(overview);
+        scale = new MMap.Scale(); //加载比例尺
+        mapObj.addControl(scale);
+    });
+
     $.extend($.fn.validatebox.defaults.rules, {
         time: {// 验证时间
             validator: function (value) {
@@ -91,6 +113,18 @@
         required: true,
         validType: 'time'
     });
+
+    function addMarker(lonlat) {
+        var LngLatX = lonlat.split(",")[0]; //获取Lng值
+        var LngLatY = lonlat.split(",")[1]; //获取Lat值
+        marker = new MMap.Marker({id: "m",
+            position: new MMap.LngLat(LngLatX, LngLatY),
+            icon: "http://webapi.amap.com/images/marker_sprite.png"}) //自定义构造MMap.Marker对象
+
+        var arr = new Array();
+        arr.push(marker);
+        mapObj.addOverlays(arr);
+    }
 	function add() {
         var isValid = $('#tsForm').form('validate');
         if (!isValid) {
@@ -100,17 +134,7 @@
                     function (data) {
                         if (data.result == '0' || data.result == '2' || data.result == '3' || data.result == '1')
                             $.messager.alert('提示', data.alertInfo, 'info');
-                        <%--if (data.result == '1') $.messager.confirm('提示', '确定要覆盖吗?', function (result) {--%>
-                            <%--if (result) {--%>
-                                <%--$('#id').val(data.id);--%>
-                                <%--$.post("${ctx}/transstation/add", $("#tsForm").serializeArray(),--%>
-                                        <%--function (data) {--%>
-                                            <%--$.messager.alert('提示', data.alertInfo, 'info');--%>
-                                            <%--$('#id').val('');--%>
-                                        <%--});--%>
-                            <%--}--%>
-                        <%--});--%>
-                    });
+            });
 	    }
     }
 	

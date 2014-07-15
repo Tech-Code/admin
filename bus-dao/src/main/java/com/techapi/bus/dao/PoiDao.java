@@ -1,14 +1,16 @@
 package com.techapi.bus.dao;
 
-import com.techapi.bus.entity.CityStation;
 import com.techapi.bus.entity.Poi;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface PoiDao extends PagingAndSortingRepository<Poi, String>{
+public interface PoiDao extends PagingAndSortingRepository<Poi, String>, JpaSpecificationExecutor<Poi> {
 
 	@Query("select c from Poi c "
 			+ "where c.poiPK.stationId = :stationid order by walkDistance asc")
@@ -52,4 +54,5 @@ public interface PoiDao extends PagingAndSortingRepository<Poi, String>{
             @Param("cityCode") String cityCode,
             @Param("poiName") String poiName,
             @Param("stationId") String stationId);
+
 }
