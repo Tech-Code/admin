@@ -12,6 +12,7 @@ import com.techapi.bus.util.*;
 import com.techapi.bus.util.XMLUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,6 +27,7 @@ public class ImportPoiService {
     @Resource
     private StationDao stationDao;
 
+    @Qualifier("cacheProxy")
     @Autowired
     private CacheProxy cacheProxy;
 

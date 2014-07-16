@@ -1,7 +1,7 @@
 package com.techapi.bus.dao;
 
 import com.techapi.bus.entity.CityStation;
-import com.techapi.bus.entity.Speed;
+import com.techapi.bus.entity.PoiStation;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -36,8 +36,33 @@ public interface CityStationDao extends PagingAndSortingRepository<CityStation, 
 
 
     @Query("select c from CityStation c "
-            + "where c.stationName = :stationName")
+            + "where c.cityStationName = :stationName")
     public List<CityStation> findByStationName(
             @Param("stationName") String stationName);
+
+    @Query("select c from CityStation c "
+            + "where c.cityStationName like :stationName "
+            + "and c.cityCode like :cityCode "
+            + "and c.cityName like :cityName "
+            + "and c.transType like :transType ")
+    public List<CityStation> findBySearch(
+            @Param("cityCode") String cityCode,
+            @Param("cityName") String cityName,
+            @Param("transType") String transType,
+            @Param("stationName") String stationName);
+
+    @Query("select count(c) from CityStation c"
+            + " where c.cityCode = :cityCode")
+    public int findCountByCityCode(@Param("cityCode") String cityCode);
+
+    @Query("select count(c) from CityStation c")
+    public int findAllCount();
+
+    @Query(value = "SELECT * FROM(SELECT A.*, rownum r FROM(SELECT * FROM bus_citystation) A WHERE rownum <= ?2) B WHERE r > ?1", nativeQuery = true)
+    public List<CityStation> findAllByPage(int pageStart, int pageEnd);
+
+    @Query(value = "SELECT * FROM(SELECT A.*, rownum r FROM(SELECT * FROM bus_citystation WHERE ADCODE = ?3) A WHERE rownum <= ?2) B WHERE r > ?1", nativeQuery = true)
+    public List<CityStation> findByCityCodeByPage(int pageStart, int pageEnd, String cityCode);
+
 
 }

@@ -3,6 +3,7 @@ package com.techapi.bus.controller;
 import com.techapi.bus.entity.UserKey;
 import com.techapi.bus.service.UserKeyService;
 import com.techapi.bus.util.Constants;
+import com.techapi.bus.vo.SpringMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,8 +60,8 @@ public class UserKeyController {
             throws Exception {
         Map<String, String> map = new HashMap<String, String>();
         try {
-            List<UserKey> poiList = userKeyService.findByIds(ids);
-            userKeyService.deleteMany(poiList);
+            List<UserKey> userKeyList = userKeyService.findByIds(ids);
+            userKeyService.deleteMany(userKeyList);
             map.put("mes", "删除成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,5 +69,31 @@ public class UserKeyController {
             throw e;
         }
         return map;// 重定向
+    }
+
+    @RequestMapping(value = "/businesstypes")
+    @ResponseBody
+    public List<SpringMap> getBusinessTypes()
+            throws Exception {
+        return userKeyService.findAllBusinessTypes();
+    }
+
+    @RequestMapping(value = "/searchlist")
+    @ResponseBody
+    public Map<String, Object> searchList(int page, int rows,
+                                          @RequestParam(value = "businessName", required = false) String businessName,
+                                          @RequestParam(value = "businessFlag", required = false) String businessFlag,
+                                          @RequestParam(value = "selectBusinessType", required = false) String selectBusinessType,
+                                          @RequestParam(value = "province", required = false) String province,
+                                          @RequestParam(value = "businessUrl", required = false) String businessUrl,
+                                          @RequestParam(value = "key", required = false) String key) throws Exception {
+        System.out.println("page: " + page + "rows: " + rows
+                            + "businessName: " + businessName
+                            + "------businessFlag: " + businessFlag
+                            + "--------selectBusinessType:" + selectBusinessType
+                            + "-------province:" + province
+                            + "-------businessUrl:" + businessUrl
+                            + "-------key:" + key);
+        return userKeyService.findBySearchBySection(page, rows, businessName, businessFlag, selectBusinessType, province, businessUrl, key);
     }
 }

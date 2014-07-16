@@ -12,9 +12,10 @@ var upDownGrayCss = { background: "#cef" };
 var upDownWhiteCss = { background: "white" };
 
 var ajaxProcessUrl = getContextPath() + "/transstation/suggestlist"; //发送ajax请求调用处理url
+//var ajaxProcessUrl = getContextPath() + "/citystation/suggestlist";
 
 $(document).ready(function () {
-    var wordInput = $("#stationName");
+    var wordInput = $("#cityStationName");
     var wordInputOffset = wordInput.offset();
 
 
@@ -43,7 +44,7 @@ $(document).ready(function () {
 
         //        if (keyCode >= 65 && keyCode <= 90 || keyCode == 8 || keyCode == 46) { //输入字母,退格或删除,显示最新的内容
         if (keyCode != 13 && keyCode != 38 && keyCode != 40) { //不是三个特殊键，可以搜索
-            var wordText = $("#stationName").val();
+            var wordText = $("#cityStationName").val();
             if (wordText.length < minPrefix) return;
             //取消上次提交
             //window.clearTimeout(timeOutId);
@@ -51,14 +52,15 @@ $(document).ready(function () {
                 $.ajax({
                     type: "GET",
                     url: ajaxProcessUrl,
-                    data: 'stationName=' + wordText,
+                    data: 'cityStationName=' + wordText,
                     success: function (data) {
                         var wordNodes = $(data.result);
                         autoNode.html("");
 
                         for(var i=0;i < data.result.length;i++) {
                             var newDivNode = $("<div>").attr("id", data.result[i].id);
-                            newDivNode.html(data.result[i].stationName).appendTo(autoNode);
+                            newDivNode.attr("coordinate", data.result[i].coordinate);
+                            newDivNode.html(data.result[i].cityStationName).appendTo(autoNode);
                             //添加光标进入事件, 高亮节点
                             newDivNode.mouseover(function () {
                                 if (highlightindex != -1) {
@@ -78,14 +80,9 @@ $(document).ready(function () {
                                 var comText = $(this).text();
                                 $("#divAutoList").hide();
                                 highlightindex = -1;
-                                $("#stationName").val(comText);
+                                $("#cityStationName").val(comText);
                                 $("#cityStationId").val($(this).attr("id"));
-                                $("#cityCode").val($(this).attr("cityCode"));
-                                $("#cityName").val($(this).attr("cityName"));
-                                $("#transType").val($(this).attr("transType"));
-                                $("#city_stationName").val($(this).attr("stationName"));
-                                $("#transdetail").val($(this).attr("transdetail"));
-                                $("#coordinate").val($(this).attr("coordinate"));
+                                addMarker($(this).attr("coordinate"));
                             });
                         }
                         if (wordNodes.length > 0) {
@@ -131,20 +128,20 @@ $(document).ready(function () {
             if (highlightindex != -1) {
                 var comText = $("#divAutoList").hide().children("div").eq(highlightindex).text();
                 highlightindex = -1;
-                $("#stationName").val(comText);
+                $("#cityStationName").val(comText);
                 return false;
             }
             else {
-                alert("文本框中的[" + $("#stationName").val() + "]被提交了！");
+                alert("文本框中的[" + $("#cityStationName").val() + "]被提交了！");
                 $("#divAutoList").hide();
-                $("#stationName").get(0).blur();
+                $("#cityStationName").get(0).blur();
                 return true;
             }
         }
     });
 
     //给查询框添加blur事件，隐藏提示层
-    $("#stationName").blur(function () {
+    $("#cityStationName").blur(function () {
         $("#divAutoList").hide();
     });
 

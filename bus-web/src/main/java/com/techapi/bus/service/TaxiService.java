@@ -115,4 +115,11 @@ public class TaxiService {
         taxiDao.delete(taxiList);
     }
 
+    public Map<String, Object> findBySearchBySection(int page, int rows, String cityCode, String cityName) {
+        Pageable pager = new PageRequest(page - 1, rows);
+
+        List<Taxi> searchResult = taxiDao.findBySearch("%" + cityCode + "%", "%" + cityName + "%");
+
+        return PageUtils.getPageMap(searchResult, pager);
+    }
 }

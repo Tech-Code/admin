@@ -1,10 +1,16 @@
 package com.techapi.bus.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.techapi.bus.entity.CityStation;
+import com.techapi.bus.entity.PoiStation;
 import com.techapi.bus.entity.Transstation;
 import com.techapi.bus.service.CityStationService;
 import com.techapi.bus.service.TransStationService;
+import com.techapi.bus.solr.BusSearch;
+import com.techapi.bus.solr.query.QueryForBus;
+import com.techapi.bus.solr.result.PoiStationResult;
 import com.techapi.bus.util.Constants;
+import com.techapi.bus.vo.SpringMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,4 +86,49 @@ public class CityStationController{
         return map;// 重定向
     }
 
+    @RequestMapping(value = "/suggestlist")
+    @ResponseBody
+    public Object suggest(@RequestParam("cityStationName") String stationName,
+                          @RequestParam("poiType") String poiType,
+                          @RequestParam("adName") String adName)
+            throws Exception {
+        JSONObject json = new JSONObject();
+
+        QueryForBus queryForBus = new QueryForBus();
+        queryForBus.setPoiType(poiType);
+        queryForBus.setAdName(adName);
+        queryForBus.setPoiStationName(stationName);
+
+        BusSearch busSearch = new BusSearch(queryForBus);
+        PoiStationResult poiStationResult = busSearch.searchPoiStationList();
+
+
+        try {
+            List<PoiStation> poiStationList = poiStationResult.getList();
+            json.put("result", poiStationList);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return json;// 重定向
+    }
+
+    @RequestMapping(value = "/transtypes")
+    @ResponseBody
+    public List<SpringMap> getTransTypes()
+            throws Exception {
+        return cityStationService.findAllTransTypes();
+    }
+
+    @RequestMapping(value = "/searchlist")
+    @ResponseBody
+    public Map<String, Object> searchList(int page, int rows,
+                                          @RequestParam(value = "cityCode", required = false) String cityCode,
+                                          @RequestParam(value = "cityName", required = false) String cityName,
+                                          @RequestParam(value = "selectTransType", required = false) String selectTransType,
+                                          @RequestParam(value = "stationName", required = false) String stationName) throws Exception {
+        System.out.println("page: " + page + "rows: " + rows + "cityCode: " + cityCode + "------cityName: " + cityName + "--------selectTransType:" + selectTransType + "-------stationName:" + stationName);
+        return cityStationService.findBySearchBySection(page, rows, cityCode, cityName, selectTransType, stationName);
+    }
 }

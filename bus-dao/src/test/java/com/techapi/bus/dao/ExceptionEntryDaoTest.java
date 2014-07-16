@@ -59,7 +59,7 @@ public class ExceptionEntryDaoTest {
 
     @Test
     public void testQuery() {
-        StopWatch sw = new StopWatch("query");
+        StopWatch sw = new StopWatch("basic");
         sw.start();
         Pageable pageable = new PageRequest(0, 40, Sort.Direction.DESC, "id.timestamp");
         Page<ExceptionEntry> entries = dao.findByServerAndException("www-label0", "RuntimeException", pageable);
@@ -75,7 +75,7 @@ public class ExceptionEntryDaoTest {
 
     @Test
     public void testTimestampOfLastEntry() {
-        StopWatch sw = new StopWatch("query");
+        StopWatch sw = new StopWatch("basic");
         sw.start();
         Pageable pageable = new PageRequest(0, 1, Sort.Direction.DESC, "id.timestamp");
         List<ExceptionEntry> entries = dao.findByServer("www-label0", pageable);
@@ -90,7 +90,7 @@ public class ExceptionEntryDaoTest {
 
     @Test
     public void testGetExceptionCount() {
-        StopWatch sw = new StopWatch("query");
+        StopWatch sw = new StopWatch("basic");
         sw.start();
         DateTime dt = new DateTime(2014, 4, 22, 15, 10, 23, 0);//2014-04-23 12:16:23
         Date date = dt.toDate();

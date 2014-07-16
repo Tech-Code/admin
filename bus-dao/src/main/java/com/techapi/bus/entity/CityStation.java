@@ -22,10 +22,11 @@ public class CityStation implements java.io.Serializable{
 	private String transType;
 	@Column(name="STATIONNAME")
     @Field("cityStationName")
-	private String stationName;
+	private String cityStationName;
 	@Column(name="TRANSDETAIL")
 	private String transdetail;
 	@Column(name="COORDINATE")
+    @Field("coordinate")
 	private String coordinate;
 
     //@OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},mappedBy= "cityStation")
@@ -59,11 +60,11 @@ public class CityStation implements java.io.Serializable{
 	public void setTransType(String transType) {
 		this.transType = transType;
 	}
-	public String getStationName() {
-		return stationName;
+	public String getCityStationName() {
+		return cityStationName;
 	}
-	public void setStationName(String stationName) {
-		this.stationName = stationName;
+	public void setCityStationName(String cityStationName) {
+		this.cityStationName = cityStationName;
 	}
 	public String getTransdetail() {
 		return transdetail;
@@ -102,7 +103,7 @@ public class CityStation implements java.io.Serializable{
         if (cityName != null ? !cityName.equals(that.cityName) : that.cityName != null) return false;
         if (coordinate != null ? !coordinate.equals(that.coordinate) : that.coordinate != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (stationName != null ? !stationName.equals(that.stationName) : that.stationName != null) return false;
+        if (cityStationName != null ? !cityStationName.equals(that.cityStationName) : that.cityStationName != null) return false;
         if (transType != null ? !transType.equals(that.transType) : that.transType != null) return false;
         if (transdetail != null ? !transdetail.equals(that.transdetail) : that.transdetail != null) return false;
 
@@ -115,7 +116,7 @@ public class CityStation implements java.io.Serializable{
         result = 31 * result + (cityCode != null ? cityCode.hashCode() : 0);
         result = 31 * result + (cityName != null ? cityName.hashCode() : 0);
         result = 31 * result + (transType != null ? transType.hashCode() : 0);
-        result = 31 * result + (stationName != null ? stationName.hashCode() : 0);
+        result = 31 * result + (cityStationName != null ? cityStationName.hashCode() : 0);
         result = 31 * result + (transdetail != null ? transdetail.hashCode() : 0);
         result = 31 * result + (coordinate != null ? coordinate.hashCode() : 0);
         return result;

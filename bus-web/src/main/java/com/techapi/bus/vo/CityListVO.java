@@ -36,7 +36,7 @@ public class CityListVO {
 	public void putTotal(String serverName,int timetotal){
 		if("transfer".equals(serverName)){
 			this.transfer+=timetotal;
-		}else if("query".equals(serverName)){
+		}else if("basic".equals(serverName)){
 			this.query+=timetotal;
 		}else if("walk".equals(serverName)){
 			this.walk+=timetotal;

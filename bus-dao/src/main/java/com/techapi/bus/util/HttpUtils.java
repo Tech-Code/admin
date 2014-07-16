@@ -10,8 +10,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
 
@@ -139,7 +138,20 @@ public class HttpUtils {
             //执行getMethod
             int statusCode = client.executeMethod(getMethod);
             if(statusCode == HttpStatus.SC_OK) {
-                response = getMethod.getResponseBodyAsString();
+                //response = getMethod.getResponseBodyAsString();
+                InputStream responseBodyAsStream = getMethod.getResponseBodyAsStream();
+                InputStreamReader inputStreamReader = new InputStreamReader(responseBodyAsStream,"GBK");
+
+                BufferedReader br = new BufferedReader(inputStreamReader);
+                StringBuffer sb = new StringBuffer();
+                String tempbf;
+                while ((tempbf = br.readLine()) != null) {
+                    sb.append(tempbf);
+                }
+                inputStreamReader.close();
+
+                response = sb.toString();
+
             }else{
                 log.debug("响应状态码 = " + getMethod.getStatusCode());
             }

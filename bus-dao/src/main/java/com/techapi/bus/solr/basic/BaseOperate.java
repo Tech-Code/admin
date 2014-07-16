@@ -1,6 +1,6 @@
-package com.techapi.bus.solr;
+package com.techapi.bus.solr.basic;
 
-import com.techapi.bus.entity.CityStation;
+import com.chetuobang.common.BeanUtils;
 import com.techapi.bus.util.ConfigUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -18,13 +18,13 @@ import java.util.List;
  * @Author hongjia.hu
  * @Date 2014-5-26
  */
-public class BaseQuery {
+public class BaseOperate {
 
 	protected HttpSolrServer server;
 
 	private long numFound = 0;
 
-	public BaseQuery() {
+	public BaseOperate() {
 		try {
 			server = new HttpSolrServer(ConfigUtils.SOLR_URL);
 			server.setMaxRetries(1); // defaults to 0. > 1 not recommended.
@@ -42,13 +42,9 @@ public class BaseQuery {
 	/**
 	 * @param list
 	 */
-	protected void updateBeans(List<?> list) {
+	protected void updateBeans(List<String> ids, List<?> list) {
 		// TODO Auto-generated method stub
 		try {
-            List<String> ids = new ArrayList<>();
-            for(Object cs : list) {
-                ids.add(((CityStation) cs).getId());
-            }
             server.deleteById(ids);
 			server.addBeans(list);
 			server.commit();
@@ -61,10 +57,9 @@ public class BaseQuery {
 		}
 	}
 
-	protected void updateBean(Object obj) {
+	protected void updateBean(String id, Object obj) {
 		// TODO Auto-generated method stub
 		try {
-            String id = ((CityStation)obj).getId();
             server.deleteById(id);
 			server.addBean(obj);
 			server.commit();
@@ -86,16 +81,21 @@ public class BaseQuery {
 			List<Object> result = new ArrayList<Object>();
 			SolrDocumentList list = response.getResults();
 			numFound = list.getNumFound();
-			for (int i = 0; i < list.size(); i++) {
-				Object obj = cls.newInstance();
-				SolrDocument doucument = list.get(i);
-                String cityStationName = doucument.getFieldValue("cityStationName").toString();
-                String id = doucument.getFieldValue("id").toString();
-                CityStation cityStation = new CityStation();
-                cityStation.setStationName(cityStationName);
-                cityStation.setId(id);
-				result.add(cityStation);
-			}
+			//for (int i = 0; i < list.size(); i++) {
+			//	Object obj = cls.newInstance();
+			//	SolrDocument doucument = list.get(i);
+             //   String cityStationName = doucument.getFieldValue("cityStationName").toString();
+             //   String id = doucument.getFieldValue("id").toString();
+             //   CityStation cityStation = new CityStation();
+             //   cityStation.setStationName(cityStationName);
+             //   cityStation.setId(id);
+			//	result.add(cityStation);
+			//}
+            for (int i = 0; i < list.size(); i++) {
+                SolrDocument doucument = list.get(i);
+                Object obj = BeanUtils.deserializ(doucument.getFieldValueMap(), cls);
+                result.add(obj);
+            }
 
 			return result;
 		} catch (Exception e) {

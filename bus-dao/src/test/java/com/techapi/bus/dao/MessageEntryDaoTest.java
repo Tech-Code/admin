@@ -53,7 +53,7 @@ public class MessageEntryDaoTest {
 
     @Test
     public void testQuery() {
-        StopWatch sw = new StopWatch("query");
+        StopWatch sw = new StopWatch("basic");
         sw.start();
         Pageable pageable = new PageRequest(0, 40, Sort.Direction.DESC, "id.timestamp");
         Page<MessageEntry> messageEntries = dao.findByServer("www-label-0", pageable);

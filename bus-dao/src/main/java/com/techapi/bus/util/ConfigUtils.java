@@ -23,6 +23,13 @@ public class ConfigUtils {
 
     public static String BUS_POI_SEARCH_URL;
 
+    public static String BUS_POI_TRANS_TYPE;
+
+    public static String BUS_POI_TRANS_TYPE_NAME;
+
+    public static int BUS_POISTATION_FLUSHSOLR_ROWS;
+
+    public static String BUS_KEY_BUSINESS_TYPE;
 
 
 
@@ -45,7 +52,14 @@ public class ConfigUtils {
 
             BUS_POI_SEARCH_URL = rb.getString("bus.data.poi.search.url");
 
-            
+            BUS_POI_TRANS_TYPE = rb.getString("bus.data.poi.trans.type");
+
+            BUS_POI_TRANS_TYPE_NAME = new String(rb.getString("bus.data.poi.trans.type.name").getBytes("ISO-8859-1"), "UTF-8");
+
+            BUS_POISTATION_FLUSHSOLR_ROWS = Integer.parseInt(rb.getString("bus.data.poistation.flushsolr.rows"));
+
+            BUS_KEY_BUSINESS_TYPE = new String(rb.getString("bus.data.key.business.type").getBytes("ISO-8859-1"), "UTF-8");
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

@@ -25,16 +25,16 @@ public class XMLUtils {
 
             Element rootElt = doc.getRootElement(); // 获取根节点
 
-            Element searchResultElement = (Element)doc.selectSingleNode("/LbsResult/KeywordRes/list/searchresult");
+            Element searchResultElement = (Element) doc.selectSingleNode("/LbsResult/KeywordRes/list/searchresult");
 
-            result.put("count",searchResultElement.elementTextTrim("bounds"));
+            result.put("count", searchResultElement.elementTextTrim("count"));
 
             Element listElement = searchResultElement.element("list");
 
             Iterator iter = listElement.elementIterator("poi");
 
             // 遍历head节点
-            List<Map<String,String>> poilist = new ArrayList<>();
+            List<Map<String, String>> poilist = new ArrayList<>();
             while (iter.hasNext()) {
                 Map map = new HashMap();
                 Element poiElement = (Element) iter.next();
@@ -73,7 +73,7 @@ public class XMLUtils {
 
                 poilist.add(map);
             }
-            result.put("poilist",poilist);
+            result.put("poilist", poilist);
 
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -82,4 +82,6 @@ public class XMLUtils {
         }
         return result;
     }
+
+
 }

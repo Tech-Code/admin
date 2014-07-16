@@ -5,7 +5,8 @@ import com.techapi.bus.dao.CityStationDao;
 import com.techapi.bus.dao.TransstationDao;
 import com.techapi.bus.entity.CityStation;
 import com.techapi.bus.entity.Transstation;
-import com.techapi.bus.solr.BaseQuery;
+import com.techapi.bus.solr.basic.BaseOperate;
+import com.techapi.bus.util.DateTimeUtils;
 import com.techapi.bus.util.PageUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +25,7 @@ import java.util.Map;
  * @date 2014-3-8
  */
 @Service
-public class TransStationService extends BaseQuery {
+public class TransStationService extends BaseOperate {
 
 	@Resource
 	private TransstationDao transStationDao;
@@ -47,7 +48,7 @@ public class TransStationService extends BaseQuery {
 
         // 站点选择，后期修改为不存在站点
         CityStation selectedCityStation = cityStationDao.findOne(filledCityStation.getId());
-        if(!selectedCityStation.getStationName().equals(filledCityStation.getStationName())) {
+        if(!selectedCityStation.getCityStationName().equals(filledCityStation.getCityStationName())) {
             resultMap.put("result", BusConstants.RESULT_NOTEXIST);
             resultMap.put("alertInfo", BusConstants.RESULT_NOTEXIST_STR);
             return resultMap;
@@ -57,7 +58,7 @@ public class TransStationService extends BaseQuery {
 
         CityStation cityStation = cityStationDao.findOne(transstation.getCityStation().getId());
 
-        List<Transstation> transStationList = transStationDao.findByTripsAndStationName(transstation.getTrips(), cityStation.getStationName());
+        List<Transstation> transStationList = transStationDao.findByTripsAndStationName(transstation.getTrips(), cityStation.getCityStationName());
 
         // 新增
         if (id == null || id.isEmpty()) {
@@ -70,13 +71,18 @@ public class TransStationService extends BaseQuery {
             if (transStationList.size() > 0) {
                 Transstation editTransstation = transStationDao.findOne(id);
                 if (!editTransstation.getTrips().trim().equals(transStationList.get(0).getTrips().trim()) ||
-                        !editTransstation.getCityStation().getStationName().equals(transStationList.get(0).getCityStation().getStationName())) {
+                        !editTransstation.getCityStation().getCityStationName().equals(transStationList.get(0).getCityStation().getCityStationName())) {
                     resultMap.put("result", BusConstants.RESULT_REPEAT);
                     resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_STR);
                     return resultMap;
                 }
             }
         }
+
+        int arriveTime = DateTimeUtils.formatFromTimeToInt(transstation.getArriveTime());
+        int departTime = DateTimeUtils.formatFromTimeToInt(transstation.getDepartTime());
+        transstation.setArriveTime(Integer.valueOf(arriveTime).toString());
+        transstation.setDepartTime(Integer.valueOf(departTime).toString());
         transstation = transStationDao.save(transstation);
 
         resultMap.put("id", transstation.getId());
@@ -136,5 +142,14 @@ public class TransStationService extends BaseQuery {
             return transStationDao.findTransstationByCityStationId(idArray);
         }
         return null;
+    }
+
+    public Map<String, Object> findBySearchBySection(int page, int rows, String cityCode, String cityName, String selectTransType, String stationName, String trips) {
+        Pageable pager = new PageRequest(page - 1, rows);
+
+        List<Transstation> searchResult = transStationDao.findBySearch("%" + cityCode + "%", "%" + cityName + "%", "%" + selectTransType + "%", "%" + stationName + "%", "%" + trips + "%");
+
+        return PageUtils.getPageMap(searchResult, pager);
+
     }
 }
