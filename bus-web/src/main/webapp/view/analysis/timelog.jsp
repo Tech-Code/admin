@@ -29,6 +29,13 @@
 					return row.name;
 				} //需要formatter一下才能显示正确的数据
 			},{
+				field : 'keyName',
+				title : '业务标识',
+				width : 20,
+				formatter : function(value, row, index) {
+					return row.keyName;
+				} //需要formatter一下才能显示正确的数据
+			},{
 				field : 'evertime',
 				title : '时间',
 				width : 20,

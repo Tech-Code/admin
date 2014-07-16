@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -17,6 +18,8 @@ public class AnalysisManage {
 	private String id;
 	@Column(name="NAME")
 	private String name;
+	@Transient
+	private String keyName;
 	@Column(name="EVERTIME")
 	private String evertime;
 	@Column(name="URL")
@@ -53,4 +56,11 @@ public class AnalysisManage {
 	public void setStatusCode(String statusCode) {
 		this.statusCode = statusCode;
 	}
+	public String getKeyName() {
+		return keyName;
+	}
+	public void setKeyName(String keyName) {
+		this.keyName = keyName;
+	}
+	
 }

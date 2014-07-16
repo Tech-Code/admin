@@ -4,6 +4,7 @@ public class GroupListVO {
 	
 	private String id;
 	private String name;
+	private String keyName;
 	private String startTime;
 	private String endTime;
 	private String total;
@@ -36,5 +37,11 @@ public class GroupListVO {
 	}
 	public void setTotal(String total) {
 		this.total = total;
+	}
+	public String getKeyName() {
+		return keyName;
+	}
+	public void setKeyName(String keyName) {
+		this.keyName = keyName;
 	}
 }

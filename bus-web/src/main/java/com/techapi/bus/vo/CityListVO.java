@@ -13,6 +13,10 @@ public class CityListVO {
 	 */
 	private String typeName;
 	/**
+	 * 
+	 */
+	private String keyName;
+	/**
 	 * 换乘
 	 */
 	private int transfer;
@@ -100,4 +104,11 @@ public class CityListVO {
 		this.total = total;
 	}
 
+	public String getKeyName() {
+		return keyName;
+	}
+
+	public void setKeyName(String keyName) {
+		this.keyName = keyName;
+	}	
 }

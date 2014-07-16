@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -22,6 +23,8 @@ public class AnalysisType implements java.io.Serializable{
 	private String id;
 	@Column(name="NAME")
 	private String name;
+	@Transient
+	private String keyName;
 	@Column(name="DAY")
 	private String day;
 	@Column(name="TYPE")
@@ -57,5 +60,11 @@ public class AnalysisType implements java.io.Serializable{
 	}
 	public void setTotal(String total) {
 		this.total = total;
+	}
+	public String getKeyName() {
+		return keyName;
+	}
+	public void setKeyName(String keyName) {
+		this.keyName = keyName;
 	}
 }

@@ -73,10 +73,11 @@ public class AnalysisService {
 			AnalysisType at = new AnalysisType();
 			String nameo = o[0].toString();
 			if(suMap.get(nameo)!=null){
-				at.setName(suMap.get(nameo).getBusinessName()+"-"+suMap.get(nameo).getKey());
+				at.setName(suMap.get(nameo).getBusinessName());
 			}else{
 				at.setName("未知业务");
 			}
+			at.setKeyName(nameo);
 			at.setTotal(o[1].toString());
 			analysisType.add(at);
 		}
@@ -109,10 +110,11 @@ public class AnalysisService {
 			AnalysisType at = new AnalysisType();
 			String nameo = o[0].toString();
 			if(suMap.get(nameo)!=null){
-				at.setName(suMap.get(nameo).getBusinessName()+"-"+suMap.get(nameo).getKey());
+				at.setName(suMap.get(nameo).getBusinessName());
 			}else{
 				at.setName("未知业务");
 			}
+			at.setKeyName(nameo);
 			String typeo = o[1].toString();
 			if(sdMap.get(typeo)!=null){
 				at.setType(sdMap.get(typeo).getServiceName());
@@ -214,10 +216,11 @@ public class AnalysisService {
 					CityListVO cv= new CityListVO();
 					cv.setCity(ml.getKey());
 					if(suKeymap.containsKey(oName)){
-						cv.setTypeName(suKeymap.get(oName).getBusinessName()+"-"+suKeymap.get(oName).getKey());
+						cv.setTypeName(suKeymap.get(oName).getBusinessName());
 					}else{
 						cv.setTypeName("未知业务");
 					}
+					cv.setKeyName(suKeymap.get(oName).getKey());
 					cv.putTotal(servName, total);
 					scmap.put(oName+ml.getKey(), cv);
 				}
@@ -269,12 +272,12 @@ public class AnalysisService {
 			GroupListVO gl = new GroupListVO();
 			gl.setId("1");
 			if(suMap.get(o[0].toString())!=null){
-				gl.setName(suMap.get(o[0].toString()).getBusinessName()+"-"+o[0].toString());
+				gl.setName(suMap.get(o[0].toString()).getBusinessName());
 			}else{
 				gl.setName("未知业务");
 			}
+			gl.setKeyName(o[0].toString());
 			String minute = o[1].toString();
-			System.out.println(minute);
 			if(position==7){
 				gl.setStartTime(minute.substring(0, 7));
 				gl.setEndTime(DataUtils.parseEndTime(minute,7));
@@ -314,8 +317,9 @@ public class AnalysisService {
 			List<AnalysisManage> AnalysisManageList =am.getContent();
 			Map<String,UserKey> suMap =getKeyMap();
 			for(AnalysisManage aam :AnalysisManageList){
+				aam.setKeyName(aam.getName());
 				if(suMap.get(aam.getName())!=null){
-					aam.setName(suMap.get(aam.getName()).getBusinessName()+"-"+aam.getName());
+					aam.setName(suMap.get(aam.getName()).getBusinessName());
 				}else{
 					aam.setName("未知业务");
 				}

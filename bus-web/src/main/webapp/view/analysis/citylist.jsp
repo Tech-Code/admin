@@ -23,10 +23,17 @@
 			columns : [ [ 
 			{
 				field : 'typeName',
-				title : '业务',
+				title : '业务名称',
 				width : 20,
 				formatter : function(value, row, index) {
 					return row.typeName;
+				} //需要formatter一下才能显示正确的数据
+			},{
+				field : 'keyName',
+				title : '业务标识',
+				width : 20,
+				formatter : function(value, row, index) {
+					return row.keyName;
 				} //需要formatter一下才能显示正确的数据
 			},{
 				field : 'transfer',
