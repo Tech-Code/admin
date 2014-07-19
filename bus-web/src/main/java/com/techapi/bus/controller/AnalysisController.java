@@ -26,36 +26,36 @@ public class AnalysisController {
     @ResponseBody
 	public Map<String, Object> namelist(HttpServletRequest request, HttpServletResponse response,int page, int rows,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
 		System.out.println("page:"+page+"rows:"+rows+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
-		return analysisService.findAnalysisTypeByTimeAndName(page,rows,name, startTime, endTime);
+		return analysisService.findAnalysisTypeByTimeAndName(page,rows,name.trim(), startTime.trim(), endTime.trim());
 	}
 	
 	@RequestMapping("/downloaddl")
 	public void  downloadnamelist(HttpServletRequest request, HttpServletResponse response,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
-		analysisService.findAnalysisTypeByTimeAndNameToExcel(response,name, startTime, endTime);
+		analysisService.findAnalysisTypeByTimeAndNameToExcel(response,name.trim(), startTime.trim(), endTime.trim());
 	}
 	
 	@RequestMapping("/typelist")
     @ResponseBody
 	public Map<String, Object> typeList(int page, int rows,@RequestParam(value="type",required = false) String type,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
 		System.out.println("page:"+page+"rows:"+rows+"type:"+name+"------name:"+type+"--------startTime:"+startTime+"-------endTime:"+endTime);
-		return analysisService.findAnalysisTypeByTimeAndType(page,rows,name,type, startTime, endTime);
+		return analysisService.findAnalysisTypeByTimeAndType(page,rows,name.trim(),type.trim(), startTime.trim(), endTime.trim());
 	}
 	
 	@RequestMapping("/downloadtl")
 	public void downloadtypeList(HttpServletRequest request, HttpServletResponse response,@RequestParam(value="type",required = false) String type,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
-		 analysisService.findAnalysisTypeByTimeAndTypeToExcel(response,name,type, startTime, endTime);
+		 analysisService.findAnalysisTypeByTimeAndTypeToExcel(response,name.trim(),type.trim(), startTime.trim(), endTime.trim());
 	}
 	
 	@RequestMapping("/citylist")
     @ResponseBody
 	public Map<String, Object> cityList(int page, int rows,@RequestParam(value="name",required = false) String name,@RequestParam(value="city",required = false) String city,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
 		System.out.println("page:"+page+"rows:"+rows+"city:"+city+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
-		return analysisService.findAnalysisCityByTimeAndName(page,rows,name,city, startTime, endTime);
+		return analysisService.findAnalysisCityByTimeAndName(page,rows,name.trim(),city.trim(), startTime.trim(), endTime.trim());
 	}
 	
 	@RequestMapping("/downloadcl")
 	public void downloadcityList(HttpServletRequest request, HttpServletResponse response,@RequestParam(value="name",required = false) String name,@RequestParam(value="city",required = false) String city,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
-		 analysisService.findAnalysisCityByTimeAndNameToExcel(response,name,city, startTime, endTime);
+		 analysisService.findAnalysisCityByTimeAndNameToExcel(response,name.trim(),city.trim(), startTime.trim(), endTime.trim());
 	}
 	
 	@RequestMapping("/grouplist")
@@ -82,7 +82,7 @@ public class AnalysisController {
 			endTime+="-31 23:59:59";
 		}
 		System.out.println("group analysis: startTime"+startTime+" endTime: "+endTime);
-		return analysisService.findAnalysisGroupByTimeAndType(page,rows,position==null?17:Integer.parseInt(position),name, startTime, endTime);
+		return analysisService.findAnalysisGroupByTimeAndType(page,rows,position==null?17:Integer.parseInt(position),name.trim(), startTime.trim(), endTime.trim());
 	}
 	
 	@RequestMapping("/downloadgl")
