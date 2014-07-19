@@ -9,6 +9,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.techapi.bus.annotation.ExcelField;
+
 /***
  * 按照类型分析
  * @author jiayusun
@@ -21,14 +23,18 @@ public class AnalysisType implements java.io.Serializable{
     @GeneratedValue(generator = "UUIDGenerator")
     @GenericGenerator(name="UUIDGenerator",strategy="uuid")
 	private String id;
+	@ExcelField
 	@Column(name="NAME")
 	private String name;
+	@ExcelField
 	@Transient
 	private String keyName;
 	@Column(name="DAY")
 	private String day;
+	@ExcelField
 	@Column(name="TYPE")
 	private String type;
+	@ExcelField
 	@Column(name="TOTAL")
 	private String total;
 	public String getId() {

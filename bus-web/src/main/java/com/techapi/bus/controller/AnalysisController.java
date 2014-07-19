@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +24,14 @@ public class AnalysisController {
 	
 	@RequestMapping("/namelist")
     @ResponseBody
-	public Map<String, Object> namelist(int page, int rows,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
+	public Map<String, Object> namelist(HttpServletRequest request, HttpServletResponse response,int page, int rows,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
 		System.out.println("page:"+page+"rows:"+rows+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
 		return analysisService.findAnalysisTypeByTimeAndName(page,rows,name, startTime, endTime);
+	}
+	
+	@RequestMapping("/downloaddl")
+	public void  downloadnamelist(HttpServletRequest request, HttpServletResponse response,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
+		analysisService.findAnalysisTypeByTimeAndNameToExcel(response,name, startTime, endTime);
 	}
 	
 	@RequestMapping("/typelist")
@@ -34,11 +41,21 @@ public class AnalysisController {
 		return analysisService.findAnalysisTypeByTimeAndType(page,rows,name,type, startTime, endTime);
 	}
 	
+	@RequestMapping("/downloadtl")
+	public void downloadtypeList(HttpServletRequest request, HttpServletResponse response,@RequestParam(value="type",required = false) String type,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
+		 analysisService.findAnalysisTypeByTimeAndTypeToExcel(response,name,type, startTime, endTime);
+	}
+	
 	@RequestMapping("/citylist")
     @ResponseBody
 	public Map<String, Object> cityList(int page, int rows,@RequestParam(value="name",required = false) String name,@RequestParam(value="city",required = false) String city,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
 		System.out.println("page:"+page+"rows:"+rows+"city:"+city+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime);
 		return analysisService.findAnalysisCityByTimeAndName(page,rows,name,city, startTime, endTime);
+	}
+	
+	@RequestMapping("/downloadcl")
+	public void downloadcityList(HttpServletRequest request, HttpServletResponse response,@RequestParam(value="name",required = false) String name,@RequestParam(value="city",required = false) String city,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
+		 analysisService.findAnalysisCityByTimeAndNameToExcel(response,name,city, startTime, endTime);
 	}
 	
 	@RequestMapping("/grouplist")
@@ -66,6 +83,30 @@ public class AnalysisController {
 		}
 		System.out.println("group analysis: startTime"+startTime+" endTime: "+endTime);
 		return analysisService.findAnalysisGroupByTimeAndType(page,rows,position==null?17:Integer.parseInt(position),name, startTime, endTime);
+	}
+	
+	@RequestMapping("/downloadgl")
+	public void downloadgrouplist(HttpServletRequest request, HttpServletResponse response,@RequestParam(value="position",required = false) String position,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
+		if(startTime.length()==16){
+			startTime+=":00";
+		}else if(startTime.length()==13){
+			startTime+=":00:00";
+		}else if(startTime.length()==10){
+			startTime+=" 00:00:00";
+		}else if(startTime.length()==7){
+			startTime+="-01 00:00:00";
+		}
+		
+		if(endTime.length()==16){
+			endTime+=":59";
+		}else if(endTime.length()==13){
+			endTime+=":59:59";
+		}else if(endTime.length()==10){
+			endTime+=" 23:59:59";
+		}else if(endTime.length()==7){
+			endTime+="-31 23:59:59";
+		}
+	   analysisService.findAnalysisGroupByTimeAndTypeToExcel(response,position==null?17:Integer.parseInt(position),name, startTime, endTime);
 	}
 	
 	

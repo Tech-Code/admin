@@ -14,7 +14,7 @@
 			fitColumns : true, //自动调整各列，用了这个属性，下面各列的宽度值就只是一个比例。
 			striped : true, //奇偶行颜色不同
 			collapsible : true,//可折叠
-			url : "${ctx}/analysis/typelist?type=all&name=all&startTime="+getPreMonth(getToDay())+"&endTime="+getToDay(), //数据来源
+			url : "${ctx}/analysis/typelist?type=all&name=all&startTime="+getPreWeek()+"&endTime="+getToDay(), //数据来源
 			sortOrder : 'desc', //倒序
 			idField:'id', //主键字段
 			remoteSort : true, //服务器端排序
@@ -73,7 +73,7 @@
 		
 		$('#selectType').combobox('setValue','全部');
 		$('#selectName').combobox('setValue','全部');
-		$('#beginTime').datebox('setValue',getPreMonth(getToDay()));
+		$('#beginTime').datebox('setValue',getPreWeek());
 		$('#endTime').datebox('setValue',getToDay());
 	});
 	//更新
@@ -81,14 +81,30 @@
 		var btime =$('#beginTime').datebox('getValue');
 		var etime = $('#endTime').datebox('getValue');
 		var selectType = $('#selectType').combobox('getValue');
-		if(selectType=="全部"){
+		if(selectType=="全部"||selectType==""){
 			selectType="all";
 		}
 		var selectName = $('#selectName').combobox('getValue');
-		if(selectName=="全部"){
+		if(selectName=="全部"||selectName==""){
 			selectName="all";
 		}
 		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/typelist?",queryParams:{startTime:btime,endTime:etime,type:selectType,name:selectName},method:"post"});
+	}
+	
+	//更新
+	function down() {
+		var btime =$('#beginTime').datebox('getValue');
+		var etime = $('#endTime').datebox('getValue');
+		var selectType = $('#selectType').combobox('getValue');
+		if(selectType=="全部"||selectType==""){
+			selectType="all";
+		}
+		var selectName = $('#selectName').combobox('getValue');
+		if(selectName=="全部"||selectName==""){
+			selectName="all";
+		}
+		var url =  "${ctx}/analysis/downloadtl?type="+selectType+"&name="+selectName+"&startTime="+btime+"&endTime="+etime; 
+	    window.location.href = url;  
 	}
 	
 	 function getToDay(){
@@ -109,6 +125,16 @@
           month = "0" + month;
          }
          return month;
+    }
+    
+    function getPreWeek(){
+    	var beforeDate = new Date();
+    	beforeDate.setTime(beforeDate.getTime()-1000*60*60*24*7);
+    	var strYear2=beforeDate.getFullYear();
+    	var strMon2=beforeDate.getMonth()+1;
+    	var strDate2=beforeDate.getDate();
+    	var std =strYear2+"-"+strMon2+"-"+strDate2;
+    	return std;
     }
     
     function getPreMonth(date) {
@@ -149,6 +175,7 @@
  <input class="easyui-combobox"  id="selectType" style="width:200px;" />
  <input class="easyui-combobox"  id="selectName" style="width:200px;" />
  <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>  
+<a href="#" id="btn" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="down()">导出EXCEL</a> 
 </div>
 	<div style="padding: 10" id="tabdiv">
 		<table id="analysistypeTable"></table>

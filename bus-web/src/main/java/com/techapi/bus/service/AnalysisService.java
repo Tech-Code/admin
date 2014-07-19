@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -29,7 +30,9 @@ import com.techapi.bus.entity.Area;
 import com.techapi.bus.entity.ServiceDict;
 import com.techapi.bus.entity.UserKey;
 import com.techapi.bus.util.DataUtils;
+import com.techapi.bus.util.ExportExcel;
 import com.techapi.bus.util.PageUtils;
+import com.techapi.bus.vo.AnalysisExcelVO;
 import com.techapi.bus.vo.CityListVO;
 import com.techapi.bus.vo.GroupListVO;
 import com.techapi.bus.vo.SpringMap;
@@ -58,6 +61,11 @@ public class AnalysisService {
 
 	public Map<String, Object> findAnalysisTypeByTimeAndName(int page,int rows,String name,String startTime,String endTime) {
 		Pageable pager = new PageRequest(page-1, rows);
+		List<AnalysisType> analysisType=findAnalysisTypeToList(name,startTime,endTime);
+		return PageUtils.getPageMap(analysisType,pager);
+	}
+	
+	private List<AnalysisType> findAnalysisTypeToList(String name,String startTime,String endTime){
 		List<AnalysisType> analysisType= new ArrayList<AnalysisType>();
 		List<Object[]> ato=null;
 	    if("all".equals(name)){
@@ -81,7 +89,24 @@ public class AnalysisService {
 			at.setTotal(o[1].toString());
 			analysisType.add(at);
 		}
-		return PageUtils.getPageMap(analysisType,pager);
+		return analysisType;
+	}
+	/***
+	 * 业务统计导出到excel
+	 */
+	public String findAnalysisTypeByTimeAndNameToExcel(HttpServletResponse response,String name,String startTime,String endTime) {
+		List<AnalysisType> analysisType= findAnalysisTypeToList(name, startTime, endTime);
+		List<AnalysisExcelVO> aeVO = new ArrayList<AnalysisExcelVO>();
+		for(AnalysisType at:analysisType){
+			AnalysisExcelVO ae =new AnalysisExcelVO();
+			ae.setName(at.getName());
+			ae.setKeyName(at.getKeyName());
+			ae.setTotal(at.getTotal());
+			aeVO.add(ae);
+		}
+		String[] title={"业务名称","业务标识","业务总量"};
+		String result = ExportExcel.exportExcel(response, "analysistype.xls", title, aeVO);
+		return result;
 	}
 	
 	/***
@@ -90,6 +115,11 @@ public class AnalysisService {
 	 */
 	public Map<String, Object> findAnalysisTypeByTimeAndType(int page,int rows,String type,String name,String startTime,String endTime) {
 		Pageable pager = new PageRequest(page-1, rows);
+		 List<AnalysisType> analysisType = loadByTimeAndTypeToList(type,name,startTime,endTime);
+		return PageUtils.getPageMap(analysisType,pager);
+	}
+	
+	private List<AnalysisType> loadByTimeAndTypeToList(String type,String name,String startTime,String endTime){
 		List<AnalysisType> analysisType= new ArrayList<AnalysisType>();
 		List<Object[]> ato=null;
 		if("all".equals(type)&&"all".equals(name)){
@@ -124,19 +154,30 @@ public class AnalysisService {
 			at.setTotal(o[2].toString());
 			analysisType.add(at);
 		}
-		return PageUtils.getPageMap(analysisType,pager);
+		return analysisType;
 	}
+	/**
+	 * 服务统计导出到excel
+	 */
+	public String findAnalysisTypeByTimeAndTypeToExcel(HttpServletResponse response,String type,String name,String startTime,String endTime) {
+		 List<AnalysisType> analysisType = loadByTimeAndTypeToList(type,name,startTime,endTime);
+		 String[] title={"业务名称","业务标识","服务类型","业务总量"};
+		 String result = ExportExcel.exportExcel(response, "analysisserver.xls", title, analysisType);
+		 return result;
+	}
+	
 	
 	/***
 	 * 按指定时间段及分城市统计业务量，即统计每个城市公交查询调用量
-	 * @param name
-	 * @param startTime
-	 * @param endTime
-	 * @return
 	 */
 	public Map<String, Object> findAnalysisCityByTimeAndName(int page,int rows,String name,String cityName,String startTime,String endTime) {
 		System.out.println("name:"+name+"---------:cityName"+cityName+"-----,startTime:"+startTime+"----,endTime:"+endTime);
 		Pageable pager = new PageRequest(page-1, rows);
+		List<CityListVO> ctVOList=findAnalysisCityByTimeAndNameToList(name, cityName, startTime, endTime);
+		return PageUtils.getPageMap(ctVOList,pager);
+	}
+	
+	private List<CityListVO> findAnalysisCityByTimeAndNameToList(String name,String cityName,String startTime,String endTime){
 		List<Object[]> oTimeAndType=null;
 		if("all".equals(name)){
 			oTimeAndType =analysisCityDao.findByTime(startTime, endTime);
@@ -220,7 +261,7 @@ public class AnalysisService {
 					}else{
 						cv.setTypeName("未知业务");
 					}
-					cv.setKeyName(suKeymap.get(oName).getKey());
+					cv.setKeyName(oName);
 					cv.putTotal(servName, total);
 					scmap.put(oName+ml.getKey(), cv);
 				}
@@ -230,19 +271,28 @@ public class AnalysisService {
 		for(Entry<String,CityListVO> cvo:scmap.entrySet()){
 			ctVOList.add(cvo.getValue());
 		}
-		return PageUtils.getPageMap(ctVOList,pager);
+		return ctVOList;
 	}
-	 
+	/***
+	 * 城市统计导出到excel
+	 */
+	public String findAnalysisCityByTimeAndNameToExcel(HttpServletResponse response,String name,String cityName,String startTime,String endTime) {
+		List<CityListVO> ctVOList=findAnalysisCityByTimeAndNameToList(name, cityName, startTime, endTime);
+		String[] title={"业务名称","业务标识","公交换乘","公交查询","步行导航","城市名称","业务总量"};
+		 String result = ExportExcel.exportExcel(response, "analysisserver.xls", title, ctVOList);
+		 return result;
+	}
+	
 	/**
 	 * 按业务账号分时段（每天、每小时、每分钟）统计业务量（GroupBy），即统计业务账号指定时间段内每天（小时或分钟）的调用量。
-	 * @param name
-	 * @param startTime
-	 * @param endTime
-	 * @return
-	 * @throws ParseException 
-	 */
+	*/
 	public Map<String, Object> findAnalysisGroupByTimeAndType(int page,int rows,Integer position,String name,String startTime,String endTime) throws ParseException {
-		 Pageable pager = new PageRequest(page-1, rows);
+		Pageable pager = new PageRequest(page-1, rows);
+		List<GroupListVO> glList=findAnalysisGroupByTimeAndType( position, name, startTime, endTime);
+		return PageUtils.getPageMap(glList,pager);
+	}
+	
+	private List<GroupListVO> findAnalysisGroupByTimeAndType(Integer position,String name,String startTime,String endTime){
 		List<Object[]>	analysisGroupO=null;
 		if(StringUtils.isBlank(name)||"all".equals(name)){
 			if(position==7){
@@ -294,8 +344,16 @@ public class AnalysisService {
 			gl.setTotal(o[2].toString());
 			glList.add(gl);
 		}
-		return PageUtils.getPageMap(glList,pager);
+		return glList;
 	}
+	
+	public String findAnalysisGroupByTimeAndTypeToExcel(HttpServletResponse response,Integer position,String name,String startTime,String endTime) throws ParseException {
+		List<GroupListVO> glList=findAnalysisGroupByTimeAndType( position, name, startTime, endTime);
+		String[] title={"开始时间段","结束时间段","业务名称","业务标识","业务总量"};
+		 String result = ExportExcel.exportExcel(response, "analysistime.xls", title, glList);
+		 return result;
+	}
+	
 	/***
 	 * 查询详细的访问log日志
 	 */
