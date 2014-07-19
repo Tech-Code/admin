@@ -100,14 +100,30 @@
 		var btime =$('#beginTime').datebox('getValue');
 		var etime = $('#endTime').datebox('getValue');
 		var selectType = $('#selectType').combobox('getValue');
-		if(selectType=="全部"){
+		if(selectType=="全部"||selectType==""){
 			selectType="all";
 		}
 		var selectgroup = $('#selectgroup').combobox('getValue');
-		if(selectgroup=="日"){
+		if(selectgroup=="日"||selectgroup==""){
 			selectgroup=10;
 		}
 		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/grouplist?",queryParams:{startTime:btime,endTime:etime,name:selectType,position:selectgroup},method:"post"});
+	}
+	
+	//更新
+	function down() {
+		var btime =$('#beginTime').datebox('getValue');
+		var etime = $('#endTime').datebox('getValue');
+		var selectType = $('#selectType').combobox('getValue');
+		if(selectType=="全部"||selectType==""){
+			selectType="all";
+		}
+		var selectgroup = $('#selectgroup').combobox('getValue');
+		if(selectgroup=="日"||selectgroup==""){
+			selectgroup=10;
+		}
+		var url =  "${ctx}/analysis/downloadgl?name="+selectType+"&position="+selectgroup+"&startTime="+btime+"&endTime="+etime; 
+	    window.location.href = url;  
 	}
 	
 	 function getToDay(){
@@ -238,7 +254,8 @@ Date.prototype.formatDate = function (format) //author: meizz
 <input class="easyui-datetimebox" id="endTime" />
 <input class="easyui-combobox"  id="selectType" style="width:200px;" />
 <input class="easyui-combobox"  id="selectgroup" style="width:80px;" />
- <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>  
+ <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a> 
+ <a href="#"  class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="down()">导出EXCEL</a>  
 </div>
 	<div style="padding: 10" id="tabdiv">
 		<table id="analysistypeTable"></table>

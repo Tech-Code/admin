@@ -1,12 +1,19 @@
 package com.techapi.bus.vo;
 
+import com.techapi.bus.annotation.ExcelField;
+
 public class GroupListVO {
 	
 	private String id;
-	private String name;
-	private String keyName;
+	@ExcelField
 	private String startTime;
+	@ExcelField
 	private String endTime;
+	@ExcelField
+	private String name;
+	@ExcelField
+	private String keyName;
+	@ExcelField
 	private String total;
 	public String getId() {
 		return id;

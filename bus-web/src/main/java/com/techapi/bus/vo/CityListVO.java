@@ -1,5 +1,7 @@
 package com.techapi.bus.vo;
 
+import com.techapi.bus.annotation.ExcelField;
+
 /***
  * 城市查询类别
  * @author jiayusun
@@ -11,30 +13,37 @@ public class CityListVO {
 	/**
 	 * 
 	 */
+	@ExcelField
 	private String typeName;
 	/**
 	 * 
 	 */
+	@ExcelField
 	private String keyName;
 	/**
 	 * 换乘
 	 */
+	@ExcelField
 	private int transfer;
 	/**
 	 * 公交查询
 	 */
+	@ExcelField
 	private int query;
 	/**
 	 * 步行导航
 	 */
+	@ExcelField
 	private int walk;
 	/***
 	 * 城市名称
 	 */
+	@ExcelField
 	private String city;
 	/***
 	 * 总量
 	 */
+	@ExcelField
 	private int total;
 	
 	public void putTotal(String serverName,int timetotal){
