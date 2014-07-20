@@ -112,7 +112,7 @@ public class TransStationController {
                                           @RequestParam(value = "stationName", required = false) String stationName,
                                           @RequestParam(value = "trips", required = false) String trips) throws Exception {
         System.out.println("page: " + page + "rows: " + rows + "cityCode: " + cityCode + "------cityName: " + cityName + "--------selectTransType:" + selectTransType + "-------stationName:" + stationName);
-        return transStationService.findBySearchBySection(page, rows, cityCode, cityName, selectTransType, stationName, trips);
+        return transStationService.findBySearchBySection(page, rows, cityCode.trim(), cityName.trim(), selectTransType.trim(), stationName.trim(), trips.toUpperCase().trim());
     }
 
 }

@@ -18,7 +18,7 @@
 
 		<fieldset>
 			<legend> 基础信息 </legend>
-			<div style="width:39%;height:600px;float: left">
+            <div style="width:auto;height:auto;float: left">
 				<label>
 					<span>业务名称</span>
 					<input name="businessName" id="businessName" value="${userKey.businessName }" class="text-input"/>
@@ -83,7 +83,15 @@
         } else {
             $.post("${ctx}/userkey/add", $("#userKeyForm").serializeArray(),
                     function (data) {
-                        $.messager.alert('提示', "操作成功", 'info');
+                        //$.messager.alert('提示', '操作成功 <br> key: ' + data.key, 'info');
+                        $.messager.show({
+                            title: "操作成功",
+                            msg: 'key:' + data.key,
+                            showType: 'show',
+                            width: 500,
+                            height: 90,
+                            timeout: 5000
+                        });
                     });
         }
 	}

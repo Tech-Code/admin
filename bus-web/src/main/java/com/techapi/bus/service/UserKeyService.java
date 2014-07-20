@@ -4,10 +4,7 @@ import com.techapi.bus.BusConstants;
 import com.techapi.bus.annotation.CacheProxy;
 import com.techapi.bus.dao.UserKeyDao;
 import com.techapi.bus.entity.UserKey;
-import com.techapi.bus.util.Common;
-import com.techapi.bus.util.PageUtils;
-import com.techapi.bus.util.PropertyMapUtils;
-import com.techapi.bus.util.TTL;
+import com.techapi.bus.util.*;
 import com.techapi.bus.vo.SpringMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -35,7 +33,7 @@ public class UserKeyService {
 
     private static Set<String> keysSet = new HashSet<>();
 
-    public void addOrUpdate(UserKey userKey) {
+    public UserKey addOrUpdate(UserKey userKey) {
 
         if (keysSet.size() == 0) {
             Iterable<UserKey> userKeyList = userKeyDao.findAll();
@@ -69,7 +67,7 @@ public class UserKeyService {
             //增加null，防止击穿cache，压力数据库
             cacheProxy.put(ctlcache, new ArrayList<UserKey>(), TTL._10M.getTime(), BusConstants.REDIS_INDEX_KEY);
         }
-        userKeyDao.save(userKey);
+        return userKeyDao.save(userKey);
     }
 
     /**
@@ -84,7 +82,6 @@ public class UserKeyService {
     public Map<String, Object> findSection(int page, int rows) {
         Pageable pager = new PageRequest(page - 1, rows);
         Page<UserKey> userKeyList = userKeyDao.findAll(pager);
-
         return PageUtils.getPageMap(userKeyList);
     }
 
@@ -106,8 +103,8 @@ public class UserKeyService {
         userKeyDao.delete(id);
     }
 
-    public void deleteMany(List<UserKey> userKeyList) {
-
+    public int deleteMany(List<UserKey> userKeyList) {
+        int deleteCount = 0;
         for (UserKey userKey : userKeyList) {
             if (userKey.getSource() == 1) {
                 if (userKey != null) {
@@ -115,9 +112,14 @@ public class UserKeyService {
                     cacheProxy.delete(poicache, BusConstants.REDIS_INDEX_KEY);
                 }
                 userKeyDao.delete(userKey);
+                deleteCount++;
             }
         }
+        if(deleteCount == 0) return BusConstants.DELETE_NONE_USERKEY_STATUS;
+        if(deleteCount == userKeyList.size()) return BusConstants.DELETE_ALL_USERKEY_STATUS;
+        if (deleteCount < userKeyList.size()) return BusConstants.DELETE_PART_USERKEY_STATUS;
 
+        return BusConstants.DELETE_NONE_USERKEY_STATUS;
     }
 
 
@@ -147,4 +149,14 @@ public class UserKeyService {
 
         return PageUtils.getPageMap(searchResult, pager);
     }
+
+    public String findBySearchToExcel(HttpServletResponse response, String businessName, String businessFlag, String selectBusinessType, String province, String businessUrl, String key) {
+        List<UserKey> searchResult = userKeyDao.findBySearch("%" + businessName + "%", "%" + businessFlag + "%", "%" + selectBusinessType + "%", "%" + province + "%", "%" + businessUrl + "%", "%" + key + "%");
+        String[] title = {"时间", "业务名称", "业务子名称", "业务标识", "业务分类", "使用API", "省份", "状态", "厂商" , "业务地址", "key", "联系人", "资源", "来源"};
+        String result = ExportExcel.exportExcel(response, "userkey.xls", title, searchResult);
+        return result;
+
+    }
+
+
 }

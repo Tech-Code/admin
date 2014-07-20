@@ -39,6 +39,7 @@
             remoteSort: true, //服务器端排序
             pagination: true, //显示分页
             rownumbers: true, //显示行号
+            pageNumber: 1,
             queryParams: queryParams,// 查询参数
             columns: [
                 [
@@ -199,7 +200,7 @@
         var stationName = $('#stationName').val();
 
         if(selectTransType == '全部') selectTransType = '';
-            if (cityName == '全部') cityName = '';
+        if (cityName == '全部') cityName = '';
         var queryParams = {cityCode: cityCode, cityName: cityName, selectTransType: selectTransType, stationName: stationName};
 
         initDataGrid("${ctx}/citystation/searchlist?", queryParams);

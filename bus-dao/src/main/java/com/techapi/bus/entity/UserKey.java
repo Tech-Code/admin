@@ -1,5 +1,6 @@
 package com.techapi.bus.entity;
 
+import com.techapi.bus.annotation.ExcelField;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,32 +13,46 @@ public class UserKey implements java.io.Serializable{
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid")
     private String id;
     @Column(name = "CREATEDATE")
+    @ExcelField
     private String createDate;
     @Column(name = "BUSINESSNAME")
+    @ExcelField
     private String businessName;
     @Column(name = "BUSINESSSUBNAME")
+    @ExcelField
     private String businessSubName;
     @Column(name = "BUSINESSFLAG")
+    @ExcelField
     private String businessFlag;
     @Column(name = "BUSINESSTYPE")
+    @ExcelField
     private String businessType;
     @Column(name = "USEDAPI")
+    @ExcelField
     private String usedApi;
     @Column(name = "PROVINCE")
+    @ExcelField
     private String province;
     @Column(name = "STATUS")
+    @ExcelField
     private String status; // 正式
     @Column(name = "FIRM")
+    @ExcelField
     private String firm;
     @Column(name = "BUSINESSURL")
+    @ExcelField
     private String businessUrl;
     @Column(name = "KEY")
+    @ExcelField
     private String key;
     @Column(name = "CONTACT")
+    @ExcelField
     private String contact;
     @Column(name = "BUSINESSRESOURCE")
+    @ExcelField
     private String businessResource;
     @Column(name = "SOURCE")
+    @ExcelField
     private int source;
 
     public String getId() {

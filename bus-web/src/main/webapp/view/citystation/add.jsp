@@ -17,20 +17,20 @@
 		<input type="hidden" id="transdetail" name="transdetail" value="${cs.transdetail }" />
 		<input type="hidden" id="id" name="id" value="${cs.id }" />
 		<input type="hidden" id="poiStationId" name="poiStationId"/>
-        <input type="hidden" id="cityCode" name="cityCode"/>
+        <input type="hidden" id="cityCode" name="cityCode" value="${cs.cityCode }"/>
 		<fieldset>
 			<legend> 基础信息 </legend>
-			<div style="width:39%;height:370px;float: left">
+            <div style="width:auto;height:auto;float: left">
 				<label>
 					<span>城市名称</span>
                     <input name="cityName" id="cityName" value="${cs.cityName }" class="text-input"/>
                 </label>
                 <label>
                     <span>交通工具类型</span>
-                    <select name="transType" class="text-input" id="transType">
+                    <select name="transType" class="text-input" id="transType" onchange="changeTransDetail()">
                     <option value="150100" <c:if test="${cs.transType=='飞机场' }" >selected</c:if>>飞机场</option>
                     <option value="150200" <c:if test="${cs.transType=='火车站' }" >selected</c:if>>火车站</option>
-                    <option value="150300;150301;150302;150303" <c:if test="${cs.transType=='轮渡' }" >selected</c:if>>港口码头</option>
+                    <option value="150300;150301;150302;150303" <c:if test="${cs.transType=='港口码头' }" >selected</c:if>>港口码头</option>
                     <option value="150400" <c:if test="${cs.transType=='长途汽车站' }" >selected</c:if>>长途汽车站</option>
                     </select>
                 </label>
@@ -40,12 +40,7 @@
                     <div id="divAutoList"></div>
 				</label>
                 <label>
-                    <span>交通工具小类</span>
-                    <label><input type="checkbox" class="checkbox" name="transdetailGroup" value="高铁" id="transdetail1" />高铁</label>
-                    <label><input type="checkbox" class="checkbox" name="transdetailGroup" value="动车" id="transdetail2" />动车</label>
-                    <label><input type="checkbox" class="checkbox" name="transdetailGroup" value="特快" id="transdetail3" />特快</label>
-                    <label><input type="checkbox" class="checkbox" name="transdetailGroup" value="普快" id="transdetail4" />普快</label>
-                    <label><input type="checkbox" class="checkbox" name="transdetailGroup" value="直达" id="transdetail5" />直达</label>
+                    <div id="divTransDetailList"></div>
                 </label>
                 <label>
                     <span>站名坐标</span>
@@ -61,26 +56,15 @@
 <script type="text/javascript">
     // 显示高德地图
     var mapObj, toolbar, overview, scale;
-    var opt = {
-        level: 10,//初始地图视野级别
-        center: new MMap.LngLat(116.397428, 39.90923),//设置地图中心点
-        doubleClickZoom: true,//双击放大地图
-        rotateEnable: true,
-        scrollwheel: true//鼠标滚轮缩放地图
+
+    var cityStationCoordinate = "${cs.coordinate}";
+
+    if (cityStationCoordinate != null && cityStationCoordinate != "") {
+        loadMap(cityStationCoordinate);
+        addMarker(cityStationCoordinate);
+    } else {
+        loadMap("116.397428, 39.90923");
     }
-
-    mapObj = new MMap.Map("iCenter", opt);
-    mapObj.plugin(["MMap.ToolBar", "MMap.OverView", "MMap.Scale"], function () {
-        toolbar = new MMap.ToolBar();
-        toolbar.autoPosition = false; //加载工具条
-        mapObj.addControl(toolbar);
-        overview = new MMap.OverView(); //加载鹰眼
-        mapObj.addControl(overview);
-        scale = new MMap.Scale(); //加载比例尺
-        mapObj.addControl(scale);
-    });
-
-    var inforWindow = new MMap.InfoWindow({content: "这是一个面"});
     mapObj.bind(mapObj, "click", function (e) {
         var lonlat = e.lnglat.lng + "," + e.lnglat.lat;
         document.getElementById("coordinate").value = lonlat;
@@ -165,6 +149,7 @@
                                     $("#cityName").val($(this).attr("adName"));
                                     $("#coordinate").val($(this).attr("poiCoordinate"));
                                     $("#cityCode").val($(this).attr("adCodeForSolr"));
+                                    loadMap($(this).attr("poiCoordinate"));
                                     addMarker($(this).attr("poiCoordinate"));
                                 });
                             }
@@ -229,11 +214,9 @@
         });
 
 
+
     });
 
-    $('#cityCode').validatebox({
-        required: true
-    });
     $('#cityName').validatebox({
         required: true
     });
@@ -243,6 +226,8 @@
     $('#coordinate').validatebox({
         required: true
     });
+
+    changeTransDetail();
 
     // 处理checkbox
     var transdetail = '${cs.transdetail}';
@@ -262,6 +247,64 @@
         }
         if(transdetails[i] == "直达") {
             $("#transdetail5").attr("checked",true)
+        }
+    }
+
+    function loadMap(lonlat) {
+        var LngLatX = lonlat.split(",")[0]; //获取Lng值
+        var LngLatY = lonlat.split(",")[1]; //获取Lat值
+        var opt = {
+            level: 10,//初始地图视野级别
+            center: new MMap.LngLat(LngLatX, LngLatY),//设置地图中心点
+            doubleClickZoom: true,//双击放大地图
+            rotateEnable: true,
+            scrollwheel: true//鼠标滚轮缩放地图
+        }
+
+        mapObj = new MMap.Map("iCenter", opt);
+        mapObj.plugin(["MMap.ToolBar", "MMap.OverView", "MMap.Scale"], function () {
+            toolbar = new MMap.ToolBar();
+            toolbar.autoPosition = false; //加载工具条
+            mapObj.addControl(toolbar);
+            overview = new MMap.OverView(); //加载鹰眼
+            mapObj.addControl(overview);
+            scale = new MMap.Scale(); //加载比例尺
+            mapObj.addControl(scale);
+        });
+    }
+
+    function changeTransDetail() {
+        var selectTransType = $("#transType").val();
+        var divTransDetailList = $("#divTransDetailList"); //可供选择的项
+        divTransDetailList.empty();
+        divTransDetailList.append("<span > 交通工具小类 </span >");
+
+        if(selectTransType == "150100") {
+
+            var item1 = "<span><input type='checkbox' class='checkbox' name='transdetailGroup' value='飞机场' id='transdetail1' checked='true'/>飞机场</span>";
+            divTransDetailList.append(item1);
+        }
+        if (selectTransType == "150200") {
+            var item1 = "<span><input type='checkbox' class='checkbox' name='transdetailGroup' value='高铁' id='transdetail1' />高铁</span>";
+            var item2 = "<span><input type='checkbox' class='checkbox' name='transdetailGroup' value='动车' id='transdetail2' />动车</span>";
+            var item3 = "<span><input type='checkbox' class='checkbox' name='transdetailGroup' value='特快' id='transdetail3' />特快</span>";
+            var item4 = "<span><input type='checkbox' class='checkbox' name='transdetailGroup' value='普快' id='transdetail4' />普快</span>";
+            var item5 = "<span><input type='checkbox' class='checkbox' name='transdetailGroup' value='直达' id='transdetail5' />直达</span>";
+            divTransDetailList.append(item1);
+            divTransDetailList.append(item2);
+            divTransDetailList.append(item3);
+            divTransDetailList.append(item4);
+            divTransDetailList.append(item5);
+        }
+        if (selectTransType == "150300;150301;150302;150303") {
+            var item1 = "<span><input type='checkbox' class='checkbox' name='transdetailGroup' value='港口码头' id='transdetail1' checked='true' />港口码头</span>";
+            divTransDetailList.append(item1);
+
+        }
+        if (selectTransType == "150400") {
+            var item1 = "<span><input type='checkbox' class='checkbox' name='transdetailGroup' value='长途汽车站' id='transdetail1' checked='true'/>长途汽车站</span>";
+            divTransDetailList.append(item1);
+
         }
     }
 
@@ -290,15 +333,13 @@
                 }
             })
             $("#transdetail").attr('value',transdetails);
-            if(transdetails == "") {
-                $.messager.alert('提示', "请选择交通工具小类", 'info');
-            } else {
-                $.post("${ctx}/citystation/add", $("#csForm").serializeArray(),
-                        function (data) {
-                            if (data.result == '0' || data.result == '2' || data.result == '4') $.messager.alert('提示', data.alertInfo, 'info');
-                        });
 
-            }
+            $.post("${ctx}/citystation/add", $("#csForm").serializeArray(),
+                    function (data) {
+                        if (data.result == '0' || data.result == '2' || data.result == '4') $.messager.alert('提示', data.alertInfo, 'info');
+                    });
+
+
 
         }
 	}
