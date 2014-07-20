@@ -106,6 +106,7 @@ public class AnalysisController {
 		}else if(endTime.length()==7){
 			endTime+="-31 23:59:59";
 		}
+		System.out.println("group time + startTime:"+startTime+" endTime:"+endTime);
 	   analysisService.findAnalysisGroupByTimeAndTypeToExcel(response,position==null?17:Integer.parseInt(position),name, startTime, endTime);
 	}
 	
