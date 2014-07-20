@@ -8,7 +8,6 @@
 <script type="text/javascript">
 	$(function() {
 		setDialog();
-
 		// 进入页面，焦点在用户名文本框上
 		$("#loginCode").focus();
 	});

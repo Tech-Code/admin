@@ -49,22 +49,6 @@
 				formatter : function(value, row, index) {
 					return row.speed;
 				} //需要formatter一下才能显示正确的数据
-			},{
-				field : 'cityCode',
-				title : '城市代码',
-				width : 20,
-				sortable : true,
-				formatter : function(value, row, index) {
-					return row.cityCode;
-				} //需要formatter一下才能显示正确的数据
-			},{
-				field : 'cityName',
-				title : '城市名',
-				width : 20,
-				sortable : true,
-				formatter : function(value, row, index) {
-					return row.cityName;
-				} //需要formatter一下才能显示正确的数据
 			}] ],
 			toolbar : [ {
 				text : '新增',

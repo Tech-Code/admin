@@ -84,9 +84,9 @@ public class UserKeyController {
 
     @RequestMapping(value = "/businesstypes")
     @ResponseBody
-    public List<SpringMap> getBusinessTypes()
+    public List<SpringMap> getBusinessTypes(int notAll)
             throws Exception {
-        return userKeyService.findAllBusinessTypes();
+        return userKeyService.findAllBusinessTypes(notAll);
     }
 
     @RequestMapping(value = "/searchlist")

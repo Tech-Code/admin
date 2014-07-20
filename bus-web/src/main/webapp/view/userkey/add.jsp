@@ -11,6 +11,15 @@
 	clear: both;
 }
 </style>
+<script type="text/javascript">
+    jQuery(function ($) {
+        $('#businessType').combobox({
+            url: "${ctx}/userkey/businesstypes?notAll=1",
+            valueField: 'id',
+            textField: 'text'
+        });
+    });
+</script>
 </head>
 <body>
 	<form action="" class="formular" id="userKeyForm">
@@ -26,6 +35,7 @@
 				<label>
 					<span>业务子名称</span>
                     <input name="businessSubName" id="businessSubName" value="${userKey.businessSubName }" class="text-input"/>
+
                 </label>
                 <label>
 					<span>业务标识</span>
@@ -33,7 +43,10 @@
                 </label>
                 <label>
 					<span>业务分类</span>
-                    <input name="businessType" id="businessType" value="${userKey.businessType }" class="text-input"/>
+                    <div style="margin-top: 5px">
+                        <input class="easyui-combobox" id="businessType" name="businessType" value="${userKey.businessType }"
+                           style="width:140px"/>
+                    </div>
                 </label>
                 <label>
 					<span>使用API</span>
@@ -86,7 +99,7 @@
                         //$.messager.alert('提示', '操作成功 <br> key: ' + data.key, 'info');
                         $.messager.show({
                             title: "操作成功",
-                            msg: 'key:' + data.key,
+                            msg: data.key,
                             showType: 'show',
                             width: 500,
                             height: 90,

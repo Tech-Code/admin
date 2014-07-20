@@ -40,9 +40,8 @@ public class SpeedService {
             if (speedType == 0) speed.setTranSportation(BusConstants.TRANSPORTATION_TYPE_SUBWAY);
             if (speedType == 1) speed.setTranSportation(BusConstants.TRANSPORTATION_TYPE_BUS);
             if (speedType == 2) speed.setTranSportation(BusConstants.TRANSPORTATION_TYPE_TAXI);
-            List<Speed> speedList = speedDao.findByTransportationAndDetailAndCityName(speed.getTranSportation(),
-                    speed.getCityName(),
-                    speed.getTranSportDes());
+            if (speedType == 3) speed.setTranSportation(BusConstants.TRANSPORTATION_TYPE_WALK);
+            List<Speed> speedList = speedDao.findByTransportation(speed.getTranSportation());
             if(id == null || id.isEmpty()) {
 
                 if (speedList.size() > 0) {
@@ -54,9 +53,7 @@ public class SpeedService {
             } else {
                 Speed editSpeed = speedDao.findOne(id);
                 if (speedList.size() > 0) {
-                    if((!editSpeed.getCityName().equals(speedList.get(0).getCityName()) ||
-                            !editSpeed.getCityCode().equals(speedList.get(0).getCityCode()) ||
-                            !editSpeed.getTranSportation().equals(speedList.get(0).getTranSportation()) ||
+                    if((!editSpeed.getTranSportation().equals(speedList.get(0).getTranSportation()) ||
                             !editSpeed.getTranSportDes().equals(speedList.get(0).getTranSportDes()))) {
                         resultMap.put("result", BusConstants.RESULT_REPEAT_SPEED);
                         resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_SPEED_STR);

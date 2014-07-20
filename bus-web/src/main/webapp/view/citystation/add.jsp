@@ -73,7 +73,7 @@
 
     var highlightindex = -1; //定义高亮显示索引,-1代表不高亮任何行
     var timeOutId = null; //定义延迟时间Id
-    var delayTime = 2000; //默认延迟0.5秒
+    var delayTime = 200; //默认延迟0.5秒
     var minPrefix = 0; //定义最小几个字符开始搜索
     var mouseOverCss = { background: "white", cursor: " pointer" }; //mouseover时样式
     var mouseOutCss = { background: "white" }; //mouseout时样式
@@ -97,124 +97,17 @@
         });
 
         //给文本框添加键盘按下并弹起的事件
-        wordInput.keyup(function (event) {
-            var myEvent = event || window.event;
-            var keyCode = myEvent.keyCode;
-            var autoNode = $("#divAutoList"); //可供选择的项
-            var poiType = $("#transType").val();
-            var adName = $("#cityName").val();
-
-            //        if (keyCode >= 65 && keyCode <= 90 || keyCode == 8 || keyCode == 46) { //输入字母,退格或删除,显示最新的内容
-            if (keyCode != 13 && keyCode != 38 && keyCode != 40) { //不是三个特殊键，可以搜索
-                var wordText = $("#cityStationName").val();
-                if (wordText.length < minPrefix) return;
-                //取消上次提交
-                //window.clearTimeout(timeOutId);
-                timeOutId = setTimeout(function () {
-                    $.ajax({
-                        type: "GET",
-                        url: ajaxProcessUrl,
-                        data: 'cityStationName=' + wordText + '&poiType=' + poiType + '&adName=' + adName,
-                        success: function (data) {
-                            var wordNodes = $(data.result);
-                            autoNode.html("");
-
-                            for (var i = 0; i < data.result.length; i++) {
-                                var newDivNode = $("<div>").attr("id", data.result[i].id);
-                                newDivNode.attr("adName", data.result[i].adName);
-                                newDivNode.attr("poiCoordinate", data.result[i].poiCoordinate);
-                                newDivNode.attr("adCodeForSolr", data.result[i].adCodeForSolr);
-                                newDivNode.html(data.result[i].poiStationName).appendTo(autoNode);
-                                //添加光标进入事件, 高亮节点
-                                newDivNode.mouseover(function () {
-                                    if (highlightindex != -1) {
-                                        $("#divAutoList").children("div")
-                                                .eq(highlightindex)
-                                                .css(mouseOverCss);
-                                    }
-                                    highlightindex = $(this).attr("id");
-                                    $(this).css(grayCss);
-                                });
-                                //添加光标移出事件,取消高亮
-                                newDivNode.mouseout(function () {
-                                    $(this).css(mouseOutCss);
-                                });
-                                //添加光标mousedown事件  点击事件newDivNode.click可能不起作用?
-                                newDivNode.mousedown(function () {
-                                    var comText = $(this).text();
-                                    $("#divAutoList").hide();
-                                    highlightindex = -1;
-                                    $("#cityStationName").val(comText);
-                                    $("#poiStationId").val($(this).attr("id"));
-                                    $("#cityName").val($(this).attr("adName"));
-                                    $("#coordinate").val($(this).attr("poiCoordinate"));
-                                    $("#cityCode").val($(this).attr("adCodeForSolr"));
-                                    loadMap($(this).attr("poiCoordinate"));
-                                    addMarker($(this).attr("poiCoordinate"));
-                                });
-                            }
-                            if (wordNodes.length > 0) {
-                                autoNode.show();
-                            }
-                            else {
-                                autoNode.hide();
-                                highlightindex = -1;
-                            }
-                        },
-                        dataType: "json"
-                    });
-                }, delayTime);
-            }
-            else if (keyCode == 38) {//输入向上,选中文字高亮
-                var autoNodes = $("#divAutoList").children("div")
-                if (highlightindex != -1) {
-                    autoNodes.eq(highlightindex).css(upDownWhiteCss);
-                    highlightindex--;
-                }
-                else {
-                    highlightindex = autoNodes.length - 1;
-                }
-
-                if (highlightindex == -1) {
-                    highlightindex = autoNodes.length - 1;
-                }
-                autoNodes.eq(highlightindex).css(upDownGrayCss);
-            }
-            else if (keyCode == 40) {//输入向下,选中文字高亮
-                var autoNodes = $("#divAutoList").children("div")
-                if (highlightindex != -1) {
-                    autoNodes.eq(highlightindex).css(upDownWhiteCss);
-                }
-                highlightindex++;
-                if (highlightindex == autoNodes.length) {
-                    highlightindex = 0;
-                }
-                autoNodes.eq(highlightindex).css(upDownGrayCss);
-
-            }
-            else if (keyCode == 13) {//输入回车
-                if (highlightindex != -1) {
-                    var comText = $("#divAutoList").hide().children("div").eq(highlightindex).text();
-                    highlightindex = -1;
-                    $("#cityStationName").val(comText);
-                    return false;
-                }
-                else {
-                    alert("文本框中的[" + $("#cityStationName").val() + "]被提交了！");
-                    $("#divAutoList").hide();
-                    $("#cityStationName").get(0).blur();
-                    return true;
-                }
-            }
+        wordInput.bind("keyup", function (event) {
+            autoComplite(event)
+        });
+        wordInput.bind("focus", function (event) {
+            autoComplite(event)
         });
 
         //给查询框添加blur事件，隐藏提示层
         $("#cityStationName").blur(function () {
             $("#divAutoList").hide();
         });
-
-
-
     });
 
     $('#cityName').validatebox({
@@ -343,5 +236,117 @@
 
         }
 	}
+
+    function autoComplite(event) {
+
+        var myEvent = event || window.event;
+        var keyCode = myEvent.keyCode;
+        var autoNode = $("#divAutoList"); //可供选择的项
+        var poiType = $("#transType").val();
+        var adName = $("#cityName").val();
+
+        //        if (keyCode >= 65 && keyCode <= 90 || keyCode == 8 || keyCode == 46) { //输入字母,退格或删除,显示最新的内容
+        if (keyCode != 13 && keyCode != 38 && keyCode != 40) { //不是三个特殊键，可以搜索
+            var wordText = $("#cityStationName").val();
+            if (wordText.length < minPrefix) return;
+            //取消上次提交
+            //window.clearTimeout(timeOutId);
+            timeOutId = setTimeout(function () {
+                $.ajax({
+                    type: "GET",
+                    url: ajaxProcessUrl,
+                    data: 'cityStationName=' + wordText + '&poiType=' + poiType + '&adName=' + adName,
+                    success: function (data) {
+                        var wordNodes = $(data.result);
+                        autoNode.html("");
+
+                        for (var i = 0; i < data.result.length; i++) {
+                            var newDivNode = $("<div>").attr("id", data.result[i].id);
+                            newDivNode.attr("adName", data.result[i].adName);
+                            newDivNode.attr("poiCoordinate", data.result[i].poiCoordinate);
+                            newDivNode.attr("adCodeForSolr", data.result[i].adCodeForSolr);
+                            newDivNode.html(data.result[i].poiStationName).appendTo(autoNode);
+                            //添加光标进入事件, 高亮节点
+                            newDivNode.mouseover(function () {
+                                if (highlightindex != -1) {
+                                    $("#divAutoList").children("div")
+                                            .eq(highlightindex)
+                                            .css(mouseOverCss);
+                                }
+                                highlightindex = $(this).attr("id");
+                                $(this).css(grayCss);
+                            });
+                            //添加光标移出事件,取消高亮
+                            newDivNode.mouseout(function () {
+                                $(this).css(mouseOutCss);
+                            });
+                            //添加光标mousedown事件  点击事件newDivNode.click可能不起作用?
+                            newDivNode.mousedown(function () {
+                                var comText = $(this).text();
+                                $("#divAutoList").hide();
+                                highlightindex = -1;
+                                $("#cityStationName").val(comText);
+                                $("#poiStationId").val($(this).attr("id"));
+                                $("#cityName").val($(this).attr("adName"));
+                                $("#coordinate").val($(this).attr("poiCoordinate"));
+                                $("#cityCode").val($(this).attr("adCodeForSolr"));
+                                loadMap($(this).attr("poiCoordinate"));
+                                addMarker($(this).attr("poiCoordinate"));
+                            });
+                        }
+                        if (wordNodes.length > 0) {
+                            autoNode.show();
+                        }
+                        else {
+                            autoNode.hide();
+                            highlightindex = -1;
+                        }
+                    },
+                    dataType: "json"
+                });
+            }, delayTime);
+        }
+        else if (keyCode == 38) {//输入向上,选中文字高亮
+            var autoNodes = $("#divAutoList").children("div")
+            if (highlightindex != -1) {
+                autoNodes.eq(highlightindex).css(upDownWhiteCss);
+                highlightindex--;
+            }
+            else {
+                highlightindex = autoNodes.length - 1;
+            }
+
+            if (highlightindex == -1) {
+                highlightindex = autoNodes.length - 1;
+            }
+            autoNodes.eq(highlightindex).css(upDownGrayCss);
+        }
+        else if (keyCode == 40) {//输入向下,选中文字高亮
+            var autoNodes = $("#divAutoList").children("div")
+            if (highlightindex != -1) {
+                autoNodes.eq(highlightindex).css(upDownWhiteCss);
+            }
+            highlightindex++;
+            if (highlightindex == autoNodes.length) {
+                highlightindex = 0;
+            }
+            autoNodes.eq(highlightindex).css(upDownGrayCss);
+
+        }
+        else if (keyCode == 13) {//输入回车
+            if (highlightindex != -1) {
+                var comText = $("#divAutoList").hide().children("div").eq(highlightindex).text();
+                highlightindex = -1;
+                $("#cityStationName").val(comText);
+                return false;
+            }
+            else {
+                alert("文本框中的[" + $("#cityStationName").val() + "]被提交了！");
+                $("#divAutoList").hide();
+                $("#cityStationName").get(0).blur();
+                return true;
+            }
+        }
+    }
 </script>
 </html>

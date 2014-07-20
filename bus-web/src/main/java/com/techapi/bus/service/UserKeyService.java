@@ -123,7 +123,7 @@ public class UserKeyService {
     }
 
 
-    public List<SpringMap> findAllBusinessTypes() {
+    public List<SpringMap> findAllBusinessTypes(int notAll) {
         Map<String, String> businessTypeMap = PropertyMapUtils.getBusinessTypeMap();
         Iterator<String> iterator = businessTypeMap.keySet().iterator();
         List<SpringMap> springMapList = new ArrayList<>();
@@ -134,10 +134,12 @@ public class UserKeyService {
             springMap.setText(businessTypeName);
             springMapList.add(springMap);
         }
-        SpringMap totalSpringMap = new SpringMap();
-        totalSpringMap.setId("all");
-        totalSpringMap.setText("全部");
-        springMapList.add(totalSpringMap);
+        if(notAll == 0) {
+            SpringMap totalSpringMap = new SpringMap();
+            totalSpringMap.setId("all");
+            totalSpringMap.setText("全部");
+            springMapList.add(totalSpringMap);
+        }
 
         return springMapList;
     }

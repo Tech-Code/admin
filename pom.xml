@@ -67,7 +67,7 @@
                 </configuration>
             </plugin>
 
-            <!-- <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
@@ -86,8 +86,8 @@
                     </webResources>
 
                 </configuration>
-            </plugin> 
- -->        </plugins>
+            </plugin>
+            </plugins>
     </build>
 
     <dependencyManagement>

@@ -8,7 +8,7 @@
 	jQuery(function($) {
         initDataGrid("${ctx}/userkey/list","{}");
         $('#selectBusinessType').combobox({
-            url: "${ctx}/userkey/businesstypes",
+            url: "${ctx}/userkey/businesstypes?notAll=0",
             valueField: 'id',
             textField: 'text'
         });
@@ -198,9 +198,9 @@
             },
             onClickRow: function (rowIndex, rowData) {
                 $.messager.show({
-                    height: 100,
-                    width: 400,
-                    msg: 'key: ' + rowData.key,
+                    width: 500,
+                    height: 90,
+                    msg: rowData.key,
                     timeout: 30000
                 })
             }

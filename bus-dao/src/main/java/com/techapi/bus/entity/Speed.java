@@ -18,12 +18,12 @@ public class Speed implements java.io.Serializable {
 	private String tranSportDes;// IS '交通工具明细';
 	@Column(name="SPEED")
 	private Double speed;// IS '时速';
-	@Column(name="CITYCODE")
-	private String  cityCode;// IS '城市代码';
-	@Column(name="CITYNAME")
-	private String cityName;// IS '城市名';
+	//@Column(name="CITYCODE")
+	//private String  cityCode;// IS '城市代码';
+	//@Column(name="CITYNAME")
+	//private String cityName;// IS '城市名';
 	@Column(name="TRANSPORTTYPE")
-	private int transportType;// IS '交通工具类型 0:地铁,1:公交';
+	private int transportType;// IS '交通工具类型 0:地铁,1:公交,2:出租,3:步行';
 
 	public String getId() {
 		return id;
@@ -49,18 +49,6 @@ public class Speed implements java.io.Serializable {
 	public void setSpeed(Double speed) {
 		this.speed = speed;
 	}
-	public String getCityCode() {
-		return cityCode;
-	}
-	public void setCityCode(String cityCode) {
-		this.cityCode = cityCode;
-	}
-	public String getCityName() {
-		return cityName;
-	}
-	public void setCityName(String cityName) {
-		this.cityName = cityName;
-	}
 
     public int getTransportType() {
         return transportType;
@@ -77,8 +65,6 @@ public class Speed implements java.io.Serializable {
                 ", tranSportation='" + tranSportation + '\'' +
                 ", tranSportDes='" + tranSportDes + '\'' +
                 ", speed=" + speed +
-                ", cityCode='" + cityCode + '\'' +
-                ", cityName='" + cityName + '\'' +
                 ", transportType=" + transportType +
                 '}';
     }

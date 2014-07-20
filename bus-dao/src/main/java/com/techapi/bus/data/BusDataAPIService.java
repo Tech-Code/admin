@@ -171,11 +171,11 @@ public class BusDataAPIService {
 	@ServiceCache(TTL._30M)
 	public List<Speed> findSpeedByCityTransportation(String transportation,
 			String cityname) {
-		List<Speed> speedList = speedDao.findByTransportationAndCityName(
-				transportation, cityname);
+		List<Speed> speedList = speedDao.findByTransportation(
+				transportation);
 		if (speedList == null || speedList.size() == 0) {
-			speedList = speedDao.findByTransportationAndCityName(
-					transportation, BusConstants.DEFAULT_CITYNAME);
+			speedList = speedDao.findByTransportation(
+					transportation);
 		}
 		return speedList;
 	}
@@ -195,12 +195,10 @@ public class BusDataAPIService {
 	public Speed findOneSpeedByCityTransportation(String transportation,
 			String cityname, String transportdes) {
 		List<Speed> speedList = speedDao
-				.findByTransportationAndDetailAndCityName(transportation,
-						cityname, transportdes);
+				.findByTransportation(transportation);
 		if (speedList == null || speedList.size() == 0) {
 			speedList = speedDao
-					.findByTransportationAndDetailAndCityName(transportation,
-							BusConstants.DEFAULT_CITYNAME, transportdes);
+					.findByTransportation(transportation);
 		}
 		if (speedList != null && speedList.size() > 0) {
 			return speedList.get(0);
@@ -210,7 +208,7 @@ public class BusDataAPIService {
 
 	/**
 	 * 
-	 * @param cityname
+	 * @param key
 	 * @return
 	 */
 	public Object findUserKey(String key) {

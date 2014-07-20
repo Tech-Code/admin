@@ -29,12 +29,23 @@ form.formular, .validationEngineContainer {
 	color: #000;
 }
 
-.formular input,.formular select,.formular textarea {
+.formular select {
 	display: block;  /* this breaks relative positioning */
 	margin-bottom: 5px;
 }
 
 .formular .text-input {
+    width: 250px;
+    color: #555;
+    padding: 5px;
+    border: 1px solid #B5B8C8;
+    font-size: 14px;
+    margin-top: 5px;
+    background: #FFF repeat-x;
+    display: block;
+}
+
+.formular .easyui-combobox {
 	width: 250px;
 	color: #555;
 	padding: 5px;
@@ -53,6 +64,7 @@ form.formular, .validationEngineContainer {
 	font-size: 14px;
 	margin-top: 4px;
 	background: #FFF repeat-x;
+    display: block;
 }
 
 .formular .infos {

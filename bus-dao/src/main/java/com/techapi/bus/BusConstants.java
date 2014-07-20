@@ -39,6 +39,8 @@ public final class BusConstants {
 
     public static final String TRANSPORTATION_TYPE_TAXI = "出租车";
 
+    public static final String TRANSPORTATION_TYPE_WALK = "步行";
+
     /** 返回状态标识 */
     public static final String RESULT_SUCCESS = "0";
     public static final String RESULT_REPEAT = "1"; // 重复记录 是否覆盖
