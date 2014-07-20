@@ -36,13 +36,13 @@
 					<td align="right"><b style="font: 12px">用户名：</b></td>
 					<td><input type="text" class="easyui-validatebox"
 						name="userName" id="userName" style="width: 200px;"
-						maxlength="20"></input>
+						maxlength="20"/>
 						</td>
 				</tr>
 				<tr>
 					<td align="right"><b style="font: 12px">密&nbsp;&nbsp;码：</b></td>
 					<td ><input type="password" class="easyui-validatebox"
-						name="password" id="password" style="width: 200px;" maxlength="20"></input></td>
+						name="password" id="password" style="width: 200px;" maxlength="20"/></td>
 				</tr>
 				<tr>
 					<td></td>

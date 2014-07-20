@@ -1,11 +1,9 @@
 package com.techapi.bus.dao;
 
-import com.techapi.bus.entity.CityStation;
+import com.techapi.bus.entity.UserKey;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
-
-import com.techapi.bus.entity.UserKey;
 
 import java.util.List;
 
@@ -15,11 +13,11 @@ public interface UserKeyDao extends PagingAndSortingRepository<UserKey, String> 
 	public UserKey findOneByKey(@Param("key") String key);
 
     @Query("select c from UserKey c "
-            + "where c.businessName like :businessName "
-            + "and c.businessFlag like :businessFlag "
-            + "and c.businessType like :businessType "
-            + "and c.province like :province "
-            + "and c.businessUrl like :businessUrl "
+            + "where coalesce(c.businessName,'0') like :businessName "
+            + "and coalesce(c.businessFlag,'0') like :businessFlag "
+            + "and coalesce(c.businessType,'0') like :businessType "
+            + "and coalesce(c.province,'0') like :province "
+            + "and coalesce(c.businessUrl,'0') like :businessUrl "
             + "and c.key like :key ")
     public List<UserKey> findBySearch(
             @Param("businessName") String businessName,

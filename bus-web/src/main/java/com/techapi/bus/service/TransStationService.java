@@ -83,6 +83,9 @@ public class TransStationService extends BaseOperate {
         int departTime = DateTimeUtils.formatFromTimeToInt(transstation.getDepartTime());
         transstation.setArriveTime(Integer.valueOf(arriveTime).toString());
         transstation.setDepartTime(Integer.valueOf(departTime).toString());
+
+        //trip转换为大写
+        transstation.setTrips(transstation.getTrips().toUpperCase());
         transstation = transStationDao.save(transstation);
 
         resultMap.put("id", transstation.getId());

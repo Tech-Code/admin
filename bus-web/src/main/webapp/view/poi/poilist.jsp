@@ -7,6 +7,12 @@
 <script type="text/javascript">
 	jQuery(function($) {
         initDataGrid("${ctx}/poi/list", "{}");
+        $('#cityName').combobox({
+            url: "${ctx}/analysis/cityname",
+            valueField: 'id',
+            textField: 'text'
+        });
+        $('#cityName').combobox('setValue', '全部');
 	});
     function initDataGrid(getUrl, queryParams) {
         $('#poiTable').datagrid({
@@ -25,6 +31,7 @@
             pagination: true, //显示分页
             rownumbers: true, //显示行号
             queryParams:queryParams,
+            pageNumber: 1,
             columns: [
                 [
                     {
@@ -38,6 +45,14 @@
                         width: 20,
                         formatter: function (value, row, index) {
                             return row.cityCode;
+                        } //需要formatter一下才能显示正确的数据
+                    },
+                    {
+                        field: 'cityName',
+                        title: '城市名称',
+                        width: 20,
+                        formatter: function (value, row, index) {
+                            return row.cityName;
                         } //需要formatter一下才能显示正确的数据
                     },
                     {
@@ -235,10 +250,12 @@
     //搜索
     function select() {
         var cityCode = $('#cityCode').val();
+        var cityName = $('#cityName').combobox('getText');
         var stationId = $('#stationId').val();
         var poiName = $('#poiName').val();
 
-        var queryParams = {cityCode: cityCode, poiName: poiName, stationId: stationId};
+        if (cityName == '全部') cityName = '';
+        var queryParams = {cityCode: cityCode, cityName: cityName, poiName: poiName, stationId: stationId};
 
         initDataGrid("${ctx}/poi/searchlist?", queryParams);
     }
@@ -250,6 +267,7 @@
     <fieldset>
         <legend>查询条件</legend>
         城市代码:<input id="cityCode" style="width:100px;"/>
+        城市名称:<input class="easyui-combobox" id="cityName"/>
         站点ID:<input id="stationId" style="width:100px;"/>
         地标名称:<input id="poiName" style="width:100px;"/>
 

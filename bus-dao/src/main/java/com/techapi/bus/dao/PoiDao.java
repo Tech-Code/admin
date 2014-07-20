@@ -36,6 +36,9 @@ public interface PoiDao extends PagingAndSortingRepository<Poi, String>, JpaSpec
     @Query(value = "SELECT * FROM(SELECT A.*, rownum r FROM(SELECT * FROM bus_poi) A WHERE rownum <= ?2) B WHERE r > ?1", nativeQuery = true)
     public List<Poi> findByCityCode(int pageStart,int pageEnd);
 
+    //@Query(value = "SELECT B.ID,B.CITYCODE,B.STATIONID,B.POIID,B.POINAME,B.POITYPE1,B.POITYPE2,B.POITYPE3,B.POICOORDINATE,B.WALKDISTANCE,B.ORIENTATION,B.ADDRESS,B.TEL,B.AREA_NAME as CITYNAME FROM (SELECT A.*,rownum r FROM (SELECT C.*,D.area_name FROM bus_poi C INNER JOIN bus_area D ON C.citycode = D.ad_code) A WHERE rownum <= ?2) B WHERE r > ?1", nativeQuery = true)
+    //public List<Object[]> findAllByPage(int pageStart, int pageEnd);
+
     //@Query(value = "SELECT * from bus_poi a " +
     //        " inner join bus_station b on a.stationid = b.STATIONID " +
     //        " inner join BUS_CITYSTATION c on a.citycode = c.citycode " +
@@ -46,13 +49,18 @@ public interface PoiDao extends PagingAndSortingRepository<Poi, String>, JpaSpec
     //        String cityName,
     //        String stationName);
 
-    @Query("select c from Poi c "
-            + "where c.cityCode like :cityCode "
-            + "and c.poiName like :poiName "
-            + "and c.poiPK.stationId like :stationId ")
-    public List<Poi> findBySearch(
-            @Param("cityCode") String cityCode,
-            @Param("poiName") String poiName,
-            @Param("stationId") String stationId);
+    @Query(value = "SELECT count(*) FROM bus_poi C INNER JOIN bus_area D ON C.citycode = D.ad_code where c.citycode like ?1 and d.area_name like ?2 and c.stationid like ?3 and c.poiname like ?4",nativeQuery = true)
+    public int findAllCount(String cityCode,
+                            String cityName,
+                            String poiName,
+                            String stationId);
+
+    @Query(value = "SELECT B.ID,B.CITYCODE,B.STATIONID,B.POIID,B.POINAME,B.POITYPE1,B.POITYPE2,B.POITYPE3,B.POICOORDINATE,B.WALKDISTANCE,B.ORIENTATION,B.ADDRESS,B.TEL,B.AREA_NAME as CITYNAME FROM (SELECT A.*,rownum r FROM (SELECT C.*,D.area_name FROM bus_poi C INNER JOIN bus_area D ON C.citycode = D.ad_code where c.citycode like ?3 and d.area_name like ?4 and c.stationid like ?5 and c.poiname like ?6) A WHERE rownum <= ?2) B WHERE r > ?1", nativeQuery = true)
+    public List<Object[]> findBySearch(int pageStart, int pageEnd,
+            String cityCode,
+            String cityName,
+            String poiName,
+            String stationId);
+
 
 }

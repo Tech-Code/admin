@@ -32,6 +32,7 @@
             pagination: true, //显示分页
             rownumbers: true, //显示行号
             queryParams: queryParams,
+            pageNumber: 1,
             columns: [
                 [
                     {

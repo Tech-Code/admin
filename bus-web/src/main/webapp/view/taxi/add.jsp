@@ -18,7 +18,7 @@
 
 		<fieldset>
 			<legend> 基础信息 </legend>
-			<div style="width:39%;height:830px;float: left">
+            <div style="width:auto;height:auto;float: left">
 				<label>
 					<span>城市代码</span>
 					<input name="cityCode" id="cityCode" value="${taxi.cityCode }" class="text-input"/>

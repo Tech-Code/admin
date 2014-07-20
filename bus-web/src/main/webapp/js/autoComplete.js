@@ -82,6 +82,7 @@ $(document).ready(function () {
                                 highlightindex = -1;
                                 $("#cityStationName").val(comText);
                                 $("#cityStationId").val($(this).attr("id"));
+                                loadMap($(this).attr("coordinate"));
                                 addMarker($(this).attr("coordinate"));
                             });
                         }

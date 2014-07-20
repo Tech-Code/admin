@@ -24,7 +24,7 @@
 
     <fieldset>
         <legend> 基础信息</legend>
-        <div style="width:39%;height:520px;float: left">
+        <div style="width:auto;height:auto;float: left">
             <label>
                 <span>城市代码</span>
                 <input name="cityCode" id="cityCode" value="${poi.cityCode }" class="text-input"/>
@@ -138,7 +138,7 @@
         } else {
             $.post("${ctx}/poi/add", $("#poiForm").serializeArray(),
                     function (data) {
-                        if (data.result == '0' || data.result == '2' || data.result == '5')
+                        if (data.result == '0' || data.result == '2' || data.result == '5' || data.result == '8')
                             $.messager.alert('提示', data.alertInfo, 'info');
                     });
         }

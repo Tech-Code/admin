@@ -48,7 +48,7 @@ public final class BusConstants {
     public static final String RESULT_REPEAT_POI = "5"; // 地标点重复记录
     public static final String RESULT_REPEAT_TAXI = "6"; // 出租车重复记录
     public static final String RESULT_REPEAT_SPEED = "7"; // 出租车重复记录
-
+    public static final String RESULT_NO_EXIST_STATION = "8"; // 站点ID不存在
     /**
      * 返回状态文字
      */
@@ -62,11 +62,19 @@ public final class BusConstants {
     public static final String RESULT_REPEAT_TAXI_STR = "城市费用已存在!";
     public static final String RESULT_REPEAT_SPEED_STR = "该城市车速已存在!";
 
+    public static final String RESULT_NO_EXIST_STATION_STR = "站点ID不存在!";
+
     /** redis Index */
     public static final int REDIS_INDEX_KEY = 2;
 
     /** tools type */
     public static final String TOOLS_FLUSH_SOLR_POISTATION = "0";// 刷新POISTATION
     public static final String TOOLS_FLUSH_SOLR_CITYSTATION = "1";// 刷新CITYSTATION
+
+    public static final int DELETE_ALL_USERKEY_STATUS = 0;
+    public static final int DELETE_PART_USERKEY_STATUS = 1;
+    public static final int DELETE_NONE_USERKEY_STATUS = 2;
+
+
 
 }

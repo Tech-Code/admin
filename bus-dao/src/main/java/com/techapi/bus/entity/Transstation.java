@@ -24,6 +24,14 @@ public class Transstation implements java.io.Serializable{
 	private Double miles;//	里程	DECIMAL(12,1)
 	@Column(name="PRICE")
 	private Double price;//	票价	DECIMAL(12,1)
+    @Column(name="DEPARTTYPE")
+    private int departType; // 发车方式 0:固定发车;1:循环发车 默认为固定发车
+    @Column(name = "FIRSTDEPARTTIME")
+    private String firstDepartTime; // 首班车发车时间
+    @Column(name = "LASTDEPARTTIME")
+    private String lastDepartTime; // 末班车发车时间
+    @Column(name = "DEPARTINTERVAL")
+    private int departInterval; // 发车间隔
     //@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
     @ManyToOne()
     @JoinColumn(name = "citystationid")
@@ -72,6 +80,37 @@ public class Transstation implements java.io.Serializable{
 		this.price = price;
 	}
 
+    public int getDepartType() {
+        return departType;
+    }
+
+    public void setDepartType(int departType) {
+        this.departType = departType;
+    }
+
+    public String getFirstDepartTime() {
+        return firstDepartTime;
+    }
+
+    public void setFirstDepartTime(String firstDepartTime) {
+        this.firstDepartTime = firstDepartTime;
+    }
+
+    public String getLastDepartTime() {
+        return lastDepartTime;
+    }
+
+    public void setLastDepartTime(String lastDepartTime) {
+        this.lastDepartTime = lastDepartTime;
+    }
+
+    public int getDepartInterval() {
+        return departInterval;
+    }
+
+    public void setDepartInterval(int departInterval) {
+        this.departInterval = departInterval;
+    }
 
     public CityStation getCityStation() {
         return cityStation;

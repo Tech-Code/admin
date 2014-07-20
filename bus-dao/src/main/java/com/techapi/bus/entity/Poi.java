@@ -32,10 +32,23 @@ public class Poi implements java.io.Serializable{
     @Column(name = "TEL")
     private String tel;// IS '电话';
     @Transient
-    private String stationName;
-    @Transient
     private String cityName;
 
+    public Poi(PoiPK poiPK, String id, String cityCode, String poiName, String poiType1, String poiType2, String poiType3, String poiCoordinate, double walkDistance, String orientation, String address, String tel, String cityName) {
+        this.poiPK = poiPK;
+        this.id = id;
+        this.cityCode = cityCode;
+        this.poiName = poiName;
+        this.poiType1 = poiType1;
+        this.poiType2 = poiType2;
+        this.poiType3 = poiType3;
+        this.poiCoordinate = poiCoordinate;
+        this.walkDistance = walkDistance;
+        this.orientation = orientation;
+        this.address = address;
+        this.tel = tel;
+        this.cityName = cityName;
+    }
 
     public PoiPK getPoiPK() {
         return poiPK;
@@ -142,14 +155,6 @@ public class Poi implements java.io.Serializable{
 
     public void setTel(String tel) {
         this.tel = tel;
-    }
-
-    public String getStationName() {
-        return stationName;
-    }
-
-    public void setStationName(String stationName) {
-        this.stationName = stationName;
     }
 
     public String getCityName() {

@@ -18,7 +18,7 @@
 
 		<fieldset>
 			<legend> 基础信息 </legend>
-			<div style="width:39%;height:350px;float: left">
+            <div style="width:auto;height:auto;float: left">
 				<label>
                     <span>交通工具类型</span>
                     <select name="transportType" class="text-input">

@@ -20,7 +20,7 @@
         <input type="hidden" id="coodinate" name="coodinate" value=""/>
 		<fieldset>
 			<legend> 基础信息 </legend>
-			<div style="width:39%;height:600px;float: left">
+			<div style="width:auto;height:auto;float: left">
 				<label>
 					<span>班次</span>
                     <input name="trips" id="trips" value="${ts.trips }" class="text-input"/>
@@ -30,27 +30,45 @@
                     <input name="cityStation.cityStationName" value="${ts.cityStation.cityStationName}" class="text-input" id="cityStationName"/>
                     <div id="divAutoList"></div>
                 </label>
+                <label>
+                    <span>发车方式</span>
+                    <input class="radio" type="radio" name="departType" value="0" id="fixDepartType"
+                           onchange="departTypeChange()"/>固定发车
+                    <input class="radio" type="radio" name="departType" value="1" id="repeatDepartType"
+                           onchange="departTypeChange()"/>循环发车
+                </label>
+                <label>
+                    <span>首班车时间（HH:mm）</span>
+                    <input name="firstDepartTime" id="firstDepartTime" value="${ts.firstDepartTime }" class="text-input"/>
+                </label>
+                <label>
+                    <span>末班车时间（HH:mm）</span>
+                    <input name="lastDepartTime" id="lastDepartTime" value="${ts.lastDepartTime }" class="text-input"/>
+                </label>
+                <label>
+                    <div id="divDepartInterval"></div>
+                </label>
 				<label>
 					<span>站序</span>
                     <input name="stationOrder" id="stationOrder" value="${ts.stationOrder }" class="text-input"/>
                 </label>
 				<label>
-					<span>到达时间</span>
+					<span>到达时间（HH:mm）</span>
                     <%--<input field="datetime" width="150" editor="datetimebox"/>--%>
                     <%--<input class="easyui-datetimebox" name="arriveTime" id="arriveTime" data-options="required:true,showSeconds:true"/>--%>
-                    <input name="arriveTime" id="arriveTime" value="${ts.arriveTime }" class="text-input"/>格式：HH:mm
+                    <input name="arriveTime" id="arriveTime" value="${ts.arriveTime }" class="text-input"/>
                 </label>
 				<label>
-					<span>发车时间</span>
+					<span>发车时间（HH:mm）</span>
                     <%--<input class="easyui-datetimebox" name="departTime" id="departTime" data-options="required:true,showSeconds:true"/>--%>
-                    <input name="departTime" id="departTime" value="${ts.departTime }" class="text-input"/>格式：HH:mm
+                    <input name="departTime" id="departTime" value="${ts.departTime }" class="text-input"/>
                 </label>
 				<label>
-					<span>里程</span>
+					<span>里程（公里）</span>
                     <input name="miles" id="miles" value="${ts.miles }" class="text-input"/>
                 </label>
 				<label>
-					<span>票价</span>
+					<span>票价（元）</span>
                     <input name="price" id="price" value="${ts.price }" class="text-input"/>
                 </label>
 			</div>
@@ -62,25 +80,17 @@
 </body>
 <script type="text/javascript">
     var mapObj, toolbar, overview, scale;
-    var opt = {
-        level: 10,//初始地图视野级别
-        center: new MMap.LngLat(116.397428, 39.90923),//设置地图中心点
-        doubleClickZoom: true,//双击放大地图
-        rotateEnable: true,
-        scrollwheel: true//鼠标滚轮缩放地图
+    var cityStationCoordinate = "${ts.cityStation.coordinate}";
+
+    if(cityStationCoordinate != null && cityStationCoordinate != "") {
+        loadMap(cityStationCoordinate);
+        addMarker(cityStationCoordinate);
+    } else {
+        loadMap("116.397428, 39.90923");
     }
 
-    mapObj = new MMap.Map("iCenter", opt);
-    mapObj.plugin(["MMap.ToolBar", "MMap.OverView", "MMap.Scale"], function () {
-        toolbar = new MMap.ToolBar();
-        toolbar.autoPosition = false; //加载工具条
-        mapObj.addControl(toolbar);
-        overview = new MMap.OverView(); //加载鹰眼
-        mapObj.addControl(overview);
-        scale = new MMap.Scale(); //加载比例尺
-        mapObj.addControl(scale);
-    });
 
+    departTypeChange();
     $.extend($.fn.validatebox.defaults.rules, {
         time: {// 验证时间
             validator: function (value) {
@@ -103,16 +113,81 @@
 
     });
     $('#arriveTime').validatebox({
-        required: true,
         validType: 'time'
     });
     $('#miles').validatebox({
         required: true
     });
     $('#departTime').validatebox({
-        required: true,
         validType: 'time'
     });
+    $('#firstDepartTime').validatebox({
+        validType: 'time'
+    });
+    $('#lastDepartTime').validatebox({
+        validType: 'time'
+    });
+
+    $('#departInterval').validatebox({
+        validType: 'number'
+    });
+
+    <c:choose>
+    <c:when test="${ts.departType=='0' }">
+    $('#fixDepartType').attr("checked", "checked");
+    </c:when>
+    <c:when test="${ts.departType=='1' }">
+    $('#repeatDepartType').attr("checked", "checked");
+    </c:when>
+    <c:otherwise>
+    $('#fixDepartType').attr("checked", "checked");
+    </c:otherwise>
+    </c:choose>
+
+    function loadMap(lonlat) {
+        var LngLatX = lonlat.split(",")[0]; //获取Lng值
+        var LngLatY = lonlat.split(",")[1]; //获取Lat值
+        var opt = {
+            level: 10,//初始地图视野级别
+            center: new MMap.LngLat(LngLatX, LngLatY),//设置地图中心点
+            doubleClickZoom: true,//双击放大地图
+            rotateEnable: true,
+            scrollwheel: true//鼠标滚轮缩放地图
+        }
+
+        mapObj = new MMap.Map("iCenter", opt);
+        mapObj.plugin(["MMap.ToolBar", "MMap.OverView", "MMap.Scale"], function () {
+            toolbar = new MMap.ToolBar();
+            toolbar.autoPosition = false; //加载工具条
+            mapObj.addControl(toolbar);
+            overview = new MMap.OverView(); //加载鹰眼
+            mapObj.addControl(overview);
+            scale = new MMap.Scale(); //加载比例尺
+            mapObj.addControl(scale);
+        });
+    }
+
+    function stationOrderChanged() {
+        // 发车时间与到达时间根据站序做限制
+        var stationOrder = $('#stationOrder').val();
+        if (stationOrder < 2) {
+            $('#arriveTime').validatebox({
+                required: true
+            });
+        }
+    }
+
+    function departTypeChange() {
+        var selected = $('input[name="departType"]:checked').val();
+        var divDepartInterval = $("#divDepartInterval"); //可供选择的项
+        divDepartInterval.empty();
+        if(selected == 1) {
+
+            divDepartInterval.append("<span > 发车间隔（分钟） </span >");
+            var item1 = "<input name='departInterval' id='departInterval' value='${ts.departInterval}' class='text-input'/>";
+            divDepartInterval.append(item1);
+        }
+    }
 
     function addMarker(lonlat) {
         var LngLatX = lonlat.split(",")[0]; //获取Lng值
@@ -137,6 +212,8 @@
             });
 	    }
     }
+
+
 	
 </script>
 </html>

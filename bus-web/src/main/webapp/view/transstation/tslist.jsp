@@ -37,6 +37,7 @@
             pagination: true, //显示分页
             rownumbers: true, //显示行号
             queryParams: queryParams,
+            pageNumber: 1,
             columns: [
                 [
                     {
@@ -89,12 +90,40 @@
                         } //需要formatter一下才能显示正确的数据
                     },
                     {
-                        field: 'stationOrder',
-                        title: '站序',
+                        field: 'departType',
+                        title: '发车方式',
                         width: 20,
                         sortable: true,
                         formatter: function (value, row, index) {
-                            return row.stationOrder;
+                            if(row.departType == 0) return "固定发车";
+                            if (row.departType == 1) return "循环发车";
+                        } //需要formatter一下才能显示正确的数据
+                    },
+                    {
+                        field: 'firstDepartTime',
+                        title: '首班车时间',
+                        width: 20,
+                        sortable: true,
+                        formatter: function (value, row, index) {
+                            return row.firstDepartTime;
+                        } //需要formatter一下才能显示正确的数据
+                    },
+                    {
+                        field: 'lastDepartTime',
+                        title: '末班车时间',
+                        width: 20,
+                        sortable: true,
+                        formatter: function (value, row, index) {
+                            return row.lastDepartTime;
+                        } //需要formatter一下才能显示正确的数据
+                    },
+                    {
+                        field: 'departInterval',
+                        title: '发车间隔',
+                        width: 20,
+                        sortable: true,
+                        formatter: function (value, row, index) {
+                            return row.departInterval;
                         } //需要formatter一下才能显示正确的数据
                     },
                     {

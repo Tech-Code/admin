@@ -26,12 +26,13 @@
             striped: true, //奇偶行颜色不同
             collapsible: true,//可折叠
             url: getUrl, //数据来源
-            sortOrder: 'desc', //倒序
+            sortOrder: 'asc', //倒序
             idField: 'id', //主键字段
             remoteSort: true, //服务器端排序
             pagination: true, //显示分页
             rownumbers: true, //显示行号
             queryParams: queryParams,
+            pageNumber: 1,
             columns: [
                 [
                     {
@@ -247,9 +248,9 @@
 					else
 						ps += "&id=" + n.id;
 				});
-				$.post('<%=root%>/userkey/delete' + ps, function() {
+				$.post('<%=root%>/userkey/delete' + ps, function(data) {
 					$('#userKeyTable').datagrid('reload');
-					$.messager.alert('删除', '删除已成功', 'info');
+					$.messager.alert('删除', data.mes, 'info');
 				});
 			}
 		});
@@ -269,6 +270,20 @@
 
         initDataGrid("${ctx}/userkey/searchlist?", queryParams);
     }
+
+    // 导出key
+    function exportUserKey() {
+        var businessName = $('#businessName').val();
+        var businessFlag = $('#businessFlag').val();
+        var selectBusinessType = $('#selectBusinessType').combobox('getText');
+        var province = $('#province').val();
+        var businessUrl = $('#businessUrl').val();
+        var key = $('#key').val();
+
+        if (selectBusinessType == '全部') selectBusinessType = '';
+        var url = "${ctx}/userkey/downloaddl?businessName=" + businessName + "&businessFlag=" + businessFlag + "&selectBusinessType=" + selectBusinessType + "&province=" + province + "&businessUrl=" + businessUrl + "&key=" + key;
+        window.location.href = url;
+    }
 </script>
 </head>
 
@@ -284,6 +299,7 @@
         KEY:<input id="key" style="width:100px;"/>
 
         <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>
+        <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="exportUserKey()">导出EXCEL</a>
     </fieldset>
 </form>
 	<div style="padding: 10" id="tabdiv">
