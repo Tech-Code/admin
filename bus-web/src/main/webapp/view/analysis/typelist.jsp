@@ -108,7 +108,6 @@
 	}
 	
 	 function getToDay(){
-         
          var now = new Date();
          var nowYear = now.getFullYear();
          var nowMonth = now.getMonth();
@@ -116,9 +115,6 @@
          newdate = new Date(nowYear,nowMonth,nowDate);
          nowMonth = doHandleMonth(nowMonth + 1);
          nowDate = doHandleMonth(nowDate);
-         if (strMon2 < 10) {
-     		  strMon2 = '0' + strMon2;
-         }
          return nowYear+"-"+nowMonth+"-"+nowDate;
     }
    
@@ -136,6 +132,9 @@
     	var strYear2=beforeDate.getFullYear();
     	var strMon2=beforeDate.getMonth()+1;
     	var strDate2=beforeDate.getDate();
+    	 if (strMon2 < 10) {
+    		  strMon2 = '0' + strMon2;
+        }
     	var std =strYear2+"-"+strMon2+"-"+strDate2;
     	return std;
     }
