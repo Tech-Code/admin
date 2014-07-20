@@ -116,6 +116,9 @@
          newdate = new Date(nowYear,nowMonth,nowDate);
          nowMonth = doHandleMonth(nowMonth + 1);
          nowDate = doHandleMonth(nowDate);
+         if (strMon2 < 10) {
+     		  strMon2 = '0' + strMon2;
+         }
          return nowYear+"-"+nowMonth+"-"+nowDate;
     }
    
