@@ -3,9 +3,7 @@ package com.techapi.bus.data;
 import com.techapi.bus.BusConstants;
 import com.techapi.bus.annotation.CacheProxy;
 import com.techapi.bus.dao.PoiDao;
-import com.techapi.bus.dao.StationDao;
 import com.techapi.bus.entity.Poi;
-import com.techapi.bus.entity.PoiPK;
 import com.techapi.bus.entity.PoiType;
 import com.techapi.bus.entity.Station;
 import com.techapi.bus.util.*;
@@ -23,9 +21,6 @@ public class ImportPoiService {
 
     @Resource
     private PoiDao poiDao;
-
-    @Resource
-    private StationDao stationDao;
 
     @Qualifier("cacheProxy")
     @Autowired
@@ -58,29 +53,34 @@ public class ImportPoiService {
                     while (stationIdIterator.hasNext()) {
                         String stationId = stationIdIterator.next().toString();
                         List<Poi> poiList = stationIdPoiListMap.get(stationId);
-                        String stationcache = String.format(BusConstants.BUS_POI_STATIONID, stationId);
-                        Object o = cacheProxy.get(stationcache);
-                        if (o == null) {
-                            if (poiList != null) {
-                                //补cache
-                                cacheProxy.put(stationcache, poiList);
-                            } else {
-                                //增加null，防止击穿cache，压力数据库
-                                cacheProxy.put(stationcache, new ArrayList<Poi>(), TTL._10M.getTime());
-                            }
-                        }
+                        insertRedis(poiList);
                         poiDao.save(poiList);
-
                     }
                 }
-                // 存入站点信息
-                stationDao.save(subStationList);
                 start += 10;
             }
         }
         log.debug("获取站点周边POI完毕....");
 
 	}
+
+    public void insertRedis(List<Poi> poiList) {
+        int index = BusConstants.REDIS_INDEX_POI;
+        for(Poi poi : poiList) {
+            String poiCache = String.format(BusConstants.BUS_GRID_POI, poi.getGridId(),poi.getPoiId());
+            Object o = cacheProxy.get(poiCache,index);
+
+            if (o == null) {
+                if (poi != null) {
+                    //补cache
+                    cacheProxy.put(poiCache, poi, -1, index);
+                } else {
+                    //增加null，防止击穿cache，压力数据库
+                    cacheProxy.put(poiCache, new Poi(), TTL._10M.getTime());
+                }
+            }
+        }
+    }
 
     public Map<String, List<Poi>> getStationIdPoiListMap(String cityName, List<Station> stationList,
                                                    Map<String, PoiType> poiTypeMap) {
@@ -126,7 +126,6 @@ public class ImportPoiService {
                     String x = poiMap.get("x").toString();
                     String y = poiMap.get("y").toString();
                     String adminCode = poiMap.get("adminCode").toString();
-                    String distance = poiMap.get("distance").toString();
                     String address = StringUtil.getString(poiMap.get("address").toString());
                     String tel = StringUtil.getString(poiMap.get("telephone").toString());
 
@@ -148,10 +147,7 @@ public class ImportPoiService {
                     Poi poi = new Poi();
                     poi.setCityCode(adminCode);
 
-                    PoiPK poiPK = new PoiPK();
-                    poiPK.setStationId(station.getStationId());
-                    poiPK.setPoiId(poiid);
-                    poi.setPoiPK(poiPK);
+                    poi.setPoiId(poiid);
 
                     poi.setPoiName(name);
 
@@ -164,13 +160,11 @@ public class ImportPoiService {
                     poi.setPoiType3(poiType.getPoiType3());
 
                     poi.setPoiCoordinate(x + "," + y);
-                    poi.setWalkDistance(Double.parseDouble(distance));
-                    poi.setOrientation(MapUtil.getDirection(Double.parseDouble(station.getStationLon()),
-                            Double.parseDouble(station.getStationLat()),
-                            Double.parseDouble(x),
-                            Double.parseDouble(y)));
                     poi.setAddress(address);
                     poi.setTel(tel);
+
+                    // 添加网格计算
+                    poi.setGridId(MapUtil.getGridId(x + "," + y));
                     poiList.add(poi);
 
                 }
@@ -178,6 +172,7 @@ public class ImportPoiService {
                     break;
                 }
             }
+            log.debug(station.getStationName() + "的poi条数: " + poiList.size());
             stationPoiListMap.put(station.getStationId(), poiList);
             log.debug("--------------------------------");
         }

@@ -71,7 +71,8 @@ public class BusDataAPIService {
 	 */
 	@ServiceCache(TTL._30M)
 	public Poi findOnePoiBystationID(String stationid) {
-		List<Poi> poiList = poiDao.findBystationID(stationid);
+        // TODO 需要修改
+		List<Poi> poiList = poiDao.findBystationID();
 		if (poiList != null && poiList.size() > 0) {
 			return poiList.get(0);
 		}
@@ -89,7 +90,8 @@ public class BusDataAPIService {
 	 */
 	@ServiceCache(TTL._30M)
 	public List<Poi> findPoiBystationID(String stationid, Integer num) {
-		List<Poi> poiList = poiDao.findBystationID(stationid);
+        // TODO 需要修改
+		List<Poi> poiList = poiDao.findBystationID();
 		if (poiList.size() > num) {
 			return poiList.subList(0, num);
 		}
@@ -106,14 +108,16 @@ public class BusDataAPIService {
 	public Map<String, List<Poi>> findPoiBystationIDList(String... stationids) {
 		Map<String, List<Poi>> map = new HashMap<String, List<Poi>>();
 		for (String stationid : stationids) {
-			String stationcache = String.format(BusConstants.BUS_POI_STATIONID,
+            // TODO 修改POI缓存问题
+			String stationcache = String.format(BusConstants.BUS_GRID_POI,
 					stationid);
 			List<Poi> poiList;
 			// 查询cache
 			Object o = cacheProxy.get(stationcache);
 			if (o == null) {
 				// 查询数据库
-				poiList = poiDao.findBystationID(stationid);
+                // TODO 需要修改
+				poiList = poiDao.findBystationID();
 				if (poiList != null) {
 					// 补cache
 					cacheProxy.put(stationcache, poiList, TTL._1H.getTime());

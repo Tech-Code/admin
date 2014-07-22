@@ -25,7 +25,6 @@ public class DataUtils {
 	 * @return
 	 */
 	public static String formatDate(Date date) {
-		// TODO Auto-generated method stub
 		return sdf.format(date);
 	}
 	
@@ -73,7 +72,6 @@ public class DataUtils {
 	 * @return
 	 */
 	public static long parseDate(String timeStr, boolean label) {
-		// TODO Auto-generated method stub
 		try {
 			String append = "";
 			if (label) {
@@ -85,7 +83,6 @@ public class DataUtils {
 			timeStr = timeStr + append;
 			return timeF.parse(timeStr).getTime();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

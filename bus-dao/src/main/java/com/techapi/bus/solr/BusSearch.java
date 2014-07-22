@@ -66,7 +66,6 @@ public class BusSearch extends BaseOperate {
      * @return
      */
     private PoiStationResult execute(String q) {
-        // TODO Auto-generated method stub
         log.debug("Query:" + q);
 
         List<PoiStation> list = (List)queryBeans(q,query.getStart(), query.getRows(), PoiStation.class);

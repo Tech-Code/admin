@@ -61,7 +61,6 @@ public class ConfigUtils {
             BUS_KEY_BUSINESS_TYPE = new String(rb.getString("bus.data.key.business.type").getBytes("ISO-8859-1"), "UTF-8");
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}

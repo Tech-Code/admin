@@ -1,7 +1,6 @@
 package com.techapi.bus.dao;
 
 import com.techapi.bus.entity.Poi;
-import com.techapi.bus.entity.PoiPK;
 import com.techapi.bus.util.StringUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +24,8 @@ public class PoiDaoTest {
     private PoiDao dao;
 	@Test
 	public void testFindBystationID() {
-		List<Poi> list = dao.findBystationID("110100013427026");
+        // TODO 需要修改
+		List<Poi> list = dao.findBystationID();
 		if(list != null){
 			for(Poi poi:list){
 				System.out.println(poi.getPoiName());
@@ -53,24 +53,16 @@ public class PoiDaoTest {
                 Poi poi = new Poi();
                 poi.setCityCode(poiData[0]);
 
-                PoiPK poiPK = new PoiPK();
-                poiPK.setStationId(poiData[1]);
-                poiPK.setPoiId(poiData[2]);
-                poi.setPoiPK(poiPK);
+                poi.setPoiId(poiData[2]);
 
                 poi.setPoiName(poiData[3]);
                 poi.setPoiType1(poiData[4]);
                 poi.setPoiType2(poiData[5]);
                 poi.setPoiType3(poiData[6]);
                 poi.setPoiCoordinate((poiData[7] + "," + poiData[8]).replace("\"", ""));
-                double walkDistance = 0.0;
-                if(poiData[9] != null && !"NULL".equalsIgnoreCase(poiData[9])) {
-                    walkDistance = Double.parseDouble(poiData[9]);
-                }
-                poi.setWalkDistance(walkDistance);
-                poi.setOrientation(StringUtil.getString(poiData[10]));
-                poi.setAddress(StringUtil.getString(poiData[11]));
-                poi.setTel(StringUtil.getString(poiData[12]));
+                // TODO
+                poi.setAddress(StringUtil.getString(poiData[9]));
+                poi.setTel(StringUtil.getString(poiData[10]));
 
                 poiList.add(poi);
             }

@@ -23,7 +23,6 @@ public class UserService {
 	 * @return
 	 */
 	public User login(String userName,String password) {
-		// TODO Auto-generated method stub
 		User user = userDao.login(userName, password);
 		return user;
 		

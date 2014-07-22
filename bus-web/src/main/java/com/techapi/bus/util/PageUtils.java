@@ -1,11 +1,11 @@
 package com.techapi.bus.util;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 /**
  * @Description:
@@ -19,7 +19,6 @@ public class PageUtils {
 	 * @return
 	 */
 	public static Map<String, Object> getPageMap(List<?> list) {
-		// TODO Auto-generated method stub
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("total", list == null ? 0 : list.size());
 		result.put("rows", list);
@@ -27,7 +26,6 @@ public class PageUtils {
 	}
 
     public static Map<String, Object> getPageMap(Page<?> list) {
-        // TODO Auto-generated method stub
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("total", list.getTotalElements());
         result.put("rows", list.getContent());
@@ -35,7 +33,6 @@ public class PageUtils {
     }
     
     public static <T> Map<String, Object> getPageMap(long total,List<T> list) {
-        // TODO Auto-generated method stub
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("total", total);
         result.put("rows", list);

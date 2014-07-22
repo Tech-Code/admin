@@ -3,8 +3,7 @@ package com.techapi.bus.annotation;
  * @author gpzuestc
  * @mail: guopengzhang@sohu-inc.com
  * @date: 2013-7-8
- * @todo: 
- * 
+ *
  */
 public interface ISerializer {
 	/**

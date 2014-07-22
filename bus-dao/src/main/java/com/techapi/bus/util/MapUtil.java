@@ -1,5 +1,9 @@
 package com.techapi.bus.util;
 
+import com.techapi.bus.data.MapService;
+import com.techapi.bus.entity.Grid;
+import com.techapi.bus.entity.LatLng;
+
 import java.awt.*;
 
 public class MapUtil {
@@ -248,9 +252,17 @@ public class MapUtil {
     	 * @return
     	 */
     	public static String getStrPoint(Point p) {
-    		// TODO Auto-generated method stub
     		double[] xy = { p.x / 100000D, p.y / 100000D };
     		return xy[0] + "," + xy[1];
     	}
+
+        public static String getGridId(String coordinate) {
+            String[] lonlat = coordinate.split(",");
+            Grid grid = MapService.getGirdByLatLng(new LatLng(Float.parseFloat(lonlat[1]), Float.parseFloat(lonlat[0])));
+            if(grid != null) {
+                return grid.getId();
+            }
+            return "";
+        }
 
 }

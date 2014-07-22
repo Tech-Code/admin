@@ -164,6 +164,13 @@
             scale = new MMap.Scale(); //加载比例尺
             mapObj.addControl(scale);
         });
+
+        mapObj.bind(mapObj, "click", function (e) {
+            var lonlat = e.lnglat.lng + "," + e.lnglat.lat;
+            //alert(lonlat);
+            document.getElementById("coordinate").value = lonlat;
+            addMarker(lonlat);
+        });
     }
 
     function changeTransDetail() {

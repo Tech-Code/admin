@@ -6,11 +6,9 @@ import java.util.UUID;
 @Entity
 @Table(name="BUS_POI")
 public class Poi implements java.io.Serializable{
-
-    @EmbeddedId
-    private PoiPK poiPK;
-    @Column(name = "ID")
-    private String id;
+    @Id
+    @Column(name="POIID")
+    private String poiId;
     @Column(name="CITYCODE")
 	private String cityCode;// IS '城市代码';
 	@Column(name="POINAME")
@@ -23,53 +21,39 @@ public class Poi implements java.io.Serializable{
 	private String poiType3;// IS 'POI小类';
 	@Column(name="POICOORDINATE")
 	private String poiCoordinate;// IS 'POI坐标';
-	@Column(name="WALKDISTANCE")
-	private double walkDistance;// IS '距离站点的步行距离(米)';
-	@Column(name="ORIENTATION")
-	private String orientation;// IS '方位';
     @Column(name = "ADDRESS")
     private String address;// IS '地址';
     @Column(name = "TEL")
     private String tel;// IS '电话';
     @Transient
     private String cityName;
+    @Column(name = "GRIDID")
+    private String gridId;
 
-    public Poi(PoiPK poiPK, String id, String cityCode, String poiName, String poiType1, String poiType2, String poiType3, String poiCoordinate, double walkDistance, String orientation, String address, String tel, String cityName) {
-        this.poiPK = poiPK;
-        this.id = id;
+    public Poi(String poiId, String cityCode, String poiName, String poiType1, String poiType2, String poiType3, String poiCoordinate, String address, String tel, String cityName) {
+        this.poiId = poiId;
         this.cityCode = cityCode;
         this.poiName = poiName;
         this.poiType1 = poiType1;
         this.poiType2 = poiType2;
         this.poiType3 = poiType3;
         this.poiCoordinate = poiCoordinate;
-        this.walkDistance = walkDistance;
-        this.orientation = orientation;
         this.address = address;
         this.tel = tel;
         this.cityName = cityName;
     }
 
-    public PoiPK getPoiPK() {
-        return poiPK;
+    public String getPoiId() {
+        return poiId;
     }
 
-    public void setPoiPK(PoiPK poiPK) {
-        this.poiPK = poiPK;
-    }
 
-    public String getId() {
-        return id;
-    }
-
-    @PrePersist
-    @PreUpdate
-    public void setId() {
-        this.id = UUID.randomUUID().toString();
-    }
-
-    public void setId(String id){
-        this.id = id;
+    public void setPoiId(String poiId) {
+        if(poiId == null || poiId.isEmpty()) {
+            this.poiId = UUID.randomUUID().toString();
+        } else {
+            this.poiId = poiId;
+        }
     }
 
     public String getCityCode() {
@@ -81,20 +65,6 @@ public class Poi implements java.io.Serializable{
 
 
     public Poi() {
-    }
-
-    public Poi(String stationId,String poiId, String cityCode, String poiName, String poiType1, String poiType2, String poiType3, String poiCoordinate, double walkDistance, String orientation, String address, String tel) {
-        this.poiPK = new PoiPK(stationId,poiId);
-        this.cityCode = cityCode;
-        this.poiName = poiName;
-        this.poiType1 = poiType1;
-        this.poiType2 = poiType2;
-        this.poiType3 = poiType3;
-        this.poiCoordinate = poiCoordinate;
-        this.walkDistance = walkDistance;
-        this.orientation = orientation;
-        this.address = address;
-        this.tel = tel;
     }
 
 
@@ -128,18 +98,6 @@ public class Poi implements java.io.Serializable{
 	public void setPoiCoordinate(String poiCoordinate) {
 		this.poiCoordinate = poiCoordinate;
 	}
-	public double getWalkDistance() {
-		return walkDistance;
-	}
-	public void setWalkDistance(double walkDistance) {
-		this.walkDistance = walkDistance;
-	}
-	public String getOrientation() {
-		return orientation;
-	}
-	public void setOrientation(String orientation) {
-		this.orientation = orientation;
-	}
 
     public String getAddress() {
         return address;
@@ -165,6 +123,14 @@ public class Poi implements java.io.Serializable{
         this.cityName = cityName;
     }
 
+    public String getGridId() {
+        return gridId;
+    }
+
+    public void setGridId(String gridId) {
+        this.gridId = gridId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -172,31 +138,51 @@ public class Poi implements java.io.Serializable{
 
         Poi poi = (Poi) o;
 
-        if (poiPK != null ? !poiPK.equals(poi.poiPK) : poi.poiPK != null) return false;
+        if (address != null ? !address.equals(poi.address) : poi.address != null) return false;
+        if (cityCode != null ? !cityCode.equals(poi.cityCode) : poi.cityCode != null) return false;
+        if (cityName != null ? !cityName.equals(poi.cityName) : poi.cityName != null) return false;
+        if (gridId != null ? !gridId.equals(poi.gridId) : poi.gridId != null) return false;
+        if (poiCoordinate != null ? !poiCoordinate.equals(poi.poiCoordinate) : poi.poiCoordinate != null) return false;
+        if (poiId != null ? !poiId.equals(poi.poiId) : poi.poiId != null) return false;
+        if (poiName != null ? !poiName.equals(poi.poiName) : poi.poiName != null) return false;
+        if (poiType1 != null ? !poiType1.equals(poi.poiType1) : poi.poiType1 != null) return false;
+        if (poiType2 != null ? !poiType2.equals(poi.poiType2) : poi.poiType2 != null) return false;
+        if (poiType3 != null ? !poiType3.equals(poi.poiType3) : poi.poiType3 != null) return false;
+        if (tel != null ? !tel.equals(poi.tel) : poi.tel != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return poiPK != null ? poiPK.hashCode() : 0;
+        int result = poiId != null ? poiId.hashCode() : 0;
+        result = 31 * result + (cityCode != null ? cityCode.hashCode() : 0);
+        result = 31 * result + (poiName != null ? poiName.hashCode() : 0);
+        result = 31 * result + (poiType1 != null ? poiType1.hashCode() : 0);
+        result = 31 * result + (poiType2 != null ? poiType2.hashCode() : 0);
+        result = 31 * result + (poiType3 != null ? poiType3.hashCode() : 0);
+        result = 31 * result + (poiCoordinate != null ? poiCoordinate.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (tel != null ? tel.hashCode() : 0);
+        result = 31 * result + (cityName != null ? cityName.hashCode() : 0);
+        result = 31 * result + (gridId != null ? gridId.hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
         return "Poi{" +
-                "poiPK=" + poiPK +
-                ", id='" + id + '\'' +
+                "poiId='" + poiId + '\'' +
                 ", cityCode='" + cityCode + '\'' +
                 ", poiName='" + poiName + '\'' +
                 ", poiType1='" + poiType1 + '\'' +
                 ", poiType2='" + poiType2 + '\'' +
                 ", poiType3='" + poiType3 + '\'' +
                 ", poiCoordinate='" + poiCoordinate + '\'' +
-                ", walkDistance=" + walkDistance +
-                ", orientation='" + orientation + '\'' +
                 ", address='" + address + '\'' +
                 ", tel='" + tel + '\'' +
+                ", cityName='" + cityName + '\'' +
+                ", gridId='" + gridId + '\'' +
                 '}';
     }
 }

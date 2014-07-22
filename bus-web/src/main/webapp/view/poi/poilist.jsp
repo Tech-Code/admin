@@ -56,24 +56,6 @@
                         } //需要formatter一下才能显示正确的数据
                     },
                     {
-                        field: 'poiPK.stationId',
-                        title: '站点ID',
-                        width: 20,
-                        sortable: true,
-                        formatter: function (value, row, index) {
-                            return row.poiPK.stationId;
-                        } //需要formatter一下才能显示正确的数据
-                    },
-                    {
-                        field: 'poiPK.poiId',
-                        title: 'POIID',
-                        width: 20,
-                        sortable: true,
-                        formatter: function (value, row, index) {
-                            return row.poiPK.poiId;
-                        } //需要formatter一下才能显示正确的数据
-                    },
-                    {
                         field: 'poiName',
                         title: '地标名称',
                         width: 20,
@@ -116,24 +98,6 @@
                         sortable: true,
                         formatter: function (value, row, index) {
                             return row.poiCoordinate;
-                        } //需要formatter一下才能显示正确的数据
-                    },
-                    {
-                        field: 'walkDistance',
-                        title: '步行距离',
-                        width: 20,
-                        sortable: true,
-                        formatter: function (value, row, index) {
-                            return row.walkDistance;
-                        } //需要formatter一下才能显示正确的数据
-                    },
-                    {
-                        field: 'orientation',
-                        title: '方位',
-                        width: 20,
-                        sortable: true,
-                        formatter: function (value, row, index) {
-                            return row.orientation;
                         } //需要formatter一下才能显示正确的数据
                     },
                     {
@@ -208,7 +172,7 @@
 		var ps = "";
 		$.each(rows, function(i, n) {
 			if (i == 0)
-				ps += "?id=" + n.id;
+				ps += "?poiId=" + n.poiId;
 		});
 		
 		var url = '<%=root%>/poi/update' + ps;
@@ -235,9 +199,9 @@
 				var ps = "";
 				$.each(rows, function(i, n) {
 					if (i == 0)
-						ps += "?id=" + n.id;
+						ps += "?poiId=" + n.poiId;
 					else
-						ps += "&id=" + n.id;
+						ps += "&poiId=" + n.poiId;
 				});
 				$.post('<%=root%>/poi/delete' + ps, function(data) {
 					$('#poiTable').datagrid('reload');
@@ -251,11 +215,10 @@
     function select() {
         var cityCode = $('#cityCode').val();
         var cityName = $('#cityName').combobox('getText');
-        var stationId = $('#stationId').val();
         var poiName = $('#poiName').val();
 
         if (cityName == '全部') cityName = '';
-        var queryParams = {cityCode: cityCode, cityName: cityName, poiName: poiName, stationId: stationId};
+        var queryParams = {cityCode: cityCode, cityName: cityName, poiName: poiName};
 
         initDataGrid("${ctx}/poi/searchlist?", queryParams);
     }
@@ -268,7 +231,6 @@
         <legend>查询条件</legend>
         城市代码:<input id="cityCode" style="width:100px;"/>
         城市名称:<input class="easyui-combobox" id="cityName"/>
-        站点ID:<input id="stationId" style="width:100px;"/>
         地标名称:<input id="poiName" style="width:100px;"/>
 
         <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>

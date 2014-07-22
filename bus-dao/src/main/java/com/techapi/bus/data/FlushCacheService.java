@@ -42,8 +42,8 @@ public class FlushCacheService {
                 // 刷新redis
                 log.info("刷新第" + (page + 1) + "页redis开始");
                 for(Poi poi : subPoiList) {
-                    String poicache = String.format(BusConstants.BUS_POI_STATIONID,
-                                                    poi.getPoiPK().getStationId());
+                    String poicache = String.format(BusConstants.BUS_GRID_POI,
+                                                    poi.getGridId(),poi.getPoiId());
                     if (poi != null) {
                         //补cache
                         cacheProxy.put(poicache, poi);

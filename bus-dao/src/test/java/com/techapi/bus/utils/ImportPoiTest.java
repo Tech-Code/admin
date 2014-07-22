@@ -63,7 +63,8 @@ public class ImportPoiTest {
                     while (stationIdIterator.hasNext()) {
                         String stationId = stationIdIterator.next().toString();
                         List<Poi> poiList = stationIdPoiListMap.get(stationId);
-                        String stationcache = String.format(BusConstants.BUS_POI_STATIONID, stationId);
+                        // TODO 修改POI缓存问题
+                        String stationcache = String.format(BusConstants.BUS_GRID_POI, stationId);
                         Object o = cacheProxy.get(stationcache);
                         if (o == null) {
                             if (poiList != null) {

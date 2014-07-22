@@ -21,7 +21,6 @@ public class ChineseUtils {
 			try {
 				code = new String(code.getBytes("ISO8859-1"), "UTF-8");
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -72,7 +71,6 @@ public class ChineseUtils {
 			String code = new String(str.getBytes("ISO8859-1"), "UTF-8");
 			System.out.println(code);
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

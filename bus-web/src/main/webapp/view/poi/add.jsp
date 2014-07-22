@@ -16,7 +16,7 @@
 <body>
 <form action="" class="formular" id="poiForm">
     <input type="hidden" id="orientation" name="orientation" value="${poi.orientation }"/>
-    <input type="hidden" id="id" name="id" value="${poi.id }"/>
+    <input type="hidden" id="poiId" name="poiId" value="${poi.poiId }"/>
 
     <input type="hidden" id="poiType1Temp" name="poiType1Temp" value="${poi.poiType1 }"/>
     <input type="hidden" id="poiType2Temp" name="poiType2Temp" value="${poi.poiType2 }"/>
@@ -30,34 +30,23 @@
                 <input name="cityCode" id="cityCode" value="${poi.cityCode }" class="text-input"/>
             </label>
             <label>
-                <span>站点ID</span>
-                <input name="poiPK.stationId" id="stationId" value="${poi.poiPK.stationId }" class="text-input"/>
-            </label>
-            <label>
-                <span>POIID</span>
-                <input name="poiPK.poiId" id="poiId" value="${poi.poiPK.poiId }" class="text-input"/>
-            </label>
-            <label>
                 <span>地标点名称</span>
                 <input name="poiName" id="poiName" value="${poi.poiName }" class="text-input"/>
             </label>
             <label>
                 <span>地标点大类型</span>
-                <%--<input name="poiType1" id="poiType1" value="${poi.poiType1 }" class="text-input"/>--%>
                 <select id="poiType1" onchange="onPoiType1Changed()" name="poiType1">
                     <option value="0">===请选择===</option>
                 </select>
             </label>
             <label>
                 <span>地标点中类型</span>
-                <%--<input name="poiType2" id="poiType2" value="${poi.poiType2 }" class="text-input"/>--%>
                 <select id="poiType2" onchange="onPoiType2Changed()" name="poiType2">
                     <option value="0">===请选择===</option>
                 </select>
             </label>
             <label>
                 <span>地标点小类型</span>
-                <%--<input name="poiType3" id="poiType3" value="${poi.poiType3 }" class="text-input"/>--%>
                 <select id="poiType3" name="poiType3">
                     <option value="0">===请选择===</option>
                 </select>
@@ -108,12 +97,6 @@
 
 
     $('#cityCode').validatebox({
-        required: true
-    });
-    $('#stationId').validatebox({
-        required: true
-    });
-    $('#poiId').validatebox({
         required: true
     });
     $('#poiName').validatebox({

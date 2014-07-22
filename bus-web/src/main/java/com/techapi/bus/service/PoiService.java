@@ -6,8 +6,6 @@ import com.techapi.bus.annotation.ServiceCache;
 import com.techapi.bus.dao.PoiDao;
 import com.techapi.bus.dao.StationDao;
 import com.techapi.bus.entity.Poi;
-import com.techapi.bus.entity.PoiPK;
-import com.techapi.bus.entity.Station;
 import com.techapi.bus.util.ExcelUtils;
 import com.techapi.bus.util.MapUtil;
 import com.techapi.bus.util.PageUtils;
@@ -20,7 +18,7 @@ import java.util.*;
 
 /**
  * @Description:
- * @author hongjia.hu
+ * @author fei.xue
  * @date 2014-3-8
  */
 @Service
@@ -46,23 +44,21 @@ public class PoiService {
     public Map<String, String> addOrUpdate(Poi poi) {
 
         Map<String, String> resultMap = new HashMap<>();
-        String poiId = poi.getPoiPK().getPoiId();
-        String stationId = poi.getPoiPK().getStationId();
-        String id = poi.getId();
+        String poiId = poi.getPoiId();
         Poi existedPoi;
 
-        if (id == null || id.isEmpty()) {
-            existedPoi = poiDao.findBystationIDAndPoiId(stationId, poiId);
+        if (poiId == null || poiId.isEmpty()) {
+            // TODO 修改查询问题
+            existedPoi = poiDao.findByCityCodeAndPoiNameAndCoorinate(poiId);
             if (existedPoi != null) {
                 resultMap.put("result", BusConstants.RESULT_REPEAT_POI);
                 resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_POI_STR);
                 return resultMap;
             }
         } else {
-            existedPoi = poiDao.findOneById(id);
+            existedPoi = poiDao.findByPoiId(poiId);
             if (existedPoi != null) {
-                if (!existedPoi.getPoiPK().getPoiId().trim().equals(poi.getPoiPK().getPoiId().trim()) ||
-                        !existedPoi.getPoiPK().getStationId().trim().equals(poi.getPoiPK().getStationId().trim())) {
+                if (!existedPoi.getPoiId().trim().equals(poi.getPoiId().trim())) {
                     resultMap.put("result", BusConstants.RESULT_REPEAT_POI);
                     resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_POI_STR);
                     return resultMap;
@@ -71,34 +67,14 @@ public class PoiService {
             }
         }
 
-        // 添加方位与距离计算
-        Station station = stationDao.findOne(stationId);
-        if(station == null) {
-            resultMap.put("result", BusConstants.RESULT_NO_EXIST_STATION);
-            resultMap.put("alertInfo", BusConstants.RESULT_NO_EXIST_STATION_STR);
-            return resultMap;
-        }
-        String poiCoordinate = poi.getPoiCoordinate();
-        String[] poiLonLat = poiCoordinate.split(",");
-        String direction = MapUtil.getDirection(Double.parseDouble(station.getStationLon()),
-                Double.parseDouble(station.getStationLat()),
-                Double.parseDouble(poiLonLat[0]),
-                Double.parseDouble(poiLonLat[1]));
-        double distance = MapUtil.getDistance(Double.parseDouble(station.getStationLon()),
-                Double.parseDouble(station.getStationLat()),
-                Double.parseDouble(poiLonLat[0]),
-                Double.parseDouble(poiLonLat[1]));
-        poi.setWalkDistance(distance);
-        poi.setOrientation(direction);
-
         poiDao.save(poi);
 
-        resultMap.put("id", poi.getId());
+        resultMap.put("poiId", poi.getPoiId());
         resultMap.put("result", BusConstants.RESULT_SUCCESS);
         resultMap.put("alertInfo", BusConstants.RESULT_SUCCESS_STR);
 
         // 写redis
-        String poicache = String.format(BusConstants.BUS_POI_STATIONID, poi.getPoiPK().getStationId());
+        String poicache = String.format(BusConstants.BUS_GRID_POI, poi.getGridId(),poi.getPoiId());
         if (poi != null) {
             //补cache
             cacheProxy.put(poicache, poi);
@@ -111,11 +87,11 @@ public class PoiService {
     }
 
     public Map<String, Object> findSection(int page, int rows) {
-        List<Object[]> poiObjectList = poiDao.findBySearch((page - 1) * rows, page * rows, "%%", "%%", "%%", "%%");
+        List<Object[]> poiObjectList = poiDao.findBySearch((page - 1) * rows, page * rows, "%%", "%%", "%%");
 
         List<Poi> poiList = convertObjectListToPoiList(poiObjectList);
 
-        int totalCount = poiDao.findAllCount("%%", "%%", "%%", "%%");
+        int totalCount = poiDao.findAllCount("%%", "%%", "%%");
 
         return PageUtils.getPageMap(totalCount,poiList);
     }
@@ -141,7 +117,7 @@ public class PoiService {
     public void deleteMany(List<Poi> poiList) {
         for (Poi poi : poiList) {
             if (poi != null) {
-                String poicache = String.format(BusConstants.BUS_POI_STATIONID, poi.getPoiPK().getStationId());
+                String poicache = String.format(BusConstants.BUS_GRID_POI, MapUtil.getGridId(poi.getPoiCoordinate()),poi.getPoiId());
                 cacheProxy.delete(poicache);
             }
         }
@@ -167,11 +143,11 @@ public class PoiService {
         //    }
         //}, new PageRequest(page-1, rows));
         //return PageUtils.getPageMap(page1);
-        List<Object[]> poiObjectList = poiDao.findBySearch((page - 1) * rows, (page + 1) * rows, "%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%", "%" + stationId + "%");
+        List<Object[]> poiObjectList = poiDao.findBySearch((page - 1) * rows, (page + 1) * rows, "%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%");
 
         List<Poi> poiList = convertObjectListToPoiList(poiObjectList);
 
-        int totalCount = poiDao.findAllCount("%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%", "%" + stationId + "%");
+        int totalCount = poiDao.findAllCount("%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%");
 
         return PageUtils.getPageMap(totalCount, poiList);
 
@@ -181,23 +157,19 @@ public class PoiService {
     private List<Poi> convertObjectListToPoiList(List<Object[]> objects) {
         List<Poi> poiList = new ArrayList<>();
         for (Object[] o : objects) {
-            String id = (o[0] == null ? "" : o[0].toString());
             String cityCode = (o[1] == null ? "" : o[1].toString());
-            String stationId = (o[2] == null ? "" : o[2].toString());
             String poiId = (o[3] == null ? "" : o[3].toString());
             String poiName = (o[4] == null ? "" : o[4].toString());
             String poiType1 = (o[5] == null ? "" : o[5].toString());
             String poiType2 = (o[6] == null ? "" : o[6].toString());
             String poiType3 = (o[7] == null ? "" : o[7].toString());
             String poiCoordinate = (o[8] == null ? "" : o[8].toString());
-            Double walkdistance = Double.valueOf(o[9].toString());
-            String orientation = (o[10] == null ? "" : o[10].toString());
             String address = (o[11] == null ? "" : o[11].toString());
             String tel = (o[12] == null ? "" : o[12].toString());
             String cityName = (o[13] == null ? "" : o[13].toString());
-            PoiPK poiPK = new PoiPK(stationId, poiId);
 
-            Poi poi = new Poi(poiPK, id, cityCode, poiName, poiType1, poiType2, poiType3, poiCoordinate, walkdistance, orientation, address, tel, cityName);
+
+            Poi poi = new Poi(poiId, cityCode, poiName, poiType1, poiType2, poiType3, poiCoordinate, address, tel, cityName);
 
             poiList.add(poi);
         }

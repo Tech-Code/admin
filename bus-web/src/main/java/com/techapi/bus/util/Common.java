@@ -180,7 +180,6 @@ public class Common {
 			Date date = sdf4.parse(dateTime);
 			millsTime = date.getTime();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	return millsTime;

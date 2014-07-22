@@ -43,31 +43,25 @@ public class BaseOperate {
 	 * @param list
 	 */
 	protected void updateBeans(List<String> ids, List<?> list) {
-		// TODO Auto-generated method stub
 		try {
             server.deleteById(ids);
 			server.addBeans(list);
 			server.commit();
 		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	protected void updateBean(String id, Object obj) {
-		// TODO Auto-generated method stub
 		try {
             server.deleteById(id);
 			server.addBean(obj);
 			server.commit();
 		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -99,7 +93,6 @@ public class BaseOperate {
 
 			return result;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

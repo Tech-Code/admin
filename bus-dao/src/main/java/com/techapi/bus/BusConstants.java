@@ -17,7 +17,9 @@ public final class BusConstants {
     /***
      * poi站点缓存key
      */
-    public static final String BUS_POI_STATIONID="bus:poi:%s";
+    public static final String BUS_GRID_POI="bus:poi:%s:%s";
+
+    public static final String BUS_TEMP_POI = "bus:poi:%s";
 
     /** 车速缓存key */
     public static final String BUS_SPEED_TYPE_CODE="bus:speed:%s";
@@ -68,6 +70,7 @@ public final class BusConstants {
 
     /** redis Index */
     public static final int REDIS_INDEX_KEY = 2;
+    public static final int REDIS_INDEX_POI = 3;
 
     /** tools type */
     public static final String TOOLS_FLUSH_SOLR_POISTATION = "0";// 刷新POISTATION
