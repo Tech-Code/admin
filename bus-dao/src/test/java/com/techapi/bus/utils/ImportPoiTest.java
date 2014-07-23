@@ -58,7 +58,7 @@ public class ImportPoiTest {
             while (start < stationList.size()) {
                 List<Station> subStationList = FileUtils.splitListWithStep(stationList, start, 1);
                 if (subStationList != null) {
-                    Map<String,List<Poi>> stationIdPoiListMap = importPoiService.getStationIdPoiListMap(cityName, subStationList, poiTypeMap);
+                    Map<String,List<Poi>> stationIdPoiListMap = importPoiService.getStationIdPoiListMap(cityName, subStationList, poiTypeMap,start);
                     Iterator stationIdIterator = stationIdPoiListMap.keySet().iterator();
                     while (stationIdIterator.hasNext()) {
                         String stationId = stationIdIterator.next().toString();

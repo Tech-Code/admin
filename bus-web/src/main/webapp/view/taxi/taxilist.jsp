@@ -8,8 +8,8 @@
 	jQuery(function($) {
         initDataGrid("${ctx}/taxi/list","{}");
         $('#cityName').combobox({
-            url: "${ctx}/analysis/cityname",
-            valueField: 'id',
+            url: "${ctx}/analysis/cityname?notAll=0",
+            valueField: 'text',
             textField: 'text'
         });
         $('#cityName').combobox('setValue', '全部');

@@ -1,34 +1,7 @@
 package com.techapi.bus.service;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import com.techapi.bus.dao.AnalysisCityDao;
-import com.techapi.bus.dao.AnalysisGroupDao;
-import com.techapi.bus.dao.AnalysisManageDao;
-import com.techapi.bus.dao.AnalysisTypeDao;
-import com.techapi.bus.dao.AreaDao;
-import com.techapi.bus.dao.ServiceDictDao;
-import com.techapi.bus.dao.UserKeyDao;
-import com.techapi.bus.entity.AnalysisCity;
-import com.techapi.bus.entity.AnalysisManage;
-import com.techapi.bus.entity.AnalysisType;
-import com.techapi.bus.entity.Area;
-import com.techapi.bus.entity.ServiceDict;
-import com.techapi.bus.entity.UserKey;
+import com.techapi.bus.dao.*;
+import com.techapi.bus.entity.*;
 import com.techapi.bus.util.DataUtils;
 import com.techapi.bus.util.ExportExcel;
 import com.techapi.bus.util.PageUtils;
@@ -36,6 +9,20 @@ import com.techapi.bus.vo.AnalysisExcelVO;
 import com.techapi.bus.vo.CityListVO;
 import com.techapi.bus.vo.GroupListVO;
 import com.techapi.bus.vo.SpringMap;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /***
  * 日志分析的服务
@@ -435,19 +422,21 @@ public class AnalysisService {
 	/***
 	  * 城市名称
 	  */
-	public List<SpringMap> findCityAll(){
+	public List<SpringMap> findCityAll(int notAll){
 		List<Area> stype = (List<Area>) areaDao.findAllFilterType();
 		List<SpringMap> lm = new ArrayList<SpringMap>();
 		for(Area s:stype){
 			SpringMap sm = new SpringMap();
-			sm.setId(s.getAreaName()+"");
+			sm.setId(s.getAdCode()+"");
 			sm.setText(s.getAreaName());
 			lm.add(sm);
 		}
-		SpringMap sm = new SpringMap();
-		sm.setId("all");
-		sm.setText("全部");
-		lm.add(sm);
+        if (notAll == 0) {
+            SpringMap sm = new SpringMap();
+            sm.setId("all");
+            sm.setText("全部");
+            lm.add(sm);
+        }
 		return lm;
 	}
 	

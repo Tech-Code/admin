@@ -53,8 +53,7 @@ public class SpeedService {
             } else {
                 Speed editSpeed = speedDao.findOne(id);
                 if (speedList.size() > 0) {
-                    if((!editSpeed.getTranSportation().equals(speedList.get(0).getTranSportation()) ||
-                            !editSpeed.getTranSportDes().equals(speedList.get(0).getTranSportDes()))) {
+                    if(!editSpeed.getTranSportation().equals(speedList.get(0).getTranSportation())) {
                         resultMap.put("result", BusConstants.RESULT_REPEAT_SPEED);
                         resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_SPEED_STR);
                         return resultMap;

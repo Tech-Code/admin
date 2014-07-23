@@ -1,19 +1,17 @@
 package com.techapi.bus.controller;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.techapi.bus.service.AnalysisService;
+import com.techapi.bus.vo.SpringMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.techapi.bus.service.AnalysisService;
-import com.techapi.bus.vo.SpringMap;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
 @Controller
 @RequestMapping("/analysis")
 public class AnalysisController {
@@ -157,8 +155,8 @@ public class AnalysisController {
 	 */
 	@RequestMapping("/cityname")
     @ResponseBody
-	public List<SpringMap> cityname() throws Exception {
-		return analysisService.findCityAll();
+	public List<SpringMap> cityname(int notAll) throws Exception {
+		return analysisService.findCityAll(notAll);
 	}
 	
 }

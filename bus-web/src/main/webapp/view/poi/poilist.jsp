@@ -8,8 +8,8 @@
 	jQuery(function($) {
         initDataGrid("${ctx}/poi/list", "{}");
         $('#cityName').combobox({
-            url: "${ctx}/analysis/cityname",
-            valueField: 'id',
+            url: "${ctx}/analysis/cityname?notAll=0",
+            valueField: 'text',
             textField: 'text'
         });
         $('#cityName').combobox('setValue', '全部');
@@ -26,7 +26,7 @@
             collapsible: true,//可折叠
             url: getUrl, //数据来源
             sortOrder: 'desc', //倒序
-            idField: 'id', //主键字段
+            idField: 'poiId', //主键字段
             remoteSort: true, //服务器端排序
             pagination: true, //显示分页
             rownumbers: true, //显示行号
@@ -151,6 +151,7 @@
         });
     }
 
+
 	//新增
 	function addrow() {
 		parent.addTab('tabId_poi_add','添加地标点','<%=root%>/view/poi/add.jsp');
@@ -216,9 +217,11 @@
         var cityCode = $('#cityCode').val();
         var cityName = $('#cityName').combobox('getText');
         var poiName = $('#poiName').val();
+        var centerLonLat = $('#centerLonLat').val();
+        var range = $('#range').combobox('getText');
 
         if (cityName == '全部') cityName = '';
-        var queryParams = {cityCode: cityCode, cityName: cityName, poiName: poiName};
+        var queryParams = {cityCode: cityCode, cityName: cityName, poiName: poiName, centerLonLat: centerLonLat, range: range};
 
         initDataGrid("${ctx}/poi/searchlist?", queryParams);
     }
@@ -229,9 +232,17 @@
 <form style="margin:20px 0 10px 0;" class="formular">
     <fieldset>
         <legend>查询条件</legend>
-        城市代码:<input id="cityCode" style="width:100px;"/>
-        城市名称:<input class="easyui-combobox" id="cityName"/>
-        地标名称:<input id="poiName" style="width:100px;"/>
+        城市代码: <input id="cityCode" style="width:100px;"/>
+        城市名称: <input class="easyui-combobox" id="cityName"/>
+        地标名称: <input id="poiName" style="width:100px;"/>
+        中心点: <input id="centerLonLat" style="width:200px;"/>
+        范围:
+        <select id="range" class="easyui-combobox" name="range" style="width:100px;">
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+            <option value="1500">1500</option>
+            <option value="2000">2000</option>
+        </select>
 
         <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>
     </fieldset>
@@ -240,4 +251,18 @@
 		<table id="poiTable"></table>
 	</div>
 </body>
+<script type="text/javascript">
+    $.extend($.fn.validatebox.defaults.rules, {
+        intOrFloat: {// 验证整数或小数
+        validator: function (value) {
+            return /^\d+(\.\d+),\d+(\.\d+)?$/i.test(value);
+        },
+        message: '请输入正确的经纬度'
+        }
+    });
+
+    $('#centerLonLat').validatebox({
+        validType: 'intOrFloat'
+    });
+</script>
 </html>

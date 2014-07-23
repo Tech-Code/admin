@@ -46,19 +46,19 @@ public class PoiController {
     }
 
     @RequestMapping("/update")
-    public String update(Model model, String id) throws Exception {
-        Poi poi = poiService.findById(id);
+    public String update(Model model, String poiId) throws Exception {
+        Poi poi = poiService.findById(poiId);
         model.addAttribute(Constants.POI_INFO_SESSION, poi);
         return "poi/add";
     }
 
     @RequestMapping(value = "/delete")
     @ResponseBody
-    public Map<String, String> delete(@RequestParam("id") List<String> ids)
+    public Map<String, String> delete(@RequestParam("poiId") List<String> poiIds)
             throws Exception {
         Map<String, String> map = new HashMap<String, String>();
         try {
-            List<Poi> poiList = poiService.findByIds(ids);
+            List<Poi> poiList = poiService.findByIds(poiIds);
             poiService.deleteMany(poiList);
             map.put("mes", "删除成功");
         } catch (Exception e) {
@@ -110,9 +110,10 @@ public class PoiController {
     public Map<String, Object> searchList(int page, int rows,
                                           @RequestParam(value = "cityCode", required = false) String cityCode,
                                           @RequestParam(value = "cityName", required = false) String cityName,
-                                          @RequestParam(value = "stationId", required = false) String stationId,
-                                          @RequestParam(value = "poiName", required = false) String poiName) throws Exception {
+                                          @RequestParam(value = "centerLonLat", required = false) String centerLonLat,
+                                          @RequestParam(value = "poiName", required = false) String poiName,
+                                          @RequestParam(value = "range", required = false) String range) throws Exception {
         //System.out.println("page: " + page + "rows: " + rows + "cityCode: " + cityCode + "--------poiName:" + poiName + "-------stationId:" + stationId);
-        return poiService.findBySearchBySection(page, rows, cityCode, cityName, poiName, stationId);
+        return poiService.findBySearchBySection(page, rows, cityCode, cityName, poiName, centerLonLat, range);
     }
 }

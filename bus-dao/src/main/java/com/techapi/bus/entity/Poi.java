@@ -1,7 +1,6 @@
 package com.techapi.bus.entity;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @Entity
 @Table(name = "BUS_POI")
@@ -41,7 +40,7 @@ public class Poi implements java.io.Serializable, Comparable<Poi> {
 
 	public Poi(String poiId, String cityCode, String poiName, String poiType1,
 			String poiType2, String poiType3, String poiCoordinate,
-			String address, String tel, String cityName) {
+			String address, String tel, String gridId, String cityName) {
 		this.poiId = poiId;
 		this.cityCode = cityCode;
 		this.poiName = poiName;
@@ -51,6 +50,7 @@ public class Poi implements java.io.Serializable, Comparable<Poi> {
 		this.poiCoordinate = poiCoordinate;
 		this.address = address;
 		this.tel = tel;
+        this.gridId = gridId;
 		this.cityName = cityName;
 	}
 
@@ -75,11 +75,7 @@ public class Poi implements java.io.Serializable, Comparable<Poi> {
 	}
 
 	public void setPoiId(String poiId) {
-		if (poiId == null || poiId.isEmpty()) {
-			this.poiId = UUID.randomUUID().toString();
-		} else {
-			this.poiId = poiId;
-		}
+        this.poiId = poiId;
 	}
 
 	public String getCityCode() {

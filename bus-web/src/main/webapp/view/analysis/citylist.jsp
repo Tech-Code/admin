@@ -82,8 +82,8 @@
 		
 		//城市名称
 		$('#selectCity').combobox({ 
-			url:"${ctx}/analysis/cityname",
-			valueField:'id', 
+			url:"${ctx}/analysis/cityname?notAll=0",
+			valueField:'text',
 			textField:'text' 
 			});
 		

@@ -6,28 +6,47 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script type="text/javascript"
             src="http://api.map.baidu.com/api?v=2.0&ak=CCfe935a7c589f7ca959bae20c503de4"></script>
-    <script type="text/javascript" src="../../js/My97DatePicker/WdatePicker.js"></script>
     <style type="text/css">
         .clear {
             clear: both;
         }
     </style>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $('#cityName').combobox({
+                url: "${ctx}/analysis/cityname?notAll=1",
+                valueField: 'text',
+                textField: 'text',
+                required:true,
+                onSelect:function(rec) {
+                    $('#cityCode').attr("value", rec.id);
+                    $('#cityName').combobox("setValue", rec.text);
+                }
+            });
+
+        });
+    </script>
 </head>
 <body>
 <form action="" class="formular" id="poiForm">
-    <input type="hidden" id="orientation" name="orientation" value="${poi.orientation }"/>
     <input type="hidden" id="poiId" name="poiId" value="${poi.poiId }"/>
 
     <input type="hidden" id="poiType1Temp" name="poiType1Temp" value="${poi.poiType1 }"/>
     <input type="hidden" id="poiType2Temp" name="poiType2Temp" value="${poi.poiType2 }"/>
     <input type="hidden" id="poiType3Temp" name="poiType3Temp" value="${poi.poiType3 }"/>
+    <input type="hidden" id="cityCode" name="cityCode" value="${poi.cityCode }"/>
+    <input type="hidden" id="gridId" name="gridId" value="${poi.gridId }"/>
 
     <fieldset>
         <legend> 基础信息</legend>
         <div style="width:auto;height:auto;float: left">
             <label>
-                <span>城市代码</span>
-                <input name="cityCode" id="cityCode" value="${poi.cityCode }" class="text-input"/>
+                <span>城市名称</span>
+                <div style="margin-top: 5px">
+                    <input class="easyui-combobox" id="cityName" name="cityName"
+                           value="${poi.cityName }"
+                           style="width:140px"/>
+                </div>
             </label>
             <label>
                 <span>地标点名称</span>
@@ -70,6 +89,14 @@
 </form>
 </body>
 <script type="text/javascript">
+    $.extend($.fn.validatebox.defaults.rules, {
+        intOrFloat: {// 验证整数或小数
+            validator: function (value) {
+                return /^\d+(\.\d+),\d+(\.\d+)?$/i.test(value);
+            },
+            message: '请输入正确的经纬度'
+        }
+    });
 
     $(function () {
         var poiType1 = $("#poiType1Temp").val();
@@ -96,7 +123,7 @@
     });
 
 
-    $('#cityCode').validatebox({
+    $('#cityName').validatebox({
         required: true
     });
     $('#poiName').validatebox({
@@ -112,10 +139,12 @@
         required: true
     });
     $('#poiCoordinate').validatebox({
-        required: true
+        required: true,
+        validType: 'intOrFloat'
     });
     function add() {
         var isValid = $('#poiForm').form('validate');
+
         if (!isValid) {
             $.messager.alert('提示', "信息不完整，请补全！", 'info');
         } else {

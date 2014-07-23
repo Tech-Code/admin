@@ -25,5 +25,5 @@ Class-Path: lib/aspectjweaver-1.7.2.jar lib/commons-pool2-2.2.jar lib/
  codec-1.2.jar lib/commons-lang-2.5.jar lib/commons-dbcp2-2.0.jar lib/
  common-utils-bean-1.0.3.jar config/bus-dao.properties config/config.p
  roperties
-Main-Class: com.techapi.bus.tools.ImportStation
+Main-Class: com.techapi.bus.tools.ImportPoi
 

@@ -40,25 +40,33 @@ public class ImportPoiService {
         log.debug("获取地标点类别完毕....");
         Iterator cityNameIterator = cityStationMap.keySet().iterator();
         log.debug("开始获取站点周边POI....");
+        boolean isSkip = true;
         while (cityNameIterator.hasNext()) {
             String cityName = cityNameIterator.next().toString();
+            if(cityName.equals("喀什地区")) {
+                isSkip = false;
+            }
+            if(isSkip) continue;
+            log.debug("BEGIN -- CityName: " + cityName);
+            log.debug("********************************");
             int start = 0;
             List<Station> stationList = cityStationMap.get(cityName);
 
             while (start < stationList.size()) {
                 List<Station> subStationList = FileUtils.splitListWithStep(stationList, start, 10);
                 if (subStationList != null) {
-                    Map<String, List<Poi>> stationIdPoiListMap = getStationIdPoiListMap(cityName, subStationList, poiTypeMap);
+                    Map<String, List<Poi>> stationIdPoiListMap = getStationIdPoiListMap(cityName, subStationList, poiTypeMap, start);
                     Iterator stationIdIterator = stationIdPoiListMap.keySet().iterator();
                     while (stationIdIterator.hasNext()) {
                         String stationId = stationIdIterator.next().toString();
                         List<Poi> poiList = stationIdPoiListMap.get(stationId);
-                        insertRedis(poiList);
+                        //insertRedis(poiList);
                         poiDao.save(poiList);
                     }
                 }
                 start += 10;
             }
+            log.debug("********************************");
         }
         log.debug("获取站点周边POI完毕....");
 
@@ -83,14 +91,12 @@ public class ImportPoiService {
     }
 
     public Map<String, List<Poi>> getStationIdPoiListMap(String cityName, List<Station> stationList,
-                                                   Map<String, PoiType> poiTypeMap) {
-        log.debug("BEGIN -- CityName: " + cityName);
-        log.debug("********************************");
+                                                   Map<String, PoiType> poiTypeMap,int start) {
         int lineCount = 1;
         Map<String, List<Poi>> stationPoiListMap = new HashMap<>();
         for (Station station : stationList) {
             List<Poi> poiList = new ArrayList<>();
-            log.debug("BEGIN -- CityName: " + cityName + ",StationName: " + station.getStationName() + "行数: " + lineCount++);
+            log.debug("BEGIN -- CityName: " + cityName + ",StationName: " + station.getStationName() + "行数: " + (start + lineCount++));
             log.debug("--------------------------------");
             for (int pageNum = 1; pageNum < 5; pageNum++) {
                 log.debug("第" + pageNum + "页");
@@ -177,7 +183,7 @@ public class ImportPoiService {
             log.debug("--------------------------------");
         }
 
-        log.debug("********************************");
+
 
 
         return stationPoiListMap;
