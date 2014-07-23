@@ -66,6 +66,7 @@
 				//var win=$("<div class=\"messager-body\"></div>").html(rowData.url).appendTo("textarea");
 				$("textarea").css("display","block");
 				$("textarea").html(rowData.url);
+				$("textarea").select();
 			}
 		});
 		
@@ -170,7 +171,7 @@
 	<div style="padding: 10" id="tabdiv">
 		<table id="analysistypeTable"></table>
 	</div>
-	 <textarea style="width:100%;height:100px;margin-top: 10px;border: 1px solid #B5B8C8;font-size: 12px;display:none;overflow-y:hidden">
+	 <textarea style="width:100%;height:60px;margin-top: 10px;border: 1px solid #B5B8C8;font-size: 12px;display:none;overflow-y:hidden">
 	 </textarea>
 </body>
 </html>
