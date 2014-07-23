@@ -18,6 +18,8 @@ public final class BusConstants {
      * poi站点缓存key
      */
     public static final String BUS_GRID_POI="bus:poi:%s:%s";
+    
+    public static final String BUS_GRID_KEY="bus:poi:%s:*";
 
     public static final String BUS_TEMP_POI = "bus:poi:%s";
 

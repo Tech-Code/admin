@@ -1,13 +1,18 @@
 package com.techapi.bus.annotation;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-
-import java.util.*;
 
 //@Component("cacheProxy")
 public class CacheProxyJedisImpl implements CacheProxy {
@@ -81,7 +86,7 @@ public class CacheProxyJedisImpl implements CacheProxy {
 		}
 		return obj;
 	}
-	
+
 	@Override
 	public Object get(String key, int dbIdx) {
 		Object obj = null;
@@ -138,34 +143,34 @@ public class CacheProxyJedisImpl implements CacheProxy {
 		return put(key, value, -1, 0);
 	}
 
-    @Override
-    public boolean put(String key, Object value, int expires) {
-        return put(key, value, expires, 0);
-    }
+	@Override
+	public boolean put(String key, Object value, int expires) {
+		return put(key, value, expires, 0);
+	}
 
-    @Override
-    public boolean delete(String key, int index) {
-        if (StringUtils.isNotBlank(key)) {
-            Jedis j = null;
-            JedisPool jp = getJedisPool();
-            try {
-                j = jp.getResource();
-                j.select(index);
-                j.del(key);
-                j.del(key.getBytes());
-                jp.returnResource(j);
-                return true;
-            } catch (Exception e) {
-                jp.returnBrokenResource(j);
-                log.error(e.getMessage(), e);
-            }
-        }
-        return false;
-    }
+	@Override
+	public boolean delete(String key, int index) {
+		if (StringUtils.isNotBlank(key)) {
+			Jedis j = null;
+			JedisPool jp = getJedisPool();
+			try {
+				j = jp.getResource();
+				j.select(index);
+				j.del(key);
+				j.del(key.getBytes());
+				jp.returnResource(j);
+				return true;
+			} catch (Exception e) {
+				jp.returnBrokenResource(j);
+				log.error(e.getMessage(), e);
+			}
+		}
+		return false;
+	}
 
 	@Override
 	public boolean delete(String key) {
-        return delete(key,0);
+		return delete(key, 0);
 	}
 
 	@Override
@@ -210,7 +215,7 @@ public class CacheProxyJedisImpl implements CacheProxy {
 	}
 
 	@Override
-	public boolean put(String key, Object value, int expires ,int index) {
+	public boolean put(String key, Object value, int expires, int index) {
 		if (StringUtils.isNotBlank(key) && value != null) {
 			Jedis j = null;
 			JedisPool jp = getJedisPool();
@@ -219,11 +224,11 @@ public class CacheProxyJedisImpl implements CacheProxy {
 				if (value instanceof String) {
 					if (expires > 0) {
 						j = jp.getResource();
-                        j.select(index);
+						j.select(index);
 						j.setex(key, expires, value.toString());
 					} else {
 						j = jp.getResource();
-                        j.select(index);
+						j.select(index);
 						j.set(key, value.toString());
 					}
 				} else {
@@ -231,11 +236,11 @@ public class CacheProxyJedisImpl implements CacheProxy {
 					byte[] bytesKey = key.getBytes();
 					if (expires > 0) {
 						j = jp.getResource();
-                        j.select(index);
+						j.select(index);
 						j.setex(bytesKey, expires, bytesValue);
 					} else {
 						j = jp.getResource();
-                        j.select(index);
+						j.select(index);
 						j.set(bytesKey, bytesValue);
 					}
 				}
@@ -335,5 +340,56 @@ public class CacheProxyJedisImpl implements CacheProxy {
 		}
 
 		return false;
+	}
+
+	@Override
+	public Set<String> keys(String keyRegex, int idx) {
+		// TODO Auto-generated method stub
+		Set<String> result = null;
+		if (StringUtils.isEmpty(keyRegex)) {
+			return result;
+		}
+
+		JedisPool jp = getJedisPool();
+		Jedis jedis = jp.getResource();
+		try {
+			jedis.select(idx);
+			result = jedis.keys(keyRegex);
+			jp.returnResource(jedis);
+			return result;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			jp.returnBrokenResource(jedis);
+		}
+		return result;
+	}
+
+	@Override
+	public List<Object> mGet(List<String> keys, int idx) {
+		// TODO Auto-generated method stub
+		if (keys.size() == 0) {
+			return new ArrayList<Object>();
+		}
+		Jedis j = null;
+		JedisPool jp = getJedisPool();
+		byte[][] bytesKeys = new byte[keys.size()][];
+		for (int i = 0; i < keys.size(); i++) {
+			bytesKeys[i] = keys.get(i).getBytes();
+		}
+		List<byte[]> bytesValueList = null;
+		try {
+			j = jp.getResource();
+			j.select(idx);
+			bytesValueList = j.mget(bytesKeys);
+			jp.returnResource(j);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			jp.returnBrokenResource(j);
+		}
+		List<Object> retList = new ArrayList<Object>();
+		for (byte[] bytesValue : bytesValueList) {
+			retList.add(serializer.decode(bytesValue));
+		}
+		return retList;
 	}
 }

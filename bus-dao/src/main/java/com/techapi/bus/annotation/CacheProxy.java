@@ -2,6 +2,7 @@ package com.techapi.bus.annotation;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import redis.clients.jedis.JedisPool;
 
@@ -94,4 +95,18 @@ public interface CacheProxy {
 	 * @return boolean
 	 */
 	public boolean mPut(Map<String, Object> map);
+
+	/**
+	 * @param keyRegex
+	 * @param i
+	 * @return
+	 */
+	public Set<String> keys(String keyRegex, int i);
+
+	/**
+	 * @param keys
+	 * @param i
+	 * @return
+	 */
+	public List<Object> mGet(List<String> keys, int idx);
 }
