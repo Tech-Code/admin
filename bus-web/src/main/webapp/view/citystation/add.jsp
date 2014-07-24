@@ -49,8 +49,7 @@
 			</div>
             <div style="width:60%;height:300px;border: 1px solid gray;float: right;" id="iCenter"></div>
 		</fieldset>
-		<input id="save" type="button" value="保存"
-					onclick="add()" class="easyui-linkbutton" />
+        <a href="javascript:add()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
 	</form>
 </body>
 <script type="text/javascript">

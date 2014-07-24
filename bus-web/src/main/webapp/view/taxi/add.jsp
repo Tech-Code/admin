@@ -84,8 +84,7 @@
 
 			</div>
 		</fieldset>
-		<input id="save" type="button" value="保存"
-					onclick="add()" class="easyui-linkbutton" />
+        <a href="javascript:add()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
 	</form>
 </body>
 <script type="text/javascript">
