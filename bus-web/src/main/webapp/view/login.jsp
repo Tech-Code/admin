@@ -24,33 +24,40 @@
 		// 不提供关闭窗口按钮
 		});
 	}
+	
+	function submitForm(){
+		$("#login").submit();
+	}
+	function clearForm(){
+		$('#login').form('clear');
+	}
 </script>
 </head>
 
 <body>
-	<div id="login" style="padding: 5px; width: 400px; height: 220px;" >
+	<div id="login" style="padding: 5px; width: 400px; height: 200px;">
 		<form action="<%=root%>/user/login" method="post">
-			<table id="loginTable" style="width: 100%;padding: 24px;">
+			<table id="loginTable" style="width: 100%; padding: 24px;">
 				<tr>
 					<td align="right"><b style="font: 12px">用户名：</b></td>
 					<td><input type="text" class="easyui-validatebox"
-						name="userName" id="userName" style="width: 200px;"
-						maxlength="20"/>
-						</td>
+						name="userName" id="userName" style="width: 200px;" maxlength="20" />
+					</td>
 				</tr>
 				<tr>
 					<td align="right"><b style="font: 12px">密&nbsp;&nbsp;码：</b></td>
-					<td ><input type="password" class="easyui-validatebox"
-						name="password" id="password" style="width: 200px;" maxlength="20"/></td>
+					<td><input type="password" class="easyui-validatebox"
+						name="password" id="password" style="width: 200px;" maxlength="20" /></td>
 				</tr>
 				<tr>
 					<td></td>
 					<td id="login_msg" style="color: red; font: 12px">&nbsp;</td>
 				</tr>
 				<tr>
-					<td colspan="2" align="center"><input
-						class="easyui-linkbutton" type="submit" value="登录"> <input
-						class="easyui-linkbutton" type="reset" value="重置">
+					<td colspan="2" align="center">
+						<input type="submit" value="登录"> 
+						<input type="reset" value="重置">
+					</td>
 				</tr>
 			</table>
 		</form>

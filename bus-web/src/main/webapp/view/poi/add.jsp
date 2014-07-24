@@ -52,19 +52,19 @@
             </label>
             <label>
                 <span>地标点大类型</span>
-                <select id="poiType1" onchange="onPoiType1Changed()" name="poiType1">
+                <select id="poiType1" onchange="onPoiType1Changed()" name="poiType1" style="width: 150px">
                     <option value="0">===请选择===</option>
                 </select>
             </label>
             <label>
                 <span>地标点中类型</span>
-                <select id="poiType2" onchange="onPoiType2Changed()" name="poiType2">
+                <select id="poiType2" onchange="onPoiType2Changed()" name="poiType2" style="width: 150px">
                     <option value="0">===请选择===</option>
                 </select>
             </label>
             <label>
                 <span>地标点小类型</span>
-                <select id="poiType3" name="poiType3">
+                <select id="poiType3" name="poiType3" style="width: 150px">
                     <option value="0">===请选择===</option>
                 </select>
             </label>
@@ -82,8 +82,7 @@
             </label>
         </div>
     </fieldset>
-    <input id="save" type="button" value="保存"
-           onclick="add()" class="easyui-linkbutton"/>
+    <a href="javascript:add()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
 </form>
 </body>
 <script type="text/javascript">
@@ -102,13 +101,14 @@
         var poiType3 = $("#poiType3Temp").val();
 
         $.post("${ctx}/poi/getPoiType1", function (data) {
-            data.poiType1List.forEach(function (value) {
+            for(var i = 0; i<data.poiType1List.length;i++) {
+                var value = data.poiType1List[i];
                 if (poiType1 == value) {
                     $("<option value='" + value + "' selected=true>" + value + "</option>").appendTo("#poiType1");
                 } else {
                     $("<option value='" + value + "'>" + value + "</option>").appendTo("#poiType1");
                 }
-            });
+            }
         });
 
         if (poiType1 != "" && poiType2 != "" && poiType3 != "") {
@@ -163,13 +163,14 @@
         }
 
         $.post("${ctx}/poi/getPoiType2", {poiType1: selectPoiType1}, function (data) {
-            data.poiType2List.forEach(function (value) {
+            for (var i = 0; i < data.poiType2List.length; i++) {
+                var value = data.poiType2List[i];
                 if (typeof(selectedPoiType2) != "undefined" && selectedPoiType2 == value) {
                     $("<option value='" + value + "' selected=true>" + value + "</option>").appendTo("#poiType2");
                 } else {
                     $("<option value='" + value + "'>" + value + "</option>").appendTo("#poiType2");
                 }
-            });
+            }
         });
     }
 
@@ -185,13 +186,15 @@
             selectPoiType2 = $("#poiType2").find("option:selected").text();
         }
         $.post("${ctx}/poi/getPoiType3", {poiType1: selectPoiType1, poiType2: selectPoiType2}, function (data) {
-            data.poiType3List.forEach(function (value) {
+
+            for (var i = 0; i < data.poiType3List.length; i++) {
+                var value = data.poiType3List[i];
                 if (typeof(selectedPoiType3) != "undefined" && selectedPoiType3 == value) {
                     $("<option value='" + value + "' selected=true>" + value + "</option>").appendTo("#poiType3");
                 } else {
                     $("<option value='" + value + "'>" + value + "</option>").appendTo("#poiType3");
                 }
-            });
+            }
         });
     }
 
