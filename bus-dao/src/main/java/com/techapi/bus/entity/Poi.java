@@ -234,7 +234,6 @@ public class Poi implements java.io.Serializable, Comparable<Poi> {
 
 	@Override
 	public int compareTo(Poi o) {
-		// TODO Auto-generated method stub
 		return (int) (this.getWalkDistance() - o.getWalkDistance());
 	}
 }

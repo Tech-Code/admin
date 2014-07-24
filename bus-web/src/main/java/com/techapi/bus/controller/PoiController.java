@@ -41,8 +41,9 @@ public class PoiController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public Map<String, Object> list(int page, int rows) throws Exception {
-        return poiService.findSection(page, rows);
+    public Map<String, Object> list(int page, int rows,
+                                    @RequestParam(value = "cityName", required = false) String cityName) throws Exception {
+        return poiService.findSection(page, rows, cityName);
     }
 
     @RequestMapping("/update")

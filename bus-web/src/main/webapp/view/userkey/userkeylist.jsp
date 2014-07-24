@@ -199,7 +199,7 @@
             onClickRow: function (rowIndex, rowData) {
                 $.messager.show({
                     width: 500,
-                    height: 90,
+                    height: 35,
                     msg: rowData.key,
                     timeout: 30000
                 })

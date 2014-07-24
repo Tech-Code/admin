@@ -16,6 +16,16 @@ public class ImportPoi {
 
 
     public static void main(String[] args) {
-        new ImportPoi().importPoiService.importPoi();
+        String startCity = "";
+        String startLine = "0";
+        if(args.length > 0) {
+            startCity = args[0];
+        }
+        if (args.length > 1) {
+            startLine = args[1];
+        }
+        System.out.println("startCity:" + startCity + "startLine:" + startLine);
+        new ImportPoi().importPoiService.importPoi(startCity,startLine);
+
     }
 }

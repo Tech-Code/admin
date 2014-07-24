@@ -19,11 +19,13 @@ public interface UserKeyDao extends PagingAndSortingRepository<UserKey, String> 
             + "and coalesce(c.province,'0') like :province "
             + "and coalesce(c.businessUrl,'0') like :businessUrl "
             + "and c.key like :key ")
-    public List<UserKey> findBySearch(
+        public List<UserKey> findBySearch(
             @Param("businessName") String businessName,
             @Param("businessFlag") String businessFlag,
             @Param("businessType") String businessType,
             @Param("province") String province,
             @Param("businessUrl") String businessUrl,
             @Param("key") String key);
+
+
 }

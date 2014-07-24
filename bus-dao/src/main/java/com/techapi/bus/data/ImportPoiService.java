@@ -28,7 +28,7 @@ public class ImportPoiService {
 
     protected static Logger log = Logger.getLogger(ImportPoiService.class);
 
-    public void importPoi() {
+    public void importPoi(String startCity,String startLine) {
         log.debug("--------------------开始导入POI--------------------");
         // 读站点信息表  Map<cityName,List<StationObject>>
         log.debug("开始获取站点数据....");
@@ -41,31 +41,31 @@ public class ImportPoiService {
         Iterator cityNameIterator = cityStationMap.keySet().iterator();
         log.debug("开始获取站点周边POI....");
         boolean isSkip = true;
+        int iStartLine = Integer.parseInt(startLine);
         while (cityNameIterator.hasNext()) {
             String cityName = cityNameIterator.next().toString();
-            if(cityName.equals("喀什地区")) {
+            if (cityName.equals(startCity)) {
                 isSkip = false;
             }
-            if(isSkip) continue;
+            if (isSkip) continue;
             log.debug("BEGIN -- CityName: " + cityName);
             log.debug("********************************");
-            int start = 0;
             List<Station> stationList = cityStationMap.get(cityName);
+            while (iStartLine < stationList.size()) {
+                List<Station> subStationList = FileUtils.splitListWithStep(stationList, iStartLine, 100);
 
-            while (start < stationList.size()) {
-                List<Station> subStationList = FileUtils.splitListWithStep(stationList, start, 10);
                 if (subStationList != null) {
-                    Map<String, List<Poi>> stationIdPoiListMap = getStationIdPoiListMap(cityName, subStationList, poiTypeMap, start);
+                    Map<String, List<Poi>> stationIdPoiListMap = getStationIdPoiListMap(cityName, subStationList, poiTypeMap, iStartLine);
                     Iterator stationIdIterator = stationIdPoiListMap.keySet().iterator();
                     while (stationIdIterator.hasNext()) {
                         String stationId = stationIdIterator.next().toString();
                         List<Poi> poiList = stationIdPoiListMap.get(stationId);
-                        //insertRedis(poiList);
                         poiDao.save(poiList);
                     }
                 }
-                start += 10;
+                iStartLine += 100;
             }
+            iStartLine = 0;
             log.debug("********************************");
         }
         log.debug("获取站点周边POI完毕....");
@@ -120,6 +120,9 @@ public class ImportPoiService {
                 // 解析json/xml
                 Map result = XMLUtils.readPoiXMLToMap(response);
 
+                if(result == null) {
+                    continue;
+                }
 
                 List<Map<String, String>> poilistMap = (List) result.get("poilist");
                 for (Map<String, String> poiMap : poilistMap) {

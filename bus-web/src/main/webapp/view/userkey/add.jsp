@@ -4,8 +4,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=CCfe935a7c589f7ca959bae20c503de4"></script>
-<script type="text/javascript" src="<%=root%>/js/My97DatePicker/WdatePicker.js"></script>
 <style type="text/css">
 .clear {
 	clear: both;
@@ -24,6 +22,13 @@
 <body>
 	<form action="" class="formular" id="userKeyForm">
 		<input type="hidden" id="id" name="id" value="${userKey.id }" />
+
+        <c:if test="${userKey.source!=null}">
+            <input type="hidden" id="source" name="source" value="${userKey.source}"/>
+        </c:if>
+
+        <input type="hidden" id="key" name="key" value="${userKey.key }"/>
+        <input type="hidden" id="createDate" name="createDate" value="${userKey.createDate }"/>
 
 		<fieldset>
 			<legend> 基础信息 </legend>
@@ -96,15 +101,20 @@
         } else {
             $.post("${ctx}/userkey/add", $("#userKeyForm").serializeArray(),
                     function (data) {
-                        //$.messager.alert('提示', '操作成功 <br> key: ' + data.key, 'info');
-                        $.messager.show({
-                            title: "操作成功",
-                            msg: data.key,
-                            showType: 'show',
-                            width: 500,
-                            height: 90,
-                            timeout: 5000
-                        });
+                        $.messager.alert('提示', '操作成功<br>' + data.key, 'info');
+                        //$.messager.show({
+                        //    title: "操作成功",
+                        //    msg: data.key,
+                        //    showType: 'show',
+                        //    style: {
+                        //        right: '',
+                        //        top: document.body.scrollTop + document.documentElement.scrollTop,
+                        //        bottom: ''
+                        //    },
+                        //    width: 500,
+                        //    height: 90,
+                        //    timeout: 5000
+                        //});
                     });
         }
 	}

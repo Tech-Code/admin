@@ -44,18 +44,26 @@ public class UserKeyService {
             }
         }
 
-        // 生成key
-        String key = userKey.getKey();
-        if (key == null || key.isEmpty()) {
-            do {
-                key = Common.getRandStr(80, false, true);
-            } while (!keysSet.add(key));
+        int source= userKey.getSource();
+        String id = userKey.getId();
 
-            userKey.setKey(key);
-            userKey.setSource(1);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-            String strDate = sdf.format(new Date());
-            userKey.setCreateDate(strDate);
+        String key;
+        // 生成key
+        if (source == 0 && id != null && !id.isEmpty()) {
+            key = userKey.getKey();
+        } else {
+            key = userKey.getKey();
+            if (key == null || key.isEmpty()) {
+                do {
+                    key = Common.getRandStr(80, false, true);
+                } while (!keysSet.add(key));
+
+                userKey.setKey(key);
+                userKey.setSource(1);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                String strDate = sdf.format(new Date());
+                userKey.setCreateDate(strDate);
+            }
         }
 
         String ctlcache = String.format(BusConstants.BUS_CTL_KEY, key);

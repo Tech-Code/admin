@@ -92,7 +92,7 @@ public class PoiService {
 
         // 更新gridId
         poi.setGridId(gridId);
-        //poiDao.save(poi);
+        poiDao.save(poi);
 
         resultMap.put("poiId", poi.getPoiId());
         resultMap.put("result", BusConstants.RESULT_SUCCESS);
@@ -101,12 +101,12 @@ public class PoiService {
         return resultMap;
     }
 
-    public Map<String, Object> findSection(int page, int rows) {
-        List<Object[]> poiObjectList = poiDao.findBySearch((page - 1) * rows, page * rows, "%%", "%%", "%%");
+    public Map<String, Object> findSection(int page, int rows,String cityName) {
+        List<Object[]> poiObjectList = poiDao.findBySearch((page - 1) * rows, page * rows, "%%", "%"+ cityName+"%", "%%");
 
         List<Poi> poiList = convertObjectListToPoiList(poiObjectList);
 
-        int totalCount = poiDao.findAllCount("%%", "%%", "%%");
+        int totalCount = poiDao.findAllCount("%%", "%" + cityName + "%", "%%");
 
         return PageUtils.getPageMap(totalCount,poiList);
     }
