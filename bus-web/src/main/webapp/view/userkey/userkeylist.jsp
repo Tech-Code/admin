@@ -197,12 +197,15 @@
                 $('#userKeyTable').datagrid('clearSelections'); //一定要加上这一句，要不然datagrid会记住之前的选择状态，删除时会出问题
             },
             onClickRow: function (rowIndex, rowData) {
-                $.messager.show({
-                    width: 500,
-                    height: 35,
-                    msg: rowData.key,
-                    timeout: 30000
-                })
+                //$.messager.show({
+                //    width: 500,
+                //    height: 35,
+                //    msg: rowData.key,
+                //    timeout: 30000
+                //})
+                $("textarea").css("display", "block");
+                $("textarea").html(rowData.key);
+                $("textarea").select();
             }
         });
     }
@@ -305,5 +308,8 @@
 	<div style="padding: 10" id="tabdiv">
 		<table id="userKeyTable"></table>
 	</div>
+    <textarea
+        style="width:100%;height:60px;margin-top: 10px;border: 1px solid #B5B8C8;font-size: 12px;display:none;overflow-y:hidden">
+    </textarea>
 </body>
 </html>
