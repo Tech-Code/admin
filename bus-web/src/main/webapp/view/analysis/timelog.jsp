@@ -14,7 +14,7 @@
 			fitColumns : true, //自动调整各列，用了这个属性，下面各列的宽度值就只是一个比例。
 			striped : true, //奇偶行颜色不同
 			collapsible : true,//可折叠
-			url : "${ctx}/analysis/loglist?name=all&startTime="+getPreWeek()+"&endTime="+getToDay(), //数据来源
+			url : "${ctx}/analysis/loglist?name=all&type=all&startTime="+getPreWeek()+"&endTime="+getToDay(), //数据来源
 			sortOrder : 'desc', //倒序
 			idField:'id', //主键字段
 			remoteSort : true, //服务器端排序
@@ -34,6 +34,13 @@
 				width : 20,
 				formatter : function(value, row, index) {
 					return row.keyName;
+				} //需要formatter一下才能显示正确的数据
+			},{
+				field : 'type',
+				title : '服务类型',
+				width : 20,
+				formatter : function(value, row, index) {
+					return row.type;
 				} //需要formatter一下才能显示正确的数据
 			},{
 				field : 'evertime',
@@ -76,7 +83,13 @@
 			valueField:'id', 
 			textField:'text' 
 			}); 
-		
+		//服务类型
+		$('#selectName').combobox({ 
+			url:"${ctx}/analysis/servicename",
+			valueField:'id', 
+			textField:'text' 
+			});
+		$('#selectName').combobox('setValue','全部');
 		$('#selectType').combobox('setValue','全部');
 		$('#beginTime').datebox('setValue',getPreWeek());
 		$('#endTime').datebox('setValue',getToDay());
@@ -93,7 +106,11 @@
 		if(keyword=="模糊关键字"||keyword==""){
 			keyword="";
 		}
-		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/loglist?",queryParams:{startTime:btime,endTime:etime,name:selectType,keyword:keyword},method:"post"});
+		var selectName = $('#selectName').combobox('getValue');
+		if(selectName=="全部"||selectName==""){
+			selectName="all";
+		}
+		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/loglist?",queryParams:{startTime:btime,endTime:etime,name:selectType,type:selectName,keyword:keyword},method:"post"});
 	}
 	
 	 function getToDay(){
@@ -163,6 +180,7 @@
 <input class="easyui-datebox" id="beginTime" data-options="required:true,showSeconds:false"/>
 <input class="easyui-datebox" id="endTime" data-options="required:true,showSeconds:false" />
  <input class="easyui-combobox"  id="selectType" style="width:200px;" />
+ <input class="easyui-combobox"  id="selectName" style="width:100px;" />
 <label>
 <input name="keyword" id="keyword"  value="模糊关键字" onclick="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" style="color:#999"/>
 </label> 

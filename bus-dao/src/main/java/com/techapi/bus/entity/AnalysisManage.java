@@ -26,6 +26,8 @@ public class AnalysisManage {
 	private String url;
 	@Column(name="STATUS_CODE")
 	private String statusCode;
+	@Column(name="TYPE")
+	private String type;
 	public String getId() {
 		return id;
 	}
@@ -62,5 +64,10 @@ public class AnalysisManage {
 	public void setKeyName(String keyName) {
 		this.keyName = keyName;
 	}
-	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 }

@@ -111,9 +111,9 @@ public class AnalysisController {
 	
 	@RequestMapping("/loglist")
     @ResponseBody
-	public Map<String, Object> loglist(int page, int rows,@RequestParam(value="keyword",required = false) String keyword,@RequestParam(value="name",required = false) String name,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
-		System.out.println("page:"+page+"rows:"+rows+"keyword:"+keyword+"------name:"+name+"--------startTime:"+startTime+"-------endTime:"+endTime+" 23:59:59");
-		return analysisService.findLogByTimeAndType(page,rows,keyword,name, startTime+" 00:00:00", endTime+" 23:59:59");
+	public Map<String, Object> loglist(int page, int rows,@RequestParam(value="keyword",required = false) String keyword,@RequestParam(value="name",required = false) String name,@RequestParam(value="type",required = false) String type,@RequestParam(value="startTime",required = false) String startTime,@RequestParam(value="endTime",required = false) String endTime) throws Exception {
+		System.out.println("page:"+page+"rows:"+rows+"keyword:"+keyword+"------name:"+name+"--type:"+type+"--------startTime:"+startTime+"-------endTime:"+endTime+" 23:59:59");
+		return analysisService.findLogByTimeAndType(page,rows,keyword,name,type,startTime+" 00:00:00", endTime+" 23:59:59");
 	}
 	
 	

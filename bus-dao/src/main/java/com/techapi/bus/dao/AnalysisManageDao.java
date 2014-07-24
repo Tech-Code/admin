@@ -14,7 +14,6 @@ public interface AnalysisManageDao extends PagingAndSortingRepository<AnalysisMa
 	 @Query(value = "SELECT a FROM AnalysisManage a where a.evertime>=?1 and a.evertime<=?2")
 	 public Page<AnalysisManage> findByTimePage(String startTime,String endTime,Pageable pageable);
 	 
-	 
 	 @Query(value = "SELECT a FROM AnalysisManage a where a.evertime>=?1 and a.evertime<=?2 and a.url like ?3")
 	 public Page<AnalysisManage> findByTimeAndSearchKey(String startTime,String endTime,String searchKey,Pageable pageable);
 	 
@@ -23,5 +22,17 @@ public interface AnalysisManageDao extends PagingAndSortingRepository<AnalysisMa
 	 
 	 @Query(value = "SELECT a FROM AnalysisManage a where a.evertime>=?1 and a.evertime<=?2 and a.name=?3 and a.url like ?4")
 	 public Page<AnalysisManage> findByTimeAndNameAndSearchKey(String startTime,String endTime,String name,String searchKey,Pageable pageable);
+	 /////////增加服务类型查询////////
+	 @Query(value = "SELECT a FROM AnalysisManage a where a.evertime>=?1 and a.evertime<=?2 and  a.type=?3")
+	 public Page<AnalysisManage> findByTimeAndTypePage(String startTime,String endTime,String type,Pageable pageable);
+	 
+	 @Query(value = "SELECT a FROM AnalysisManage a where a.evertime>=?1 and a.evertime<=?2 and a.type=?3 and a.url like ?4")
+	 public Page<AnalysisManage> findByTimeAndSearchKeyAndType(String startTime,String endTime,String type,String searchKey,Pageable pageable);
+	 
+	 @Query(value = "SELECT a FROM AnalysisManage a where a.evertime>=?1 and a.evertime<=?2 and a.name=?3 and a.type=?4")
+	 public Page<AnalysisManage> findByTimeAndNameAndType(String startTime,String endTime,String name,String type,Pageable pageable);
+	 
+	 @Query(value = "SELECT a FROM AnalysisManage a where a.evertime>=?1 and a.evertime<=?2 and a.name=?3 and a.type=?4 and a.url like ?5")
+	 public Page<AnalysisManage> findByTimeAndNameAndTypeAndSearchKey(String startTime,String endTime,String name,String type,String searchKey,Pageable pageable);
 	 
 }

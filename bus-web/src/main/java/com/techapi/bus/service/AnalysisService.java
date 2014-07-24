@@ -317,16 +317,16 @@ public class AnalysisService {
 			String minute = o[1].toString();
 			if(position==7){
 				gl.setStartTime(minute.substring(0, 7));
-				gl.setEndTime(DataUtils.parseEndTime(minute,7));
+				gl.setEndTime(minute.substring(0, 7));
 			}else if(position==10){
 				gl.setStartTime(minute.substring(0, 10));
-				gl.setEndTime(DataUtils.parseEndTime(minute,10));
+				gl.setEndTime(minute.substring(0, 10));
 			}else if(position==13){
 				gl.setStartTime(minute.substring(0,13));
-				gl.setEndTime(DataUtils.parseEndTime(minute,13));
+				gl.setEndTime(minute.substring(0,13));
 			}else{
 				gl.setStartTime(minute.substring(0, 16));
-				gl.setEndTime(DataUtils.parseEndTime(minute,16));
+				gl.setEndTime(minute.substring(0, 16));
 			}
 			gl.setTotal(o[2].toString());
 			glList.add(gl);
@@ -344,23 +344,33 @@ public class AnalysisService {
 	/***
 	 * 查询详细的访问log日志
 	 */
-	public Map<String, Object> findLogByTimeAndType(int page,int rows,String keyword,String name,String startTime,String endTime) {
+	public Map<String, Object> findLogByTimeAndType(int page,int rows,String keyword,String name,String type,String startTime,String endTime) {
 		 Pageable pageable = new PageRequest(page-1, rows);
 		 Page<AnalysisManage> am = null;
 		 
-		 if(StringUtils.isBlank(keyword)&&"all".equals(name)){//既无关键字也无类型查询
+		 if(StringUtils.isBlank(keyword)&&"all".equals(name)&&"all".equals(type)){//既无关键字也无类型查询
 			 am = analysisManageDao.findByTimePage(startTime, endTime,pageable);
-		 }else if(StringUtils.isBlank(keyword)&&!"all".equals(name)){ //类型查询
+		 }else if(StringUtils.isBlank(keyword)&&!"all".equals(name)&&"all".equals(type)){ //类型查询
 			 am = analysisManageDao.findByTimeAndName(startTime, endTime, name, pageable); 
-		 }else if(StringUtils.isNotBlank(keyword)&&"all".equals(name)){//关键字查询
+		 }else if(StringUtils.isNotBlank(keyword)&&"all".equals(name)&&"all".equals(type)){//关键字查询
 			 am = analysisManageDao.findByTimeAndSearchKey(startTime, endTime, "%"+keyword+"%", pageable);
-		 }else if(StringUtils.isNotBlank(keyword)&&!"all".equals(name)){//关键字类型查询
+		 }else if(StringUtils.isNotBlank(keyword)&&!"all".equals(name)&&"all".equals(type)){//关键字类型查询
 			 am = analysisManageDao.findByTimeAndNameAndSearchKey(startTime, endTime, name, "%"+keyword+"%", pageable);
+		 }else if(StringUtils.isBlank(keyword)&&!"all".equals(name)&&!"all".equals(type)){
+			 am = analysisManageDao.findByTimeAndNameAndType(startTime, endTime, name, type, pageable);
+		 }else if(StringUtils.isBlank(keyword)&&"all".equals(name)&&!"all".equals(type)){
+			 am = analysisManageDao.findByTimeAndTypePage(startTime, endTime, type, pageable);
+		 }else if(StringUtils.isNotBlank(keyword)&&"all".equals(name)&&!"all".equals(type)){
+			 am = analysisManageDao.findByTimeAndSearchKeyAndType(startTime, endTime, type, "%"+keyword+"%", pageable);
+		 }else if(StringUtils.isNotBlank(keyword)&&!"all".equals(name)&&!"all".equals(type)){
+			 am = analysisManageDao.findByTimeAndNameAndTypeAndSearchKey(startTime, endTime, name, type, "%"+keyword+"%", pageable);
 		 }
+		 
 		 if(am!=null){
 			long total = am.getTotalElements();
 			List<AnalysisManage> AnalysisManageList =am.getContent();
 			Map<String,UserKey> suMap =getKeyMap();
+			Map<String,ServiceDict> sdMap = getServiceDictMap();
 			for(AnalysisManage aam :AnalysisManageList){
 				aam.setKeyName(aam.getName());
 				if(suMap.get(aam.getName())!=null){
@@ -372,6 +382,11 @@ public class AnalysisService {
 					aam.setUrl(aam.getUrl().replaceAll("\\-", "&"));
 				}else{
 					aam.setUrl("无效访问");
+				}
+				if(sdMap.get(aam.getType())!=null){
+					aam.setType(sdMap.get(aam.getType()).getServiceName());
+				}else{
+					aam.setType("未知服务");
 				}
 			}
 			return PageUtils.getPageMap(total,AnalysisManageList);
