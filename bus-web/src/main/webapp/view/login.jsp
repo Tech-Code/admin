@@ -35,7 +35,7 @@
 </head>
 
 <body>
-	<div id="login" style="padding: 5px; width: 400px; height: 200px;">
+	<div id="login" style="padding: 5px; width: 400px; height: 230px;">
 		<form action="<%=root%>/user/login" method="post">
 			<table id="loginTable" style="width: 100%; padding: 24px;">
 				<tr>
