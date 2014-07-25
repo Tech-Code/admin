@@ -259,7 +259,7 @@
             //window.clearTimeout(timeOutId);
             timeOutId = setTimeout(function () {
                 $.ajax({
-                    type: "GET",
+                    type: "POST",
                     url: ajaxProcessUrl,
                     data: 'cityStationName=' + wordText + '&poiType=' + poiType + '&adName=' + adName,
                     success: function (data) {
