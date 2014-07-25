@@ -88,9 +88,9 @@ public class CityStationController{
 
     @RequestMapping(value = "/suggestlist")
     @ResponseBody
-    public Object suggest(@RequestParam("cityStationName") String stationName,
-                          @RequestParam("poiType") String poiType,
-                          @RequestParam("adName") String adName)
+    public Object suggest(@RequestParam(value = "cityStationName", required = false) String stationName,
+                          @RequestParam(value = "poiType") String poiType,
+                          @RequestParam(value = "adName", required = false) String adName)
             throws Exception {
         JSONObject json = new JSONObject();
 

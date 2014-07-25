@@ -163,15 +163,38 @@
         }
 
         $.post("${ctx}/poi/getPoiType2", {poiType1: selectPoiType1}, function (data) {
+
+            var local_selectedPoiType2;
             for (var i = 0; i < data.poiType2List.length; i++) {
                 var value = data.poiType2List[i];
+                if(i == 0) local_selectedPoiType2 = value;
                 if (typeof(selectedPoiType2) != "undefined" && selectedPoiType2 == value) {
                     $("<option value='" + value + "' selected=true>" + value + "</option>").appendTo("#poiType2");
+                    local_selectedPoiType2 = value;
                 } else {
                     $("<option value='" + value + "'>" + value + "</option>").appendTo("#poiType2");
                 }
             }
+
+            $("#poiType3 option").each(function () {
+                $(this).remove();   //移除原有项
+            });
+            $.post("${ctx}/poi/getPoiType3", {poiType1: selectPoiType1, poiType2: local_selectedPoiType2}, function (data) {
+
+                for (var i = 0; i < data.poiType3List.length; i++) {
+                    var value = data.poiType3List[i];
+                    if (typeof(selectedPoiType3) != "undefined" && selectedPoiType3 == value) {
+                        $("<option value='" + value + "' selected=true>" + value + "</option>").appendTo("#poiType3");
+                    } else {
+                        $("<option value='" + value + "'>" + value + "</option>").appendTo("#poiType3");
+                    }
+                }
+            });
         });
+
+
+
+
     }
 
     function onPoiType2Changed(selectPoiType1, selectPoiType2, selectPoiType3) {
