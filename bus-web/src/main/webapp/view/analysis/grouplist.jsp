@@ -5,63 +5,8 @@
 <head>
 <script type="text/javascript">
 	jQuery(function($) {
-		$('#analysistypeTable').datagrid({
-			method : 'post',
-			iconCls : 'icon-edit', //图标
-			singleSelect : false, //多选
-			height : 360, //高度
-			fitColumns : true, //自动调整各列，用了这个属性，下面各列的宽度值就只是一个比例。
-			striped : true, //奇偶行颜色不同
-			collapsible : true,//可折叠
-			url : "${ctx}/analysis/grouplist?position=10&name=all&startTime="+getPreWeek()+"&endTime="+getToDay(), //数据来源
-			sortOrder : 'desc', //倒序
-			idField:'id', //主键字段
-			remoteSort : true, //服务器端排序
-			pagination : true, //显示分页
-			rownumbers : true, //显示行号
-			columns : [ [ 
-			{
-				field : 'startTime',
-				title : '开始时间段',
-				width : 20,
-				formatter : function(value, row, index) {
-					return row.startTime;
-				} //需要formatter一下才能显示正确的数据
-			},{
-				field : 'endTime',
-				title : '结束时间段',
-				width : 20,
-				formatter : function(value, row, index) {
-					return row.endTime;
-				} //需要formatter一下才能显示正确的数据
-			},{
-				field : 'name',
-				title : '业务名称',
-				width : 20,
-				formatter : function(value, row, index) {
-					return row.name;
-				} //需要formatter一下才能显示正确的数据
-			},{
-				field : 'keyName',
-				title : '业务标识',
-				width : 20,
-				formatter : function(value, row, index) {
-					return row.keyName;
-				} //需要formatter一下才能显示正确的数据
-			},{
-				field : 'total',
-				title : '业务总量',
-				width : 20,
-				formatter : function(value, row, index) {
-					return row.total;
-				} //需要formatter一下才能显示正确的数据
-			}] ],
-			
-			onLoadSuccess : function() {
-				$('#analysistypeTable').datagrid('clearSelections'); //一定要加上这一句，要不然datagrid会记住之前的选择状态，删除时会出问题
-			}
-		});
-		
+		var url = "${ctx}/analysis/grouplist?position=10&name=all&startTime="+getPreWeek()+"&endTime="+getToDay(); //数据来源
+		initDataGrid(url,"{}");
 		//业务名称
 		$('#selectType').combobox({ 
 			url:"${ctx}/analysis/typename",
@@ -109,9 +54,70 @@
 		if(selectgroup=="日"||selectgroup==""){
 			selectgroup=10;
 		}
-		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/grouplist?",queryParams:{startTime:btime,endTime:etime,name:selectType,position:selectgroup},method:"post"});
+		var url="${ctx}/analysis/grouplist?";
+		var queryParams={startTime:btime,endTime:etime,name:selectType,position:selectgroup,page:1};
+		initDataGrid(url,queryParams);
 	}
-	
+	function initDataGrid(getUrl,queryParams) {
+		$('#analysistypeTable').datagrid({
+			method : 'post',
+			iconCls : 'icon-edit', //图标
+			singleSelect : false, //多选
+			height : 360, //高度
+			fitColumns : true, //自动调整各列，用了这个属性，下面各列的宽度值就只是一个比例。
+			striped : true, //奇偶行颜色不同
+			collapsible : true,//可折叠 
+			url :getUrl,
+			sortOrder : 'desc', //倒序
+			idField:'id', //主键字段
+			remoteSort : true, //服务器端排序
+			pagination : true, //显示分页
+			rownumbers : true, //显示行号
+			pageNumber:1,
+			queryParams: queryParams,// 查询参数
+			columns : [ [ 
+			{
+				field : 'startTime',
+				title : '开始时间段',
+				width : 20,
+				formatter : function(value, row, index) {
+					return row.startTime;
+				} //需要formatter一下才能显示正确的数据
+			},{
+				field : 'endTime',
+				title : '结束时间段',
+				width : 20,
+				formatter : function(value, row, index) {
+					return row.endTime;
+				} //需要formatter一下才能显示正确的数据
+			},{
+				field : 'name',
+				title : '业务名称',
+				width : 20,
+				formatter : function(value, row, index) {
+					return row.name;
+				} //需要formatter一下才能显示正确的数据
+			},{
+				field : 'keyName',
+				title : '业务标识',
+				width : 20,
+				formatter : function(value, row, index) {
+					return row.keyName;
+				} //需要formatter一下才能显示正确的数据
+			},{
+				field : 'total',
+				title : '业务总量',
+				width : 20,
+				formatter : function(value, row, index) {
+					return row.total;
+				} //需要formatter一下才能显示正确的数据
+			}] ],
+			
+			onLoadSuccess : function() {
+				$('#analysistypeTable').datagrid('clearSelections'); //一定要加上这一句，要不然datagrid会记住之前的选择状态，删除时会出问题
+			}
+		});		
+	}
 	//更新
 	function down() {
 		var btime =document.getElementById("beginTime").value;

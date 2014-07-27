@@ -5,7 +5,46 @@
 <head>
 <script type="text/javascript">
 	jQuery(function($) {
+		var url = "${ctx}/analysis/typelist?type=all&name=all&startTime="+getPreWeek()+"&endTime="+getToDay(); //数据来源
+		initDataGrid(url,"{}");
 		
+		//业务名称
+		$('#selectType').combobox({ 
+			url:"${ctx}/analysis/typename",
+			valueField:'id', 
+			textField:'text' 
+			}); 
+		
+		//服务类型
+		$('#selectName').combobox({ 
+			url:"${ctx}/analysis/servicename",
+			valueField:'id', 
+			textField:'text' 
+			});
+		
+		$('#selectType').combobox('setValue','全部');
+		$('#selectName').combobox('setValue','全部');
+		$('#beginTime').datebox('setValue',getPreWeek());
+		$('#endTime').datebox('setValue',getToDay());
+	});
+	//更新
+	function select() {
+		var btime =$('#beginTime').datebox('getValue');
+		var etime = $('#endTime').datebox('getValue');
+		var selectType = $('#selectType').combobox('getValue');
+		if(selectType=="全部"||selectType==""){
+			selectType="all";
+		}
+		var selectName = $('#selectName').combobox('getValue');
+		if(selectName=="全部"||selectName==""){
+			selectName="all";
+		}
+		var getUrl="${ctx}/analysis/typelist?";
+		var queryParams={startTime:btime,endTime:etime,type:selectType,name:selectName};
+		initDataGrid(getUrl,queryParams);
+	}
+	
+	function initDataGrid(getUrl,queryParams){
 		$('#analysistypeTable').datagrid({
 			method : 'post',
 			iconCls : 'icon-edit', //图标
@@ -14,12 +53,14 @@
 			fitColumns : true, //自动调整各列，用了这个属性，下面各列的宽度值就只是一个比例。
 			striped : true, //奇偶行颜色不同
 			collapsible : true,//可折叠
-			url : "${ctx}/analysis/typelist?type=all&name=all&startTime="+getPreWeek()+"&endTime="+getToDay(), //数据来源
+			url : getUrl,
 			sortOrder : 'desc', //倒序
 			idField:'id', //主键字段
 			remoteSort : true, //服务器端排序
 			pagination : true, //显示分页
 			rownumbers : true, //显示行号
+			pageNumber:1,
+			queryParams: queryParams,// 查询参数
 			columns : [ [ 
 			{
 				field : 'name',
@@ -55,40 +96,6 @@
 				$('#analysistypeTable').datagrid('clearSelections'); //一定要加上这一句，要不然datagrid会记住之前的选择状态，删除时会出问题
 			}
 		});
-		
-		
-		//业务名称
-		$('#selectType').combobox({ 
-			url:"${ctx}/analysis/typename",
-			valueField:'id', 
-			textField:'text' 
-			}); 
-		
-		//服务类型
-		$('#selectName').combobox({ 
-			url:"${ctx}/analysis/servicename",
-			valueField:'id', 
-			textField:'text' 
-			});
-		
-		$('#selectType').combobox('setValue','全部');
-		$('#selectName').combobox('setValue','全部');
-		$('#beginTime').datebox('setValue',getPreWeek());
-		$('#endTime').datebox('setValue',getToDay());
-	});
-	//更新
-	function select() {
-		var btime =$('#beginTime').datebox('getValue');
-		var etime = $('#endTime').datebox('getValue');
-		var selectType = $('#selectType').combobox('getValue');
-		if(selectType=="全部"||selectType==""){
-			selectType="all";
-		}
-		var selectName = $('#selectName').combobox('getValue');
-		if(selectName=="全部"||selectName==""){
-			selectName="all";
-		}
-		$('#analysistypeTable').datagrid({ url:"${ctx}/analysis/typelist?",queryParams:{startTime:btime,endTime:etime,type:selectType,name:selectName},method:"post"});
 	}
 	
 	//更新
