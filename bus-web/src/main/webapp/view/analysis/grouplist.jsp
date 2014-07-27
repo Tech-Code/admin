@@ -191,14 +191,17 @@
 </head>
 
 <body >
-<div style="margin:1px 0 10px 0;">
+<form style="margin:20px 0 10px 0;" class="formular">
+        <fieldset>
+            <legend>查询条件</legend>
 <input type="text" class="Wdate" id="beginTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd'})" />
 <input type="text" class="Wdate" id="endTime" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd'})" />
 <input class="easyui-combobox"  id="selectType" style="width:200px;" />
 <input class="easyui-combobox"  id="selectgroup" style="width:80px;" />
  <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a> 
  <a href="#"  class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="down()">导出EXCEL</a>  
-</div>
+</fieldset>
+    </form>
 	<div style="padding: 10" id="tabdiv">
 		<table id="analysistypeTable"></table>
 	</div>

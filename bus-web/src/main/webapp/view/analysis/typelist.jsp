@@ -169,16 +169,17 @@
 </head>
 
 <body >
-<!-- <input type="text" id="txtStartTime" class="easyui-datebox" style="width:90px"/>
-<input type="text" id="txtEndTime" class="easyui-datebox" style="width:90px"/> -->
-<div style="margin:20px 0 10px 0;">
+<form style="margin:20px 0 10px 0;" class="formular">
+        <fieldset>
+            <legend>查询条件</legend>
 <input class="easyui-datebox" id="beginTime" />
 <input class="easyui-datebox" id="endTime" data-options="required:true,showSeconds:false" />
  <input class="easyui-combobox"  id="selectType" style="width:200px;" />
  <input class="easyui-combobox"  id="selectName" style="width:200px;" />
  <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>  
 <a href="#" id="btn" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="down()">导出EXCEL</a> 
-</div>
+</fieldset>
+    </form>
 	<div style="padding: 10" id="tabdiv">
 		<table id="analysistypeTable"></table>
 	</div>

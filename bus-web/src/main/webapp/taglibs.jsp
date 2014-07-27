@@ -14,6 +14,7 @@ response.setDateHeader("Expires",0);
 <link rel="stylesheet" type="text/css" href="<%=root%>/css/tooltip-form-style.css">
 <link rel="stylesheet" href="<%=root%>/css/validationEngine.jquery.css" type="text/css"/>
 <link rel="stylesheet" href="<%=root%>/css/customMessages.css" type="text/css"/>
+<link rel="stylesheet" href="<%=root%>/css/template.css" type="text/css"/>
 
 <script type="text/javascript" src="<%=root%>/js/jquery-1.4.4.min.js"></script>
 <script type="text/javascript" src="<%=root%>/js/easyui/js/jquery.easyui.min.js"></script>

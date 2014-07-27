@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="/taglibs.jsp"%>
+
 <html>
 <head>
 <script type="text/javascript">
@@ -131,7 +132,6 @@
 	}
 	
 	 function getToDay(){
-         
          var now = new Date();
          var nowYear = now.getFullYear();
          var nowMonth = now.getMonth();
@@ -193,15 +193,18 @@
 </head>
 
 <body >
-<div style="margin:20px 0 10px 0;">
-<input class="easyui-datebox" id="beginTime" data-options="required:true,showSeconds:false"/>
-<input class="easyui-datebox" id="endTime" data-options="required:true,showSeconds:false" />
- <input class="easyui-combobox"  id="selectType" style="width:200px" />
- &nbsp;
- <input class="easyui-combobox"  id="selectCity" style="width:200px" />
- <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>  
- <a href="#"  class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="down()">导出EXCEL</a> 
-</div>
+<form style="margin:20px 0 10px 0;" class="formular">
+<fieldset>
+<legend>查询条件</legend>
+	<input class="easyui-datebox" id="beginTime"/>
+	<input class="easyui-datebox" id="endTime" />
+ 	<input class="easyui-combobox"  id="selectType" style="width:200px" />
+ 	&nbsp;
+ 	 <input class="easyui-combobox"  id="selectCity" style="width:200px" />
+	 <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>  
+ 	 <a href="#"  class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="down()">导出EXCEL</a> 
+</fieldset>
+</form>
 	<div style="padding: 10" id="tabdiv">
 		<table id="analysistypeTable"></table>
 	</div>

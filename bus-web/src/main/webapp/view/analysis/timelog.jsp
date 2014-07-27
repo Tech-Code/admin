@@ -176,7 +176,9 @@
 </head>
 
 <body >
-<div style="margin:20px 0 10px 0;">
+<form style="margin:20px 0 10px 0;" class="formular">
+        <fieldset>
+            <legend>查询条件</legend>
 <input class="easyui-datebox" id="beginTime" data-options="required:true,showSeconds:false"/>
 <input class="easyui-datebox" id="endTime" data-options="required:true,showSeconds:false" />
  <input class="easyui-combobox"  id="selectType" style="width:200px;" />
@@ -185,7 +187,8 @@
 <input name="keyword" id="keyword"  value="模糊关键字" onclick="if(value==defaultValue){value='';this.style.color='#000'}" onBlur="if(!value){value=defaultValue;this.style.color='#999'}" style="color:#999"/>
 </label> 
  <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>  
-</div>
+</fieldset>
+    </form>
 	<div style="padding: 10" id="tabdiv">
 		<table id="analysistypeTable"></table>
 	</div>
