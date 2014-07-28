@@ -6,14 +6,14 @@
 <head>
 <script type="text/javascript">
 	jQuery(function($) {
-        var queryParams = {cityName: '北京市'};
+        var queryParams = {cityName: ''};
         initDataGrid("${ctx}/poi/list", queryParams);
         $('#cityName').combobox({
-            url: "${ctx}/analysis/cityname?notAll=1",
+            url: "${ctx}/analysis/cityname?notAll=0",
             valueField: 'text',
             textField: 'text'
         });
-        $('#cityName').combobox('setValue', '北京市');
+        $('#cityName').combobox('setValue', '全部');
 	});
     function initDataGrid(getUrl, queryParams) {
         $('#poiTable').datagrid({
@@ -222,7 +222,6 @@
         var range = $('#range').combobox('getText');
 
         if (cityName == '全部') cityName = '';
-        if(cityCode.trim() == '' && cityName.trim() == '') $.messager.alert('提示', '城市代码和城市名称不能全为空!', 'info');
         else {
             var queryParams = {cityCode: cityCode, cityName: cityName, poiName: poiName, centerLonLat: centerLonLat, range: range};
             initDataGrid("${ctx}/poi/searchlist?", queryParams);

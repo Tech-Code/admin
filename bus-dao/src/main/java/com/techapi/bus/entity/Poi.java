@@ -28,7 +28,7 @@ public class Poi implements java.io.Serializable, Comparable<Poi> {
 	private String address;// IS '地址';
 	@Column(name = "TEL")
 	private String tel;// IS '电话';
-	@Transient
+    @Column(name = "CITYNAME")
 	private String cityName;
 	@Column(name = "GRIDID")
 	private String gridId;

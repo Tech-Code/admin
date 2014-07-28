@@ -59,7 +59,7 @@ public class ExcelUtils {
                     cityList.add(city);
                 }
             }
-            System.out.println("provinceList.size():" + provinceList.size());
+            //System.out.println("provinceList.size():" + provinceList.size());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -125,7 +125,7 @@ public class ExcelUtils {
                     prePoiType1 = poiType1;
                     prePoiType2 = poiType2;
                 }
-                System.out.println("prePoiType1:" + prePoiType1 + ",PoiType1:"+ poiType1+",i:" + i);
+                //System.out.println("prePoiType1:" + prePoiType1 + ",PoiType1:"+ poiType1+",i:" + i);
                 if(!prePoiType2.equals(poiType2)) {
 
                     poiType23Map.put(prePoiType2, poiType3List);

@@ -189,14 +189,14 @@
     }
 
     function departTypeChange() {
-        //var selected = $('input[name="departType"]:checked').val();
-        //var divDepartInterval = $("#divDepartInterval"); //可供选择的项
-        //divDepartInterval.empty();
-        <%--if(selected == 1) {--%>
-            <%--divDepartInterval.append("<span > 发车间隔（分钟） </span >");--%>
-            <%--var item1 = "<input name='departInterval' id='departInterval' value='${ts.departInterval}' class='text-input'/>";--%>
-            <%--divDepartInterval.append(item1);--%>
-        <%--}--%>
+        var selected = $('input[name="departType"]:checked').val();
+        var divDepartInterval = $("#divDepartInterval"); //可供选择的项
+        divDepartInterval.empty();
+        if(selected == 1) {
+            divDepartInterval.append("<span > 发车间隔（分钟） </span >");
+            var item1 = "<input name='departInterval' id='departInterval' value='${ts.departInterval}' class='text-input'/>";
+            divDepartInterval.append(item1);
+        }
     }
 
     function addMarker(lonlat) {

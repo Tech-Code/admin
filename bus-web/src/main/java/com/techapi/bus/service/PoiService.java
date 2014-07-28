@@ -59,6 +59,7 @@ public class PoiService {
                 Area area = areaDao.findByAreaName(cityName);
                 if(area != null) {
                     poi.setCityCode(area.getAdCode().toString());
+                    poi.setCityName(area.getAreaName());
                 } else {
                     resultMap.put("result", BusConstants.RESULT_NO_EXIST_CITYNAME);
                     resultMap.put("alertInfo", BusConstants.RESULT_NO_EXIST_CITYNAME_STR);
@@ -92,6 +93,7 @@ public class PoiService {
 
         // 更新gridId
         poi.setGridId(gridId);
+        // TODO 需要添加对新增城市名和城市代码的更新
         poiDao.save(poi);
 
         resultMap.put("poiId", poi.getPoiId());
@@ -102,9 +104,8 @@ public class PoiService {
     }
 
     public Map<String, Object> findSection(int page, int rows,String cityName) {
-        List<Object[]> poiObjectList = poiDao.findBySearch((page - 1) * rows, page * rows, "%%", "%"+ cityName+"%", "%%");
+        List<Poi> poiList = poiDao.findBySearch((page - 1) * rows, page * rows, "%%", "%"+ cityName+"%", "%%");
 
-        List<Poi> poiList = convertObjectListToPoiList(poiObjectList);
 
         int totalCount = poiDao.findAllCount("%%", "%" + cityName + "%", "%%");
 
@@ -115,9 +116,8 @@ public class PoiService {
      * @return
      */
     public Poi findById(String id) {
-        List<Object[]> objects = poiDao.findOneById(id);
-        List<Poi> poiList = convertObjectListToPoiList(objects);
-        return poiList.get(0);
+        Poi poi = poiDao.findByPoiId(id);
+        return poi;
     }
 
     public List<Poi> findByIds(List<String> ids) {
@@ -183,19 +183,17 @@ public class PoiService {
             //strGridIds = "'" + StringUtils.join(gridIdArray,"','") + "'";
 
         }
-        List<Object[]> poiObjectList;
+        List<Poi> poiList;
         int totalCount;
         if(gridIdArray != null && gridIdArray.length > 0) {
             //if(cityName.equals())
-            poiObjectList = poiDao.findBySearchAndGridIds((page - 1) * rows, page * rows, "%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%", gridIdArray);
+            poiList = poiDao.findBySearchAndGridIds((page - 1) * rows, page * rows, "%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%", gridIdArray);
             totalCount = poiDao.findAllCountByGridIds("%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%", gridIdArray);
         } else {
-            poiObjectList = poiDao.findBySearch((page - 1) * rows, page * rows, "%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%");
+            poiList = poiDao.findBySearch((page - 1) * rows, page * rows, "%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%");
             totalCount = poiDao.findAllCount("%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%");
         }
 
-
-        List<Poi> poiList = convertObjectListToPoiList(poiObjectList);
         return PageUtils.getPageMap(totalCount, poiList);
 
 

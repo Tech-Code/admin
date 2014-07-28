@@ -13,28 +13,6 @@ public interface PoiDao extends PagingAndSortingRepository<Poi, String>, JpaSpec
 	@Query("select c from Poi c ")
 	public List<Poi> findBystationID();
 
-    @Query(value = "SELECT\n" +
-            "  A.CITYCODE,\n" +
-            "  A.POIID,\n" +
-            "  A.POINAME,\n" +
-            "  A.POITYPE1,\n" +
-            "  A.POITYPE2,\n" +
-            "  A.POITYPE3,\n" +
-            "  A.POICOORDINATE,\n" +
-            "  A.ADDRESS,\n" +
-            "  A.TEL,\n" +
-            "  A.GRIDID,\n" +
-            "  C.AREA_NAME AS CITYNAME\n" +
-            "FROM bus_poi A INNER JOIN (SELECT\n" +
-            "                                         *\n" +
-            "                                       FROM bus_area B\n" +
-            "                                       WHERE B.area_type = '1') C\n" +
-            "                ON substr(A.citycode, 0, DECODE(C.area_name, '北京市', 3, '天津市', 3, '上海市', 3, '重庆市', 3, 4)) =\n" +
-            "                   substr(C.ad_code, 0, DECODE(C.area_name, '北京市', 3, '天津市', 3, '上海市', 3, '重庆市', 3, 4))\n" +
-            "            \n" +
-            "      WHERE A.POIID=?1",nativeQuery = true)
-    public List<Object[]> findOneById(String poiId);
-
     @Query("select c from Poi c "
             + "where c.poiId in :poiIds")
     public List<Poi> findByids(@Param("poiIds") String[] poiIds);
@@ -69,30 +47,82 @@ public interface PoiDao extends PagingAndSortingRepository<Poi, String>, JpaSpec
     //        String stationName);
 
 
-    @Query(value = "SELECT count(*) FROM bus_poi C INNER JOIN (select * from bus_area E where e.area_type = '1') D ON substr(C.citycode,0,DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4)) = substr(D.ad_code, 0, DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4))  where c.citycode like ?1 and d.area_name like ?2 and c.poiname like ?3", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*)\n" +
+            "  FROM BUS_POI\n" +
+            " WHERE CITYCODE LIKE ?1\n" +
+            "   AND CITYNAME LIKE ?2\n" +
+            "   AND POINAME LIKE ?3\n", nativeQuery = true)
     public int findAllCount(String cityCode,
                             String cityName,
                             String poiName);
 
-    @Query(value = "SELECT B.CITYCODE,B.POIID,B.POINAME,B.POITYPE1,B.POITYPE2,B.POITYPE3,B.POICOORDINATE,B.ADDRESS,B.TEL,B.GRIDID,B.AREA_NAME as CITYNAME FROM (SELECT A.*,rownum r FROM (SELECT C.*,D.area_name FROM bus_poi C INNER JOIN (select * from bus_area E where e.area_type = '1') D ON substr(C.citycode,0,DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4)) = substr(D.ad_code, 0, DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4)) where c.citycode like ?3 and d.area_name like ?4 and c.poiname like ?5) A WHERE rownum <= ?2) B WHERE r > ?1", nativeQuery = true)
-    public List<Object[]> findBySearch(int pageStart, int pageEnd,
+    //@Query(value = "SELECT count(*) FROM bus_poi C INNER JOIN (select * from bus_area E where e.area_type = '1') D ON substr(C.citycode,0,DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4)) = substr(D.ad_code, 0, DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4))  where c.citycode like ?1 and d.area_name like ?2 and c.poiname like ?3", nativeQuery = true)
+    //public int findAllCount(String cityCode,
+    //                        String cityName,
+    //                        String poiName);
+
+
+    @Query(value = "  SELECT *\n" +
+            "          FROM (SELECT A.*, ROWNUM R\n" +
+            "            FROM (SELECT *\n" +
+            "                    FROM BUS_POI\n" +
+            "                   WHERE CITYCODE LIKE ?3\n" +
+            "                     AND CITYNAME LIKE ?4\n" +
+            "                     AND POINAME  LIKE ?5\n)A" +
+            "           WHERE ROWNUM <= ?2) B\n" +
+            "         WHERE R > ?1", nativeQuery = true)
+    public List<Poi> findBySearch(int pageStart, int pageEnd,
                                        String cityCode,
                                        String cityName,
                                        String poiName);
 
+    //@Query(value = "SELECT B.CITYCODE,B.POIID,B.POINAME,B.POITYPE1,B.POITYPE2,B.POITYPE3,B.POICOORDINATE,B.ADDRESS,B.TEL,B.GRIDID,B.AREA_NAME as CITYNAME FROM (SELECT A.*,rownum r FROM (SELECT C.*,D.area_name FROM bus_poi C INNER JOIN (select * from bus_area E where e.area_type = '1') D ON substr(C.citycode,0,DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4)) = substr(D.ad_code, 0, DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4)) where c.citycode like ?3 and d.area_name like ?4 and c.poiname like ?5) A WHERE rownum <= ?2) B WHERE r > ?1", nativeQuery = true)
+    //public List<Object[]> findBySearch(int pageStart, int pageEnd,
+    //                                   String cityCode,
+    //                                   String cityName,
+    //                                   String poiName);
 
-    @Query(value = "SELECT count(*) FROM bus_poi C INNER JOIN (select * from bus_area E where e.area_type = '1') D ON substr(C.citycode,0,DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4)) = substr(D.ad_code, 0, DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4))  where c.citycode like ?1 and d.area_name like ?2 and c.poiname like ?3 and c.gridid in (?4)", nativeQuery = true)
+
+    @Query(value = "SELECT COUNT(*)\n" +
+            "  FROM BUS_POI\n" +
+            " WHERE CITYCODE LIKE ?1\n" +
+            "   AND CITYNAME LIKE ?2\n" +
+            "   AND POINAME LIKE ?3\n" +
+            "   AND GRIDID IN (?4)", nativeQuery = true)
     public int findAllCountByGridIds(String cityCode,
                             String cityName,
                             String poiName,
-                            String[] poiIds);
+                            String[] gridIds);
 
-    @Query(value = "SELECT B.CITYCODE,B.POIID,B.POINAME,B.POITYPE1,B.POITYPE2,B.POITYPE3,B.POICOORDINATE,B.ADDRESS,B.TEL,B.GRIDID,B.AREA_NAME as CITYNAME FROM (SELECT A.*,rownum r FROM (SELECT C.*,D.area_name FROM bus_poi C INNER JOIN (select * from bus_area E where e.area_type = '1') D ON substr(C.citycode,0,DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4)) = substr(D.ad_code, 0, DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4)) where c.citycode like ?3 and d.area_name like ?4 and c.poiname like ?5 and c.gridid in (?6)) A WHERE rownum <= ?2) B WHERE r > ?1", nativeQuery = true)
-    public List<Object[]> findBySearchAndGridIds(int pageStart, int pageEnd,
+
+    // @Query(value = "SELECT count(*) FROM bus_poi C INNER JOIN (select * from bus_area E where e.area_type = '1') D ON substr(C.citycode,0,DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4)) = substr(D.ad_code, 0, DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4))  where c.citycode like ?1 and d.area_name like ?2 and c.poiname like ?3 and c.gridid in (?4)", nativeQuery = true)
+    //public int findAllCountByGridIds(String cityCode,
+    //                        String cityName,
+    //                        String poiName,
+    //                        String[] poiIds);
+
+    @Query(value = "  SELECT *\n" +
+            "          FROM (SELECT A.*, ROWNUM R\n" +
+            "            FROM (SELECT *\n" +
+            "                    FROM BUS_POI\n" +
+            "                   WHERE CITYCODE LIKE ?3\n" +
+            "                     AND CITYNAME LIKE ?4\n" +
+            "                     AND POINAME  LIKE ?5\n" +
+            "                     AND GRIDID IN (?6))A"    +
+            "           WHERE ROWNUM <= ?2) B\n" +
+            "         WHERE R > ?1", nativeQuery = true)
+    public List<Poi> findBySearchAndGridIds(int pageStart, int pageEnd,
                                        String cityCode,
                                        String cityName,
                                        String poiName,
-                                       String[] poiIds);
+                                       String[] gridIds);
+
+    //@Query(value = "SELECT B.CITYCODE,B.POIID,B.POINAME,B.POITYPE1,B.POITYPE2,B.POITYPE3,B.POICOORDINATE,B.ADDRESS,B.TEL,B.GRIDID,B.AREA_NAME as CITYNAME FROM (SELECT A.*,rownum r FROM (SELECT C.*,D.area_name FROM bus_poi C INNER JOIN (select * from bus_area E where e.area_type = '1') D ON substr(C.citycode,0,DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4)) = substr(D.ad_code, 0, DECODE(d.area_name,'北京市',3,'天津市',3,'上海市',3,'重庆市',3,4)) where c.citycode like ?3 and d.area_name like ?4 and c.poiname like ?5 and c.gridid in (?6)) A WHERE rownum <= ?2) B WHERE r > ?1", nativeQuery = true)
+    //public List<Object[]> findBySearchAndGridIds(int pageStart, int pageEnd,
+    //                                             String cityCode,
+    //                                             String cityName,
+    //                                             String poiName,
+    //                                             String[] poiIds);
 
 
 }

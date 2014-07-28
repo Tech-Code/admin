@@ -51,6 +51,9 @@
             <input type="button" value="开始标注"
                    style="border:1px solid #C0C0C0"
                    onclick="javascript:mapObj.bind(mapObj,'click',callback)">
+            <input type="button" value="结束标注"
+                   style="border:1px solid #C0C0C0"
+                   onclick="javascript:mapObj.unbind(mapObj,'click',callback)">
             <br>
             <div style="border: 1px solid gray;height:300px" id="iCenter"/>
             </div>
@@ -207,7 +210,7 @@
         //alert(lonlat);
         document.getElementById("coordinate").value = lonlat;
         addMarker(lonlat);
-        mapObj.unbind(mapObj, 'click', callback)
+        //mapObj.unbind(mapObj, 'click', callback)
     }
 
     function addMarker(lonlat) {
