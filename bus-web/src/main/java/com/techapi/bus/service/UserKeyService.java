@@ -40,33 +40,37 @@ public class UserKeyService {
             Iterator<UserKey> userKeyIterator = userKeyList.iterator();
             while (userKeyIterator.hasNext()) {
                 UserKey userKey1 = userKeyIterator.next();
-                keysSet.add(userKey1.getKey());
+                keysSet.add(userKey1.getGenerateKey());
             }
         }
 
         int source= userKey.getSource();
-        String id = userKey.getId();
 
-        String key;
+        String generateKey = userKey.getGenerateKey();
         // 生成key
-        if (source == 0 && id != null && !id.isEmpty()) {
-            key = userKey.getKey();
+        if (source == 1 && generateKey != null && !generateKey.isEmpty()) { // 原始的更新
+            generateKey = userKey.getGenerateKey();
         } else {
-            key = userKey.getKey();
-            if (key == null || key.isEmpty()) {
+            // 新的generateKey的新增与修改
+            if (generateKey == null || generateKey.isEmpty() || generateKey.equals("待分配")) { // 新增
                 do {
-                    key = Common.getRandStr(80, false, true);
-                } while (!keysSet.add(key));
-
-                userKey.setKey(key);
-                userKey.setSource(1);
+                    generateKey = Common.getRandStr(80, false, true);
+                } while (!keysSet.add(generateKey));
+                userKey.setGenerateKey(generateKey);
+                userKey.setSource(0);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
                 String strDate = sdf.format(new Date());
                 userKey.setCreateDate(strDate);
+
+            } else { // 修改
+                UserKey existedUserKey = userKeyDao.findOne(generateKey);
+                if(existedUserKey != null) {
+                    userKey.setCreateDate(existedUserKey.getCreateDate());
+                }
             }
         }
 
-        String ctlcache = String.format(BusConstants.BUS_CTL_KEY, key);
+        String ctlcache = String.format(BusConstants.BUS_CTL_KEY, generateKey);
 
         if (userKey != null) {
             //补cache
@@ -76,6 +80,8 @@ public class UserKeyService {
             cacheProxy.put(ctlcache, new ArrayList<UserKey>(), TTL._10M.getTime(), BusConstants.REDIS_INDEX_KEY);
         }
         return userKeyDao.save(userKey);
+
+
     }
 
     /**
@@ -96,8 +102,8 @@ public class UserKeyService {
     /**
      * @return
      */
-    public UserKey findById(String id) {
-        UserKey userKey = userKeyDao.findOne(id);
+    public UserKey findByKey(String generateKey) {
+        UserKey userKey = userKeyDao.findOneByKey(generateKey);
         return userKey;
     }
 
@@ -107,16 +113,16 @@ public class UserKeyService {
     }
 
 
-    public void deleteOne(String id) {
-        userKeyDao.delete(id);
+    public void deleteOne(String generateKey) {
+        userKeyDao.delete(generateKey);
     }
 
     public int deleteMany(List<UserKey> userKeyList) {
         int deleteCount = 0;
         for (UserKey userKey : userKeyList) {
-            if (userKey.getSource() == 1) {
+            if (userKey.getSource() == 0) {
                 if (userKey != null) {
-                    String poicache = String.format(BusConstants.BUS_CTL_KEY, userKey.getKey());
+                    String poicache = String.format(BusConstants.BUS_CTL_KEY, userKey.getGenerateKey());
                     cacheProxy.delete(poicache, BusConstants.REDIS_INDEX_KEY);
                 }
                 userKeyDao.delete(userKey);
@@ -152,17 +158,17 @@ public class UserKeyService {
         return springMapList;
     }
 
-    public Map<String, Object> findBySearchBySection(int page, int rows, String businessName, String businessFlag, String selectBusinessType, String province, String businessUrl, String key) {
+    public Map<String, Object> findBySearchBySection(int page, int rows, String businessName, String businessFlag, String selectBusinessType, String province, String businessUrl, String generateKey) {
         Pageable pager = new PageRequest(page - 1, rows);
 
-        List<UserKey> searchResult = userKeyDao.findBySearch("%" + businessName + "%", "%" + businessFlag + "%", "%" + selectBusinessType + "%", "%" + province + "%", "%" + businessUrl + "%", "%" + key + "%");
+        List<UserKey> searchResult = userKeyDao.findBySearch("%" + businessName + "%", "%" + businessFlag.toUpperCase() + "%", "%" + selectBusinessType + "%", "%" + province + "%", "%" + businessUrl + "%", "%" + generateKey + "%");
 
         return PageUtils.getPageMap(searchResult, pager);
     }
 
-    public String findBySearchToExcel(HttpServletResponse response, String businessName, String businessFlag, String selectBusinessType, String province, String businessUrl, String key) {
-        List<UserKey> searchResult = userKeyDao.findBySearch("%" + businessName + "%", "%" + businessFlag + "%", "%" + selectBusinessType + "%", "%" + province + "%", "%" + businessUrl + "%", "%" + key + "%");
-        String[] title = {"时间", "业务名称", "业务子名称", "业务标识", "业务分类", "使用API", "省份", "状态", "厂商" , "业务地址", "key", "联系人", "资源", "来源"};
+    public String findBySearchToExcel(HttpServletResponse response, String businessName, String businessFlag, String selectBusinessType, String province, String businessUrl, String generateKey) {
+        List<UserKey> searchResult = userKeyDao.findBySearch("%" + businessName + "%", "%" + businessFlag + "%", "%" + selectBusinessType + "%", "%" + province + "%", "%" + businessUrl + "%", "%" + generateKey + "%");
+        String[] title = {"时间", "业务名称", "业务子名称", "业务标识", "业务分类", "使用API", "省份", "状态", "厂商" , "业务地址", "key", "联系人", "资源", "来源(0:新增,1:原始)"};
         String result = ExportExcel.exportExcel(response, "userkey.xls", title, searchResult);
         return result;
 

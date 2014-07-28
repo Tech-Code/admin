@@ -55,6 +55,7 @@ public final class BusConstants {
     public static final String RESULT_REPEAT_TAXI = "6"; // 出租车重复记录
     public static final String RESULT_REPEAT_SPEED = "7"; // 出租车重复记录
     public static final String RESULT_NO_EXIST_CITYNAME = "8"; // 城市名称不存在
+
     /**
      * 返回状态文字
      */

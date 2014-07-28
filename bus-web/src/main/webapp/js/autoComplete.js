@@ -61,7 +61,7 @@ function autoComplete (event) {
         //window.clearTimeout(timeOutId);
         timeOutId = setTimeout(function () {
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: ajaxProcessUrl,
                 data: 'cityStationName=' + wordText,
                 success: function (data) {

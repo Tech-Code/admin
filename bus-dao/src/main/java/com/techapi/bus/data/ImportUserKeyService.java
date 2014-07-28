@@ -26,7 +26,7 @@ public class ImportUserKeyService {
         // import to redis
         int index = 2;
         for(UserKey userKey : userKeyList) {
-            String key = userKey.getKey();
+            String key = userKey.getGenerateKey();
             String ctlcache = String.format(BusConstants.BUS_CTL_KEY, key);
 
             if (userKey != null) {
@@ -40,5 +40,7 @@ public class ImportUserKeyService {
         }
         System.out.println("Begin----------------insert db");
         dao.save(userKeyList);
+
+        System.out.println("导入UserKey完毕!");
 	}
 }

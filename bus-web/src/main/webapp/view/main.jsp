@@ -76,7 +76,7 @@
 		<div class="easyui-accordion" fit="true" border="false">
 			<!-- selected -->
 
-            <div title="城际换乘" style="overflow: hidden;">
+            <div title="系统配置表维护" style="overflow: hidden;">
                 <ul>
                     <li>
                         <a href="javascript:addTab('tabId_cslist','城市交通站点管理','<%=root%>/view/citystation/cslist.jsp');">城市交通站点管理</a>
@@ -102,15 +102,18 @@
                         <a href="javascript:addTab('tabId_splist','时速配置管理','<%=root%>/view/speed/speedlist.jsp');">时速配置管理</a>
                     </li>
                 </ul>
+            </div>
+
+            <div title="权限管理" style="overflow: hidden;">
                 <ul>
                     <li>
                         <a href="javascript:addTab('tabId_keylist','权限配置管理','<%=root%>/view/userkey/userkeylist.jsp');">权限配置管理</a>
                     </li>
                 </ul>
-
             </div>
 
-			<div title="日志查询" style="overflow: hidden;">
+
+			<div title="统计功能" style="overflow: hidden;">
 				<ul>
 					<li>
 						<a href="javascript:addTab('tabId_namelist','业务统计','<%=root%>/view/analysis/namelist.jsp');">业务统计</a>
@@ -131,12 +134,14 @@
 						<a href="javascript:addTab('tabId_group_tab','时段统计','<%=root%>/view/analysis/grouplist.jsp');">时段统计</a>
 					</li>
 				</ul>
-				<ul>
-					<li>
-						<a href="javascript:addTab('tabId_time_log','访问日志','<%=root%>/view/analysis/timelog.jsp');">访问日志</a>
-					</li>
-				</ul>
 			</div>
+            <div title="日志管理" style="overflow: hidden;">
+                <ul>
+                    <li>
+                        <a href="javascript:addTab('tabId_time_log','访问日志','<%=root%>/view/analysis/timelog.jsp');">访问日志</a>
+                    </li>
+                </ul>
+            </div>
 		</div>
 	</div>
 	<!-- 正中间panel -->

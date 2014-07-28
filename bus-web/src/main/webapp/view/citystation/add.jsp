@@ -47,7 +47,14 @@
                     <input name="coordinate" id="coordinate" value="${cs.coordinate }" class="text-input" />
                 </label>
 			</div>
-            <div style="width:60%;height:300px;border: 1px solid gray;float: right;" id="iCenter"></div>
+            <div style="width:60%;height:320px;float:right;">
+            <input type="button" value="开始标注"
+                   style="border:1px solid #C0C0C0"
+                   onclick="javascript:mapObj.bind(mapObj,'click',callback)">
+            <br>
+            <div style="border: 1px solid gray;height:300px" id="iCenter"/>
+            </div>
+            </div>
 		</fieldset>
         <a href="javascript:add()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
 	</form>
@@ -64,11 +71,6 @@
     } else {
         loadMap("116.397428, 39.90923");
     }
-    mapObj.bind(mapObj, "click", function (e) {
-        var lonlat = e.lnglat.lng + "," + e.lnglat.lat;
-        document.getElementById("coordinate").value = lonlat;
-        addMarker(lonlat);
-    });
 
     var highlightindex = -1; //定义高亮显示索引,-1代表不高亮任何行
     var timeOutId = null; //定义延迟时间Id
@@ -163,13 +165,6 @@
             scale = new MMap.Scale(); //加载比例尺
             mapObj.addControl(scale);
         });
-
-        mapObj.bind(mapObj, "click", function (e) {
-            var lonlat = e.lnglat.lng + "," + e.lnglat.lat;
-            //alert(lonlat);
-            document.getElementById("coordinate").value = lonlat;
-            addMarker(lonlat);
-        });
     }
 
     function changeTransDetail() {
@@ -205,6 +200,14 @@
             divTransDetailList.append(item1);
 
         }
+    }
+
+    function callback(e) {
+        var lonlat = e.lnglat.lng + "," + e.lnglat.lat;
+        //alert(lonlat);
+        document.getElementById("coordinate").value = lonlat;
+        addMarker(lonlat);
+        mapObj.unbind(mapObj, 'click', callback)
     }
 
     function addMarker(lonlat) {

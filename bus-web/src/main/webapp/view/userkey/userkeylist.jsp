@@ -27,7 +27,7 @@
             collapsible: true,//可折叠
             url: getUrl, //数据来源
             sortOrder: 'asc', //倒序
-            idField: 'id', //主键字段
+            idField: 'generateKey', //主键字段
             remoteSort: true, //服务器端排序
             pagination: true, //显示分页
             rownumbers: true, //显示行号
@@ -129,12 +129,12 @@
                         } //需要formatter一下才能显示正确的数据
                     },
                     {
-                        field: 'key',
-                        title: 'key',
+                        field: 'generateKey',
+                        title: 'Key',
                         width: 20,
                         sortable: true,
                         formatter: function (value, row, index) {
-                            return row.key;
+                            return row.generateKey;
                         } //需要formatter一下才能显示正确的数据
                     },
                     {
@@ -161,8 +161,8 @@
                         width: 20,
                         sortable: true,
                         formatter: function (value, row, index) {
-                            if (value == 0) return "原始";
-                            if (value == 1) return "新增";
+                            if (value == 1) return "原始";
+                            if (value == 0) return "新增";
                             //return row.source;
                         } //需要formatter一下才能显示正确的数据
                     }
@@ -197,14 +197,8 @@
                 $('#userKeyTable').datagrid('clearSelections'); //一定要加上这一句，要不然datagrid会记住之前的选择状态，删除时会出问题
             },
             onClickRow: function (rowIndex, rowData) {
-                //$.messager.show({
-                //    width: 500,
-                //    height: 35,
-                //    msg: rowData.key,
-                //    timeout: 30000
-                //})
                 $("textarea").css("display", "block");
-                $("textarea").html(rowData.key);
+                $("textarea").html(rowData.generateKey);
                 $("textarea").select();
             }
         });
@@ -231,7 +225,7 @@
 		var ps = "";
 		$.each(rows, function(i, n) {
 			if (i == 0)
-				ps += "?id=" + n.id;
+				ps += "?generateKey=" + n.generateKey;
 		});
 		
 		var url = '<%=root%>/userkey/update' + ps;
@@ -247,9 +241,9 @@
 				var ps = "";
 				$.each(rows, function(i, n) {
 					if (i == 0)
-						ps += "?id=" + n.id;
+						ps += "?generateKey=" + n.generateKey;
 					else
-						ps += "&id=" + n.id;
+						ps += "&generateKey=" + n.generateKey;
 				});
 				$.post('<%=root%>/userkey/delete' + ps, function(data) {
 					$('#userKeyTable').datagrid('reload');
@@ -266,10 +260,10 @@
         var selectBusinessType = $('#selectBusinessType').combobox('getText');
         var province = $('#province').val();
         var businessUrl = $('#businessUrl').val();
-        var key = $('#key').val();
+        var generateKey = $('#generateKey').val();
 
         if (selectBusinessType == '全部') selectBusinessType = '';
-        var queryParams = {businessName: businessName, businessFlag: businessFlag, selectBusinessType: selectBusinessType, province: province, businessUrl: businessUrl, key: key};
+        var queryParams = {businessName: businessName, businessFlag: businessFlag, selectBusinessType: selectBusinessType, province: province, businessUrl: businessUrl, generateKey: generateKey};
 
         initDataGrid("${ctx}/userkey/searchlist?", queryParams);
     }
@@ -281,10 +275,10 @@
         var selectBusinessType = $('#selectBusinessType').combobox('getText');
         var province = $('#province').val();
         var businessUrl = $('#businessUrl').val();
-        var key = $('#key').val();
+        var generateKey = $('#generateKey').val();
 
         if (selectBusinessType == '全部') selectBusinessType = '';
-        var url = "${ctx}/userkey/downloaddl?businessName=" + businessName + "&businessFlag=" + businessFlag + "&selectBusinessType=" + selectBusinessType + "&province=" + province + "&businessUrl=" + businessUrl + "&key=" + key;
+        var url = "${ctx}/userkey/downloaddl?businessName=" + businessName + "&businessFlag=" + businessFlag + "&selectBusinessType=" + selectBusinessType + "&province=" + province + "&businessUrl=" + businessUrl + "&generateKey=" + generateKey;
         window.location.href = url;
     }
 </script>
@@ -299,7 +293,7 @@
         业务分类:<input class="easyui-combobox" id="selectBusinessType" style="width:70px;"/>
         省份:<input id="province" style="width:100px;"/>
         业务地址:<input id="businessUrl" style="width:100px;"/>
-        KEY:<input id="key" style="width:100px;"/>
+        KEY:<input id="generateKey" style="width:100px;"/>
 
         <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-search" onclick="select()">查询</a>
         <a href="#" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="exportUserKey()">导出EXCEL</a>

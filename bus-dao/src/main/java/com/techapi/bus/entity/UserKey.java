@@ -1,17 +1,16 @@
 package com.techapi.bus.entity;
 
 import com.techapi.bus.annotation.ExcelField;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name="BUS_KEY")
 public class UserKey implements java.io.Serializable{
-    @Id
-    @GeneratedValue(generator = "UUIDGenerator")
-    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid")
-    private String id;
+
     @Column(name = "CREATEDATE")
     @ExcelField
     private String createDate;
@@ -42,9 +41,10 @@ public class UserKey implements java.io.Serializable{
     @Column(name = "BUSINESSURL")
     @ExcelField
     private String businessUrl;
-    @Column(name = "KEY")
+    @Id
+    @Column(name = "GENERATEKEY")
     @ExcelField
-    private String key;
+    private String generateKey;
     @Column(name = "CONTACT")
     @ExcelField
     private String contact;
@@ -53,15 +53,7 @@ public class UserKey implements java.io.Serializable{
     private String businessResource;
     @Column(name = "SOURCE")
     @ExcelField
-    private int source;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    private int source; // 0:新增;1:原始 便于初始化时的处理
 
     public String getCreateDate() {
         return createDate;
@@ -143,12 +135,12 @@ public class UserKey implements java.io.Serializable{
         this.businessUrl = businessUrl;
     }
 
-    public String getKey() {
-        return key;
+    public String getGenerateKey() {
+        return generateKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setGenerateKey(String generateKey) {
+        this.generateKey = generateKey;
     }
 
     public String getContact() {
@@ -178,8 +170,7 @@ public class UserKey implements java.io.Serializable{
     @Override
     public String toString() {
         return "Key{" +
-                "id='" + id + '\'' +
-                ", createDate='" + createDate + '\'' +
+                " createDate='" + createDate + '\'' +
                 ", businessName='" + businessName + '\'' +
                 ", businessSubName='" + businessSubName + '\'' +
                 ", businessFlag='" + businessFlag + '\'' +
@@ -189,7 +180,7 @@ public class UserKey implements java.io.Serializable{
                 ", status='" + status + '\'' +
                 ", firm='" + firm + '\'' +
                 ", businessUrl='" + businessUrl + '\'' +
-                ", key='" + key + '\'' +
+                ", generateKey='" + generateKey + '\'' +
                 ", contact='" + contact + '\'' +
                 ", businessResource='" + businessResource + '\'' +
                 '}';

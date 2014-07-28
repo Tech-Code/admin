@@ -83,17 +83,17 @@ public class ExcelUtils {
                 userKey.setCreateDate(sheet.getCell(0, i).getContents());
                 userKey.setBusinessName(sheet.getCell(1, i).getContents());
                 userKey.setBusinessSubName(sheet.getCell(2, i).getContents());
-                userKey.setBusinessFlag(sheet.getCell(3, i).getContents());
+                userKey.setBusinessFlag(sheet.getCell(3, i).getContents().toUpperCase());
                 userKey.setBusinessType(sheet.getCell(4, i).getContents());
                 userKey.setUsedApi(sheet.getCell(5, i).getContents());
                 userKey.setProvince(sheet.getCell(6, i).getContents());
                 userKey.setStatus(sheet.getCell(7, i).getContents());
                 userKey.setFirm(sheet.getCell(8, i).getContents());
                 userKey.setBusinessUrl(sheet.getCell(9, i).getContents());
-                userKey.setKey(sheet.getCell(10, i).getContents());
+                userKey.setGenerateKey(sheet.getCell(10, i).getContents().trim());
                 userKey.setContact(sheet.getCell(11, i).getContents());
                 userKey.setBusinessResource(sheet.getCell(12, i).getContents());
-                userKey.setSource(0);
+                userKey.setSource(1);
                 userKeyList.add(userKey);
             }
 

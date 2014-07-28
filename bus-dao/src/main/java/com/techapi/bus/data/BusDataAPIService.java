@@ -1,23 +1,5 @@
 package com.techapi.bus.data;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-
 import com.techapi.bus.BusConstants;
 import com.techapi.bus.annotation.CacheProxy;
 import com.techapi.bus.annotation.HessianSerializer;
@@ -27,14 +9,19 @@ import com.techapi.bus.dao.PoiDao;
 import com.techapi.bus.dao.SpeedDao;
 import com.techapi.bus.dao.TaxiDao;
 import com.techapi.bus.dao.UserKeyDao;
-import com.techapi.bus.entity.Grid;
-import com.techapi.bus.entity.LatLng;
-import com.techapi.bus.entity.Poi;
-import com.techapi.bus.entity.Speed;
-import com.techapi.bus.entity.Taxi;
-import com.techapi.bus.entity.UserKey;
+import com.techapi.bus.entity.*;
 import com.techapi.bus.util.MapUtil;
 import com.techapi.bus.util.TTL;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
+import javax.annotation.Resource;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 public class BusDataAPIService {
@@ -107,7 +94,7 @@ public class BusDataAPIService {
 	/***
 	 * 批量返回一批地标点获得POI（实时接口）
 	 * 
-	 * @param stationid
+	 * @param stationids
 	 *            ... 地标点串
 	 * @return
 	 */
@@ -324,7 +311,7 @@ public class BusDataAPIService {
 
 		Object obj = cacheProxy.get(sKey, index);
 		if (obj == null) {
-			UserKey user = keyDao.findOneByKey(key);
+			UserKey user = keyDao.findOne(key);
 
 			if (user != null) {
 				// 数据持久化

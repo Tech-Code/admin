@@ -2,7 +2,6 @@ package com.techapi.bus.service;
 
 import com.techapi.bus.dao.*;
 import com.techapi.bus.entity.*;
-import com.techapi.bus.util.DataUtils;
 import com.techapi.bus.util.ExportExcel;
 import com.techapi.bus.util.PageUtils;
 import com.techapi.bus.vo.AnalysisExcelVO;
@@ -405,8 +404,8 @@ public class AnalysisService {
 		List<SpringMap> lm = new ArrayList<SpringMap>();
 		for(UserKey s:stype){
 			SpringMap sm = new SpringMap();
-			sm.setId(s.getKey());
-			sm.setText(s.getBusinessName()+"-"+s.getKey());
+			sm.setId(s.getGenerateKey());
+			sm.setText(s.getBusinessName()+"-"+s.getGenerateKey());
 			lm.add(sm);
 		}
 		SpringMap sm = new SpringMap();
@@ -487,7 +486,7 @@ public class AnalysisService {
 		List<UserKey> ukList =(List<UserKey>) userKeyDao.findAll();
 		Map<String,UserKey> map = new HashMap<String,UserKey>();
 		for(UserKey uk:ukList){
-			map.put(uk.getKey(), uk);
+			map.put(uk.getGenerateKey(), uk);
 		}
 		return map;
 	}

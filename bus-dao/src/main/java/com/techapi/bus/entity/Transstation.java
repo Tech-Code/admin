@@ -32,6 +32,8 @@ public class Transstation implements java.io.Serializable{
     private String lastDepartTime; // 末班车发车时间
     @Column(name = "DEPARTINTERVAL")
     private int departInterval; // 发车间隔
+    @Column(name = "DAYCOUNT",columnDefinition = "1")
+    private int dayCount; // 天数
     //@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
     @ManyToOne()
     @JoinColumn(name = "citystationid")
@@ -118,6 +120,14 @@ public class Transstation implements java.io.Serializable{
 
     public void setCityStation(CityStation cityStation) {
         this.cityStation = cityStation;
+    }
+
+    public int getDayCount() {
+        return dayCount;
+    }
+
+    public void setDayCount(int dayCount) {
+        this.dayCount = dayCount;
     }
 
     @Override

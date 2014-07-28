@@ -30,15 +30,14 @@ public class UserKeyController {
     public Map<String, String> add(UserKey userKey, HttpServletRequest request)
             throws Exception {
         Map<String, String> map = new HashMap<>();
-
         try {
-            UserKey savedUserKey = userKeyService.addOrUpdate(userKey);
-            map.put("mes", "操作成功");
-            map.put("key", savedUserKey.getKey());
+            userKey = userKeyService.addOrUpdate(userKey);
+            map.put("mes", "操作失败");
+            map.put("generateKey", userKey.getGenerateKey());
         } catch (Exception e) {
             e.printStackTrace();
             map.put("mes", "操作失败");
-            map.put("key", "");
+            map.put("generateKey", "");
             throw e;
         }
 
@@ -52,19 +51,19 @@ public class UserKeyController {
     }
 
     @RequestMapping("/update")
-    public String update(Model model, String id) throws Exception {
-        UserKey userKey = userKeyService.findById(id);
+    public String update(Model model, String generateKey) throws Exception {
+        UserKey userKey = userKeyService.findByKey(generateKey);
         model.addAttribute(Constants.KEY_INFO_SESSION, userKey);
         return "userkey/add";
     }
 
     @RequestMapping(value = "/delete")
     @ResponseBody
-    public Map<String, String> delete(@RequestParam("id") List<String> ids)
+    public Map<String, String> delete(@RequestParam("generateKey") List<String> keys)
             throws Exception {
         Map<String, String> map = new HashMap<String, String>();
         try {
-            List<UserKey> userKeyList = userKeyService.findByIds(ids);
+            List<UserKey> userKeyList = userKeyService.findByIds(keys);
             int deleteStatus = userKeyService.deleteMany(userKeyList);
             if(deleteStatus == BusConstants.DELETE_ALL_USERKEY_STATUS) {
                 map.put("mes", "删除全部成功");
@@ -97,15 +96,15 @@ public class UserKeyController {
                                           @RequestParam(value = "selectBusinessType", required = false) String selectBusinessType,
                                           @RequestParam(value = "province", required = false) String province,
                                           @RequestParam(value = "businessUrl", required = false) String businessUrl,
-                                          @RequestParam(value = "key", required = false) String key) throws Exception {
+                                          @RequestParam(value = "generateKey", required = false) String generateKey) throws Exception {
         System.out.println("page: " + page + "rows: " + rows
                             + "businessName: " + businessName
                             + "------businessFlag: " + businessFlag
                             + "--------selectBusinessType:" + selectBusinessType
                             + "-------province:" + province
                             + "-------businessUrl:" + businessUrl
-                            + "-------key:" + key);
-        return userKeyService.findBySearchBySection(page, rows, businessName, businessFlag, selectBusinessType, province, businessUrl, key);
+                            + "-------generateKey:" + generateKey);
+        return userKeyService.findBySearchBySection(page, rows, businessName, businessFlag, selectBusinessType, province, businessUrl, generateKey);
     }
 
     @RequestMapping("/downloaddl")
@@ -116,13 +115,13 @@ public class UserKeyController {
                                  @RequestParam(value = "selectBusinessType", required = false) String selectBusinessType,
                                  @RequestParam(value = "province", required = false) String province,
                                  @RequestParam(value = "businessUrl", required = false) String businessUrl,
-                                 @RequestParam(value = "key", required = false) String key) throws Exception {
+                                 @RequestParam(value = "generateKey", required = false) String generateKey) throws Exception {
         userKeyService.findBySearchToExcel(response,
                                             businessName.trim(),
                                             businessFlag.trim(),
                                             selectBusinessType.trim(),
                                             province.trim(),
                                             businessUrl.trim(),
-                                            key.trim());
+                                            generateKey.trim());
     }
 }

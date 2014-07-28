@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface UserKeyDao extends PagingAndSortingRepository<UserKey, String> {
 
-	@Query("select c from UserKey c " + "where c.key = :key")
-	public UserKey findOneByKey(@Param("key") String key);
+	@Query("select c from UserKey c " + "where c.generateKey = :generateKey")
+	public UserKey findOneByKey(@Param("generateKey") String generateKey);
 
     @Query("select c from UserKey c "
             + "where coalesce(c.businessName,'0') like :businessName "
@@ -18,14 +18,14 @@ public interface UserKeyDao extends PagingAndSortingRepository<UserKey, String> 
             + "and coalesce(c.businessType,'0') like :businessType "
             + "and coalesce(c.province,'0') like :province "
             + "and coalesce(c.businessUrl,'0') like :businessUrl "
-            + "and c.key like :key ")
+            + "and c.generateKey like :generateKey ")
         public List<UserKey> findBySearch(
             @Param("businessName") String businessName,
             @Param("businessFlag") String businessFlag,
             @Param("businessType") String businessType,
             @Param("province") String province,
             @Param("businessUrl") String businessUrl,
-            @Param("key") String key);
+            @Param("generateKey") String generateKey);
 
 
 }

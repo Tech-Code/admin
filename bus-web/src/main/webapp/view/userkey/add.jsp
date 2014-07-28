@@ -21,9 +21,8 @@
 </head>
 <body>
 	<form action="" class="formular" id="userKeyForm">
-		<input type="hidden" id="id" name="id" value="${userKey.id }" />
 
-        <c:if test="${userKey.source!=null}">
+        <c:if test="${userKey.source != null}">
             <input type="hidden" id="source" name="source" value="${userKey.source}"/>
         </c:if>
 
@@ -56,7 +55,8 @@
                 <label>
                     <span>key</span>
                     <div style="margin-top: 5px">
-                        <input class="text-input" id="key" name="key" value="${userKey.key }" readonly style="width:700px"/>
+                        <input class="text-input" id="generateKey" name="generateKey" value="<c:choose><c:when test="${!empty userKey.generateKey}">${userKey.generateKey }</c:when><c:otherwise>待分配</c:otherwise></c:choose>"
+                              style="color:#999;width:700px" readonly />
                     </div>
                 </label>
                 <label>
@@ -97,8 +97,6 @@
         required: true
     });
 
-
-
 	function add() {
         var isValid = $('#userKeyForm').form('validate');
         if (!isValid) {
@@ -106,11 +104,29 @@
         } else {
             $.post("${ctx}/userkey/add", $("#userKeyForm").serializeArray(),
                     function (data) {
+                        $('#generateKey').attr('value', data.generateKey);
                         $.messager.alert('提示', '操作成功', 'info');
-                        $('#key').attr('value',data.key);
+
                     });
+
 
         }
 	}
+
+
+
+    //Load
+    function Load() {
+        $("<div class=\"datagrid-mask\"></div>").css({ display: "block", width: "100%", height: $(window).height() }).appendTo("body");
+        $("<div class=\"datagrid-mask-msg\"></div>").html("正在运行，请稍候。。。").appendTo("body").css({ display: "block", left: ($(document.body).outerWidth(true) - 190) / 2, top: ($(window).height() - 45) / 2 });
+    }
+
+    //hidden Load
+    function dispalyLoad() {
+        $(".datagrid-mask").remove();
+        $(".datagrid-mask-msg").remove();
+    }
+
+
 </script>
 </html>

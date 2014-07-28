@@ -22,6 +22,6 @@ public class DateTimeUtils {
         int iMinutes = time % 60;
 
 
-        return iHour + ":" + iMinutes;
+        return iHour + ":" + ((iMinutes<10)?("0"+iMinutes):iMinutes);
     }
 }

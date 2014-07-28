@@ -32,10 +32,10 @@
                 </label>
                 <label>
                     <span>发车方式</span>
-                    <input class="radio" type="radio" name="departType" value="0" id="fixDepartType"
-                           onchange="departTypeChange()"/>固定发车
-                    <input class="radio" type="radio" name="departType" value="1" id="repeatDepartType"
-                           onchange="departTypeChange()"/>循环发车
+                    <input type="radio" name="departType" value="0" id="fixDepartType"
+                           onclick="departTypeChange()"/>固定发车
+                    <input type="radio" name="departType" value="1" id="repeatDepartType"
+                           onclick="departTypeChange()"/>循环发车
                 </label>
                 <label>
                     <span>首班车时间（HH:mm）</span>
@@ -63,6 +63,16 @@
                     <%--<input class="easyui-datetimebox" name="departTime" id="departTime" data-options="required:true,showSeconds:true"/>--%>
                     <input name="departTime" id="departTime" value="${ts.departTime }" class="text-input"/>
                 </label>
+                <label>
+                    <span>天数</span>
+                    <select name="dayCount" class="text-input" id="dayCount">
+                        <option value="1" <c:if test="${cs.dayCount==1 }">selected</c:if>>1天</option>
+                        <option value="2" <c:if test="${cs.dayCount==2 }">selected</c:if>>2天</option>
+                        <option value="3" <c:if test="${cs.dayCount==3 }">selected</c:if>>3天</option>
+                        <option value="4" <c:if test="${cs.dayCount==4 }">selected</c:if>>4天</option>
+                        <option value="5" <c:if test="${cs.dayCount==5 }">selected</c:if>>5天</option>
+                    </select>
+                </label>
 				<label>
 					<span>里程（公里）</span>
                     <input name="miles" id="miles" value="${ts.miles }" class="text-input"/>
@@ -78,6 +88,18 @@
 	</form>
 </body>
 <script type="text/javascript">
+    <c:choose>
+    <c:when test="${ts.departType=='0' }">
+    $('#fixDepartType').attr("checked", "checked");
+    </c:when>
+    <c:when test="${ts.departType=='1' }">
+    $('#repeatDepartType').attr("checked", "checked");
+    </c:when>
+    <c:otherwise>
+    $('#fixDepartType').attr("checked", "checked");
+    </c:otherwise>
+    </c:choose>
+
     var mapObj, toolbar, overview, scale;
     var cityStationCoordinate = "${ts.cityStation.coordinate}";
 
@@ -131,17 +153,7 @@
         validType: 'number'
     });
 
-    <c:choose>
-    <c:when test="${ts.departType=='0' }">
-    $('#fixDepartType').attr("checked", "checked");
-    </c:when>
-    <c:when test="${ts.departType=='1' }">
-    $('#repeatDepartType').attr("checked", "checked");
-    </c:when>
-    <c:otherwise>
-    $('#fixDepartType').attr("checked", "checked");
-    </c:otherwise>
-    </c:choose>
+
 
     function loadMap(lonlat) {
         var LngLatX = lonlat.split(",")[0]; //获取Lng值
@@ -177,15 +189,14 @@
     }
 
     function departTypeChange() {
-        var selected = $('input[name="departType"]:checked').val();
-        var divDepartInterval = $("#divDepartInterval"); //可供选择的项
-        divDepartInterval.empty();
-        if(selected == 1) {
-
-            divDepartInterval.append("<span > 发车间隔（分钟） </span >");
-            var item1 = "<input name='departInterval' id='departInterval' value='${ts.departInterval}' class='text-input'/>";
-            divDepartInterval.append(item1);
-        }
+        //var selected = $('input[name="departType"]:checked').val();
+        //var divDepartInterval = $("#divDepartInterval"); //可供选择的项
+        //divDepartInterval.empty();
+        <%--if(selected == 1) {--%>
+            <%--divDepartInterval.append("<span > 发车间隔（分钟） </span >");--%>
+            <%--var item1 = "<input name='departInterval' id='departInterval' value='${ts.departInterval}' class='text-input'/>";--%>
+            <%--divDepartInterval.append(item1);--%>
+        <%--}--%>
     }
 
     function addMarker(lonlat) {

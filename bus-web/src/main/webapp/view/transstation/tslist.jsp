@@ -143,7 +143,8 @@
                         formatter: function (value, row, index) {
                             var hour = parseInt(row.arriveTime / 60);
                             var minute = row.arriveTime % 60;
-                            return hour + ":" + minute;
+
+                            return hour + ":" + ((minute < 10)?('0'+minute):minute);
                         } //需要formatter一下才能显示正确的数据
                     },
                     {
@@ -154,7 +155,16 @@
                         formatter: function (value, row, index) {
                             var hour = parseInt(row.departTime / 60);
                             var minute = row.departTime % 60;
-                            return hour + ":" + minute;
+                            return hour + ":" + ((minute < 10) ? ('0' + minute) : minute);
+                        } //需要formatter一下才能显示正确的数据
+                    },
+                    {
+                        field: 'dayCount',
+                        title: '天数',
+                        width: 20,
+                        sortable: true,
+                        formatter: function (value, row, index) {
+                            return row.dayCount + '天';
                         } //需要formatter一下才能显示正确的数据
                     },
                     {
