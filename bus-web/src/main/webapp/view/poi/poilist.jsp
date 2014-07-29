@@ -222,10 +222,8 @@
         var range = $('#range').combobox('getText');
 
         if (cityName == '全部') cityName = '';
-        else {
-            var queryParams = {cityCode: cityCode, cityName: cityName, poiName: poiName, centerLonLat: centerLonLat, range: range};
-            initDataGrid("${ctx}/poi/searchlist?", queryParams);
-        }
+        var queryParams = {cityCode: cityCode, cityName: cityName, poiName: poiName, centerLonLat: centerLonLat, range: range};
+        initDataGrid("${ctx}/poi/searchlist?", queryParams);
 
 
     }
