@@ -47,7 +47,6 @@ public class BusDataAPIService {
 	 * 
 	 * @return
 	 */
-	@ServiceCache(TTL._5M)
 	public List<CityTransstationRelation> getAllCityTransstation() {
 		List<CityTransstationRelation> city = cityTransstationDataService
 				.getAllCityTransstation();
