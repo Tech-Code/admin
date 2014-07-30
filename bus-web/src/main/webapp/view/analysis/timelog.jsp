@@ -5,7 +5,7 @@
 <head>
 <script type="text/javascript">
 	jQuery(function($) {
-		var url="${ctx}/analysis/loglist?name=all&type=all&startTime="+getPreWeek()+"&endTime="+getToDay(); //数据来源
+		var url="${ctx}/analysis/loglist?name=all&type=all&startTime="+getPre3day()+"&endTime="+getToDay(); //数据来源
 		initDataGrid(url,"{}");
 		//业务名称
 		$('#selectType').combobox({ 
@@ -21,7 +21,7 @@
 			});
 		$('#selectName').combobox('setValue','全部');
 		$('#selectType').combobox('setValue','全部');
-		$('#beginTime').datebox('setValue',getPreWeek());
+		$('#beginTime').datebox('setValue',getPre3day());
 		$('#endTime').datebox('setValue',getToDay());
 	});
 	//更新
@@ -133,9 +133,9 @@
          return nowYear+"-"+nowMonth+"-"+nowDate;
     }
    
-	 function getPreWeek(){
+	 function getPre3day(){
 	    	var beforeDate = new Date();
-	    	beforeDate.setTime(beforeDate.getTime()-1000*60*60*24*7);
+	    	beforeDate.setTime(beforeDate.getTime()-1000*60*60*24*3);
 	    	var strYear2=beforeDate.getFullYear();
 	    	var strMon2=beforeDate.getMonth()+1;
 	    	var strDate2=beforeDate.getDate();
