@@ -105,18 +105,27 @@ public class BusDataAPIService {
 					stationid);
 			List<Poi> poiList;
 			// 查询cache
-			Object o = cacheProxy.get(stationcache);
+			Object o=null;
+			try {
+				o = cacheProxy.get(stationcache);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			if (o == null) {
 				// 查询数据库
 				// TODO 需要修改
 				poiList = poiDao.findBystationID();
-				if (poiList != null) {
-					// 补cache
-					cacheProxy.put(stationcache, poiList, TTL._1H.getTime());
-				} else {
-					// 增加null，防止击穿cache，压力数据库
-					cacheProxy.put(stationcache, new ArrayList<Poi>(),
-							TTL._10M.getTime());
+				try {
+					if (poiList != null) {
+						// 补cache
+						cacheProxy.put(stationcache, poiList, TTL._1H.getTime());
+					} else {
+						// 增加null，防止击穿cache，压力数据库
+						cacheProxy.put(stationcache, new ArrayList<Poi>(),
+								TTL._10M.getTime());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			} else {
 				poiList = (List<Poi>) o;
