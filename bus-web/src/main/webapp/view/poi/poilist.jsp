@@ -219,7 +219,7 @@
         var cityName = $('#cityName').combobox('getText');
         var poiName = $('#poiName').val();
         var centerLonLat = $('#centerLonLat').val();
-        var range = $('#range').combobox('getText');
+        var range = $('#range').val();
 
         if (cityName == '全部') cityName = '';
         var queryParams = {cityCode: cityCode, cityName: cityName, poiName: poiName, centerLonLat: centerLonLat, range: range};
@@ -239,7 +239,8 @@
         地标名称: <input id="poiName" style="width:100px;"/>
         中心点: <input id="centerLonLat" style="width:200px;"/>
         范围:
-        <select id="range" class="easyui-combobox" name="range" style="width:100px;">
+        <select id="range" name="range" style="width:100px;">
+            <option value="200">200</option>
             <option value="500">500</option>
             <option value="1000">1000</option>
             <option value="1500">1500</option>

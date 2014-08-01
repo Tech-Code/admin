@@ -59,7 +59,8 @@
             </div>
             </div>
 		</fieldset>
-        <a href="javascript:add()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+        </br>
+        <a href="javascript:add()" class="easyui-linkbutton" iconCls="icon-save">保存</a>
 	</form>
 </body>
 <script type="text/javascript">

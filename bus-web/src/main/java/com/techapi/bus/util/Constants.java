@@ -12,6 +12,7 @@ public class Constants {
 	public final static String TAXI_INFO_SESSION = "taxi";
 	public final static String SPEED_INFO_SESSION = "speed";
 	public final static String KEY_INFO_SESSION = "userKey";
+    public static final String UPDATE_USER_TYPE_SESSION = "updatetype";
 
 
 	public final static String MODEL_INFO_SESSION = "model";

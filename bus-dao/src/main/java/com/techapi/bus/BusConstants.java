@@ -55,6 +55,9 @@ public final class BusConstants {
     public static final String RESULT_REPEAT_TAXI = "6"; // 出租车重复记录
     public static final String RESULT_REPEAT_SPEED = "7"; // 出租车重复记录
     public static final String RESULT_NO_EXIST_CITYNAME = "8"; // 城市名称不存在
+    public static final String RESULT_REPEAT_LOGINNAME = "9"; // 登录名已存在
+    public static final String RESULT_NOTEXIST_LOGINNAME = "10"; // 该用户已不存在
+    public static final String RESULT_NOADMIN = "11"; // 该用户已不存在
 
     /**
      * 返回状态文字
@@ -70,6 +73,10 @@ public final class BusConstants {
     public static final String RESULT_REPEAT_SPEED_STR = "该城市车速已存在!";
 
     public static final String RESULT_NO_EXIST_CITYNAME_STR = "城市名称不存在!";
+    public static final String RESULT_REPEAT_LOGINNAME_STR = "登录名已存在";
+    public static final String RESULT_NOTEXIST_LOGINNAME_STR = "该用户已不存在";
+    public static final String RESULT_NOADMIN_STR = "至少存在一个管理员";
+
 
     /** redis Index */
     public static final int REDIS_INDEX_KEY = 2;

@@ -1,24 +1,28 @@
 package com.techapi.bus.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 @Entity
-@Table(name="LOGIN_USER")
+@Table(name="BUS_USER")
 public class User implements java.io.Serializable{
-	@Id
-	@Column(name="ID")
+    @Id
+    @GeneratedValue(generator = "UUIDGenerator")
+    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid")
 	private String id;
 	@Column(name="USERNAME")
 	private String userName;
+    @Column(name = "LOGINNAME")
+    private String loginName;
 	@Column(name="PASSWORD")
 	private String password;
 	@Column(name="TIME")
 	private String time;
 	@Column(name="EMAIL")
 	private String email;
+    @Column(name = "ROLE")
+    private String role;
 	
 	public String getId() {
 		return id;
@@ -51,4 +55,19 @@ public class User implements java.io.Serializable{
 		this.email = email;
 	}
 
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

@@ -1,7 +1,6 @@
 package com.techapi.bus.service;
 
 import com.techapi.bus.BusConstants;
-import com.techapi.bus.annotation.CacheProxy;
 import com.techapi.bus.annotation.ServiceCache;
 import com.techapi.bus.dao.AreaDao;
 import com.techapi.bus.dao.PoiDao;
@@ -14,7 +13,6 @@ import com.techapi.bus.util.ExcelUtils;
 import com.techapi.bus.util.MapUtil;
 import com.techapi.bus.util.PageUtils;
 import com.techapi.bus.util.TTL;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -32,8 +30,6 @@ public class PoiService {
 	private PoiDao poiDao;
     @Resource
     private AreaDao areaDao;
-    @Autowired
-    public CacheProxy cacheProxy;
 
     private static Map<String,Map<String,List<String>>> poiTypeMap = new TreeMap<>();
 
@@ -87,13 +83,11 @@ public class PoiService {
                     resultMap.put("alertInfo", BusConstants.RESULT_REPEAT_POI_STR);
                     return resultMap;
                 }
-
             }
         }
 
         // 更新gridId
         poi.setGridId(gridId);
-        // TODO 需要添加对新增城市名和城市代码的更新
         poiDao.save(poi);
 
         resultMap.put("poiId", poi.getPoiId());
@@ -131,12 +125,6 @@ public class PoiService {
     }
 
     public void deleteMany(List<Poi> poiList) {
-        for (Poi poi : poiList) {
-            if (poi != null) {
-                String poicache = String.format(BusConstants.BUS_GRID_POI, MapUtil.getGridId(poi.getPoiCoordinate()),poi.getPoiId());
-                cacheProxy.delete(poicache);
-            }
-        }
         poiDao.delete(poiList);
 
     }
@@ -161,15 +149,18 @@ public class PoiService {
         //return PageUtils.getPageMap(page1);
         // 中心点经纬度
         String[] gridIdArray = null;
+        float d_lon = 0.0f;
+        float d_lat = 0.0f;
+        int iRange = 0;
         if((centerLonLat != null && !centerLonLat.isEmpty()) && range != null && !range.isEmpty()) {
             String[] lonLat = centerLonLat.split(",");
             String lon = lonLat[0];
             String lat = lonLat[1];
 
-            float d_lon = Float.parseFloat(lon);
-            float d_lat = Float.parseFloat(lat);
+            d_lon = Float.parseFloat(lon);
+            d_lat = Float.parseFloat(lat);
 
-            int iRange = Integer.parseInt(range);
+            iRange = Integer.parseInt(range);
 
 
             List<Grid> gridsOfBoundingBox = MapService.getGridsOfBoundingBox(new LatLng(d_lat, d_lon), iRange, false);
@@ -186,9 +177,10 @@ public class PoiService {
         List<Poi> poiList;
         int totalCount;
         if(gridIdArray != null && gridIdArray.length > 0) {
-            //if(cityName.equals())
-            poiList = poiDao.findBySearchAndGridIds((page - 1) * rows, page * rows, "%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%", gridIdArray);
-            totalCount = poiDao.findAllCountByGridIds("%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%", gridIdArray);
+            //poiList = poiDao.findBySearchAndGridIds((page - 1) * rows, page * rows, "%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%", gridIdArray);
+            poiList = poiDao.findBySearchAndGridIdsAndRange((page - 1) * rows, page * rows, "%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%", gridIdArray, iRange, d_lon, d_lat);
+            //totalCount = poiDao.findAllCountByGridIds("%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%", gridIdArray);
+            totalCount = poiDao.findBySearchAndGridIdsAndRangeCount("%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%", gridIdArray, iRange, d_lon, d_lat);
         } else {
             poiList = poiDao.findBySearch((page - 1) * rows, page * rows, "%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%");
             totalCount = poiDao.findAllCount("%" + cityCode + "%", "%" + cityName + "%", "%" + poiName + "%");

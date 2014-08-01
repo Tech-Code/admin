@@ -12,4 +12,9 @@ public class StringUtil {
         }
         return str.toString();
     }
+
+    public static boolean isNotEmpty(String id) {
+        if(id != null && !id.isEmpty()) return true;
+        return false;
+    }
 }
