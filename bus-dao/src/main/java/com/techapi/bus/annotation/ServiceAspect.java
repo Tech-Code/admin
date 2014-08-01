@@ -39,7 +39,12 @@ public class ServiceAspect {
         Object[] arg = pjp.getArgs();    
         String methodName = pjp.getSignature().getName();
         String key = createMemacheKey(methodName,arg);
-        Object st = cacheProxy.get(key);
+        Object st=null;
+		try {
+			st = cacheProxy.get(key);
+		} catch (Exception e1) {
+			log.error("redis set error: key is "+key,e1);
+		}
         if(st!=null&&m==Model.ON){
             return st;
         }else{
