@@ -323,14 +323,18 @@ public class BusDataAPIService {
 
 			if (user != null) {
 				// 数据持久化
-				JedisPool pool = cacheProxy.getJedisPool();
-				Jedis jedis = pool.getResource();
-				jedis.select(index);
+				try {
+					JedisPool pool = cacheProxy.getJedisPool();
+					Jedis jedis = pool.getResource();
+					jedis.select(index);
 
-				byte[] bytesValue = serializer.encode(user);
-				byte[] bytesKey = sKey.getBytes();
-				jedis.set(bytesKey, bytesValue);
-				pool.returnResource(jedis);
+					byte[] bytesValue = serializer.encode(user);
+					byte[] bytesKey = sKey.getBytes();
+					jedis.set(bytesKey, bytesValue);
+					pool.returnResource(jedis);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
 			}
 			return user;
 		}

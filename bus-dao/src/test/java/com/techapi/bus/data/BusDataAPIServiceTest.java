@@ -38,6 +38,7 @@ public class BusDataAPIServiceTest {
 	}
 
 	@Test
+	@Ignore
 	public void testFindOnePoiByGrids() {
 		List<Poi> list = busDataAPIService.findPoiByGrids("116.42581,39.96872",
 				1200, 2);
@@ -79,7 +80,6 @@ public class BusDataAPIServiceTest {
 	}
 
 	@Test
-	@Ignore
 	public void testFindOneUser() {
 		String key = "48e0087d372b5b5676f11ca7aa8a8c43c7bf189d511a418e72591eb7e33f703f04c3fa16df6c90bd";
 		Object obj = busDataAPIService.findUserKey(key);
