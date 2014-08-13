@@ -120,6 +120,9 @@
     	if (strMon2 < 10) {
   		  strMon2 = '0' + strMon2;
         }
+    	if (strDate2 < 10) {
+    		strDate2 = '0' + strDate2;
+        }
     	var std =strYear2+"-"+strMon2+"-"+strDate2;
     	return std;
     }
