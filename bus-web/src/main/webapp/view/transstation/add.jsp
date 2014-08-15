@@ -101,14 +101,6 @@
     </c:choose>
 
     var mapObj, toolbar, overview, scale;
-    var cityStationCoordinate = "${ts.cityStation.coordinate}";
-
-    if(cityStationCoordinate != null && cityStationCoordinate != "") {
-        loadMap(cityStationCoordinate);
-        addMarker(cityStationCoordinate);
-    } else {
-        loadMap("116.397428, 39.90923");
-    }
 
 
     departTypeChange();
@@ -153,7 +145,16 @@
         validType: 'number'
     });
 
+    $(document).ready(function () {
+        var cityStationCoordinate = "${ts.cityStation.coordinate}";
 
+        if (cityStationCoordinate != null && cityStationCoordinate != "") {
+            loadMap(cityStationCoordinate);
+            addMarker(cityStationCoordinate);
+        } else {
+            loadMap("116.397428, 39.90923");
+        }
+    });
 
     function loadMap(lonlat) {
         var LngLatX = lonlat.split(",")[0]; //获取Lng值
@@ -204,7 +205,7 @@
         var LngLatY = lonlat.split(",")[1]; //获取Lat值
         marker = new MMap.Marker({id: "m",
             position: new MMap.LngLat(LngLatX, LngLatY),
-            icon: "http://webapi.amap.com/images/marker_sprite.png"}) //自定义构造MMap.Marker对象
+            icon: "<%=root%>/img/marker_sprite.png"})//自定义构造MMap.Marker对象
 
         var arr = new Array();
         arr.push(marker);

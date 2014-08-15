@@ -64,18 +64,9 @@
 	</form>
 </body>
 <script type="text/javascript">
+
     // 显示高德地图
     var mapObj, toolbar, overview, scale;
-
-    var cityStationCoordinate = "${cs.coordinate}";
-
-    if (cityStationCoordinate != null && cityStationCoordinate != "") {
-        loadMap(cityStationCoordinate);
-        addMarker(cityStationCoordinate);
-    } else {
-        loadMap("116.397428, 39.90923");
-    }
-
     var highlightindex = -1; //定义高亮显示索引,-1代表不高亮任何行
     var timeOutId = null; //定义延迟时间Id
     var delayTime = 200; //默认延迟0.5秒
@@ -86,8 +77,8 @@
     var upDownGrayCss = { background: "#cef" };
     var upDownWhiteCss = { background: "white" };
 
-    var ajaxProcessUrl = getContextPath() + "/citystation/suggestlist"; //发送ajax请求调用处理url
 
+    var ajaxProcessUrl = getContextPath() + "/citystation/suggestlist"; //发送ajax请求调用处理url
     $(document).ready(function () {
         var wordInput = $("#cityStationName");
 
@@ -113,6 +104,17 @@
         $("#cityStationName").blur(function () {
             $("#divAutoList").hide();
         });
+
+        var cityStationCoordinate = "${cs.coordinate}";
+
+        if (cityStationCoordinate != null && cityStationCoordinate != "") {
+            loadMap(cityStationCoordinate);
+            addMarker(cityStationCoordinate);
+        } else {
+            loadMap("116.397428, 39.90923");
+        }
+
+
     });
 
     $('#cityName').validatebox({
@@ -220,7 +222,7 @@
         var LngLatY = lonlat.split(",")[1]; //获取Lat值
         marker = new MMap.Marker({id: "m",
             position: new MMap.LngLat(LngLatX, LngLatY),
-            icon: "http://webapi.amap.com/images/marker_sprite.png"}) //自定义构造MMap.Marker对象
+            icon: "<%=root%>/img/marker_sprite.png"})//自定义构造MMap.Marker对象
 
         var arr = new Array();
         arr.push(marker);
