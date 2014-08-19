@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 @Service
-public class ImportPoiService {
+public class ImportPoiMutiThreadService {
 
     @Resource
     private PoiDao poiDao;
@@ -26,59 +26,38 @@ public class ImportPoiService {
     @Autowired
     private CacheProxy cacheProxy;
 
-    protected static Logger log = Logger.getLogger(ImportPoiService.class);
+    protected static Logger log = Logger.getLogger(ImportPoiMutiThreadService.class);
 
-    private static Map<String,Set<String>> cityPoiIdMap = new HashMap<>();
+    private static Map<String, Set<String>> cityPoiIdMap = new HashMap<>();
 
-    public void importPoi() {
-        log.info("--------------------开始导入POI--------------------");
-        // 读站点信息表  Map<cityName,List<StationObject>>
-        log.info("开始获取站点数据....");
-        Map<String, List<Station>> cityStationMap = FileUtils.getStationData(ConfigUtils.BUS_STATION_DATA);
-        log.info("获取站点数据完毕....");
-        // 读取poi类别表
-        log.info("开始获取地标点类别....");
-        Map<String, PoiType> poiTypeMap = FileUtils.getPoiType(ConfigUtils.BUS_POITYPE_DATA_CSV);
-        log.info("获取地标点类别完毕....");
-        Iterator cityNameIterator = cityStationMap.keySet().iterator();
-        log.info("开始获取站点周边POI....");
-        //boolean isSkip = true;
+    public String importPoi(String cityName, Map<String, List<Station>> cityStationMap, Map<String, PoiType> poiTypeMap) {
         int iStartLine = 0;
-        while (cityNameIterator.hasNext()) {
-            String cityName = cityNameIterator.next().toString();
-            //if (cityName.equals(startCity)) {
-            //    isSkip = false;
-            //}
-            //if (isSkip) continue;
-            log.info("BEGIN -- CityName: " + cityName);
-            log.info("********************************");
-            List<Station> stationList = cityStationMap.get(cityName);
-            while (iStartLine < stationList.size()) {
-                List<Station> subStationList = FileUtils.splitListWithStep(stationList, iStartLine, 100);
+        log.info("BEGIN -- CityName: " + cityName);
+        log.info("********************************");
+        List<Station> stationList = cityStationMap.get(cityName);
+        while (iStartLine < stationList.size()) {
+            List<Station> subStationList = FileUtils.splitListWithStep(stationList, iStartLine, 100);
 
-                if (subStationList != null) {
-                    Map<String, List<Poi>> stationIdPoiListMap = getStationIdPoiListMap(cityName, subStationList, poiTypeMap, iStartLine);
-                    Iterator stationIdIterator = stationIdPoiListMap.keySet().iterator();
-                    while (stationIdIterator.hasNext()) {
-                        String stationId = stationIdIterator.next().toString();
-                        List<Poi> poiList = stationIdPoiListMap.get(stationId);
-                        poiDao.save(poiList);
-                    }
+            if (subStationList != null) {
+                Map<String, List<Poi>> stationIdPoiListMap = getStationIdPoiListMap(cityName, subStationList, poiTypeMap, iStartLine);
+                Iterator stationIdIterator = stationIdPoiListMap.keySet().iterator();
+                while (stationIdIterator.hasNext()) {
+                    String stationId = stationIdIterator.next().toString();
+                    List<Poi> poiList = stationIdPoiListMap.get(stationId);
+                    poiDao.save(poiList);
                 }
-                iStartLine += 100;
             }
-            iStartLine = 0;
-            log.info("********************************");
+            iStartLine += 100;
         }
-        log.info("获取站点周边POI完毕....");
-
-	}
+        log.info("********************************");
+        return "0";
+    }
 
     public void insertRedis(List<Poi> poiList) {
         int index = BusConstants.REDIS_INDEX_POI;
-        for(Poi poi : poiList) {
-            String poiCache = String.format(BusConstants.BUS_GRID_POI, poi.getGridId(),poi.getPoiId());
-            Object o = cacheProxy.get(poiCache,index);
+        for (Poi poi : poiList) {
+            String poiCache = String.format(BusConstants.BUS_GRID_POI, poi.getGridId(), poi.getPoiId());
+            Object o = cacheProxy.get(poiCache, index);
 
             if (o == null) {
                 if (poi != null) {
@@ -93,7 +72,7 @@ public class ImportPoiService {
     }
 
     public Map<String, List<Poi>> getStationIdPoiListMap(String cityName, List<Station> stationList,
-                                                   Map<String, PoiType> poiTypeMap,int start) {
+                                                         Map<String, PoiType> poiTypeMap, int start) {
         int lineCount = 1;
         Map<String, List<Poi>> stationPoiListMap = new HashMap<>();
         for (Station station : stationList) {
@@ -119,10 +98,10 @@ public class ImportPoiService {
                 paraMap.put("display_type", "1");
                 // 调用接口 cityCode为三位，按照cityCode处理
                 String response = HttpUtils.URLGet(ConfigUtils.BUS_POI_SEARCH_URL, paraMap, "UTF-8");
-
                 if (response == null || response.isEmpty()) {
                     continue;
                 }
+
                 // 解析json/xml
                 Map result = XMLUtils.readPoiXMLToMap(response);
 
@@ -180,13 +159,15 @@ public class ImportPoiService {
 
                     // 添加通过POIID过滤
                     Set<String> poiIdSet = cityPoiIdMap.get(adminCode);
-                    if(poiIdSet == null || poiIdSet.size() == 0) {
+                    if (poiIdSet == null || poiIdSet.size() == 0) {
                         poiIdSet = poiDao.findPoiIdListByCityCode(adminCode);
+                        cityPoiIdMap.put(adminCode, poiIdSet);
                     }
-                    if(poiIdSet.add(poi.getPoiId())) {
+                    if (poiIdSet.add(poi.getPoiId())) {
                         poiList.add(poi);
                     }
-                    cityPoiIdMap.put(adminCode, poiIdSet);
+
+                    poiList.add(poi);
 
                 }
                 if (poiList.size() == 5) {
@@ -197,8 +178,6 @@ public class ImportPoiService {
             stationPoiListMap.put(station.getStationId(), poiList);
             log.info("--------------------------------");
         }
-
-
 
 
         return stationPoiListMap;

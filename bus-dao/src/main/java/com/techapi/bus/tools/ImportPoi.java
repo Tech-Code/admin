@@ -25,7 +25,8 @@ public class ImportPoi {
             startLine = args[1];
         }
         System.out.println("startCity:" + startCity + "startLine:" + startLine);
-        new ImportPoi().importPoiService.importPoi(startCity,startLine);
-
+        long starttime = System.currentTimeMillis();
+        new ImportPoi().importPoiService.importPoi();
+        System.out.println("总耗时：" + (System.currentTimeMillis() - starttime));
     }
 }

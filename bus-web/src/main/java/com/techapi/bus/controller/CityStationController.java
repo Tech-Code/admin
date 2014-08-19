@@ -98,6 +98,7 @@ public class CityStationController{
         queryForBus.setPoiType(poiType);
         queryForBus.setAdName(adName);
         queryForBus.setPoiStationName(stationName);
+        queryForBus.setRows(Constants.SUGGEST_LIST_ROWS);
 
         BusSearch busSearch = new BusSearch(queryForBus);
         PoiStationResult poiStationResult = busSearch.searchPoiStationList();

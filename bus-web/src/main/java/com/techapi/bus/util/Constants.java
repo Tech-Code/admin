@@ -17,5 +17,5 @@ public class Constants {
 
 	public final static String MODEL_INFO_SESSION = "model";
 
-
+    public final static int SUGGEST_LIST_ROWS = 20;
 }

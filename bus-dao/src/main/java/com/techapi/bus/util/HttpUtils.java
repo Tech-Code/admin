@@ -138,7 +138,7 @@ public class HttpUtils {
             //执行getMethod
             int statusCode = client.executeMethod(getMethod);
             if(statusCode == HttpStatus.SC_OK) {
-                //response = getMethod.getResponseBodyAsString();
+
                 InputStream responseBodyAsStream = getMethod.getResponseBodyAsStream();
                 InputStreamReader inputStreamReader = new InputStreamReader(responseBodyAsStream,"GBK");
 

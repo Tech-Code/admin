@@ -7,6 +7,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Set;
 
 public interface PoiDao extends PagingAndSortingRepository<Poi, String>, JpaSpecificationExecutor<Poi> {
 
@@ -32,6 +33,10 @@ public interface PoiDao extends PagingAndSortingRepository<Poi, String>, JpaSpec
 
     @Query(value = "SELECT * FROM(SELECT A.*, rownum r FROM(SELECT * FROM bus_poi) A WHERE rownum <= ?2) B WHERE r > ?1", nativeQuery = true)
     public List<Poi> findByCityCode(int pageStart,int pageEnd);
+
+    @Query("select c.poiId from Poi c"
+            + " where c.cityCode like :cityCode ")
+    public Set<String> findPoiIdListByCityCode(@Param("cityCode") String cityCode);
 
     //@Query(value = "SELECT B.ID,B.CITYCODE,B.STATIONID,B.POIID,B.POINAME,B.POITYPE1,B.POITYPE2,B.POITYPE3,B.POICOORDINATE,B.WALKDISTANCE,B.ORIENTATION,B.ADDRESS,B.TEL,B.AREA_NAME as CITYNAME FROM (SELECT A.*,rownum r FROM (SELECT C.*,D.area_name FROM bus_poi C INNER JOIN bus_area D ON C.citycode = D.ad_code) A WHERE rownum <= ?2) B WHERE r > ?1", nativeQuery = true)
     //public List<Object[]> findAllByPage(int pageStart, int pageEnd);
@@ -199,6 +204,7 @@ public interface PoiDao extends PagingAndSortingRepository<Poi, String>, JpaSpec
     //                                             String cityName,
     //                                             String poiName,
     //                                             String[] poiIds);
+
 
 
 }

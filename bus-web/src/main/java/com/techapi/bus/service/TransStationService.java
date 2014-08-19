@@ -6,6 +6,7 @@ import com.techapi.bus.dao.TransstationDao;
 import com.techapi.bus.entity.CityStation;
 import com.techapi.bus.entity.Transstation;
 import com.techapi.bus.solr.basic.BaseOperate;
+import com.techapi.bus.util.Constants;
 import com.techapi.bus.util.DateTimeUtils;
 import com.techapi.bus.util.PageUtils;
 import org.springframework.data.domain.Page;
@@ -135,7 +136,7 @@ public class TransStationService extends BaseOperate {
     }
 
     public List<CityStation> suggetList(String q) {
-        List<CityStation> cityStationNameList = (ArrayList) queryBeans(q, 0, 10, CityStation.class);
+        List<CityStation> cityStationNameList = (ArrayList) queryBeans(q, 0, Constants.SUGGEST_LIST_ROWS, CityStation.class);
         return cityStationNameList;
     }
 
