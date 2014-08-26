@@ -11,8 +11,6 @@ public class ConfigUtils {
 
     public static String SOLR_URL;
 
-    public static String BUS_DATA;
-
     public static String BUS_STATION_DATA;
 
     public static String BUS_KEY_DATA;
@@ -31,7 +29,7 @@ public class ConfigUtils {
 
     public static String BUS_KEY_BUSINESS_TYPE;
 
-
+    public static int BUS_IMPORT_POI_THREAD_COUNT;
 
 
 	static {
@@ -39,8 +37,6 @@ public class ConfigUtils {
 			ResourceBundle rb = ResourceBundle.getBundle("config");
 
             SOLR_URL = rb.getString("solr.url");
-
-            BUS_DATA = rb.getString("bus.data");
 
             BUS_STATION_DATA = rb.getString("bus.data.station");
 
@@ -59,6 +55,8 @@ public class ConfigUtils {
             BUS_POISTATION_FLUSHSOLR_ROWS = Integer.parseInt(rb.getString("bus.data.poistation.flushsolr.rows"));
 
             BUS_KEY_BUSINESS_TYPE = new String(rb.getString("bus.data.key.business.type").getBytes("ISO-8859-1"), "UTF-8");
+
+            BUS_IMPORT_POI_THREAD_COUNT = Integer.parseInt(rb.getString("bus.poi.import.thread.count"));
 
 		} catch (Exception e) {
 			e.printStackTrace();

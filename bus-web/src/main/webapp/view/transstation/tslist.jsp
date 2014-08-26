@@ -90,6 +90,15 @@
                         } //需要formatter一下才能显示正确的数据
                     },
                     {
+                        field: 'stationOrder',
+                        title: '站序',
+                        width: 20,
+                        sortable: true,
+                        formatter: function (value, row, index) {
+                            return row.stationOrder;
+                        } //需要formatter一下才能显示正确的数据
+                    },
+                    {
                         field: 'departType',
                         title: '发车方式',
                         width: 20,

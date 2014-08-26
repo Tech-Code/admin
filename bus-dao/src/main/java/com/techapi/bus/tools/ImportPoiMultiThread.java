@@ -36,9 +36,9 @@ public class ImportPoiMultiThread {
         log.info("获取地标点类别完毕....");
         Iterator cityNameIterator = cityStationMap.keySet().iterator();
         log.info("开始获取站点周边POI....");
-
+        Map<String, Integer> cityNameInsertRowsMap = new HashMap<>();
         try {
-            new ExecutorTest().doExecutorService_submit(cityNameIterator, cityStationMap, poiTypeMap);
+            cityNameInsertRowsMap = new ExecutorTest().doExecutorService_submit(cityNameIterator, cityStationMap, poiTypeMap);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -47,6 +47,13 @@ public class ImportPoiMultiThread {
 
         log.info("获取站点周边POI完毕....");
         log.info("总耗时：" + (System.currentTimeMillis() - starttime));
-
+        int totalInsertRows = 0;
+        Iterator insertCityNameIterator = cityNameInsertRowsMap.keySet().iterator();
+        while (insertCityNameIterator.hasNext()) {
+            String insertCityName = insertCityNameIterator.next().toString();
+            log.info("CityName: " + insertCityName + " 插入条数: " + cityNameInsertRowsMap.get(insertCityName));
+            totalInsertRows += cityNameInsertRowsMap.get(insertCityName);
+        }
+        log.info("总共插入条数: " + totalInsertRows);
     }
 }

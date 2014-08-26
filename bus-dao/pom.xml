@@ -286,9 +286,9 @@
             <version>4.7.1</version>
         </dependency>
         <dependency>
-            <groupId>com.chetuobang.common</groupId>
+            <groupId>com.techapi.common</groupId>
             <artifactId>common-utils-bean</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.10</version>
         </dependency>
 
 	</dependencies>

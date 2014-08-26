@@ -1,7 +1,7 @@
 package com.techapi.bus.solr.basic;
 
-import com.chetuobang.common.BeanUtils;
 import com.techapi.bus.util.ConfigUtils;
+import com.techapi.common.BeanUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
