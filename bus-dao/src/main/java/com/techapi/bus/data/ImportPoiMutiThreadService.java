@@ -39,7 +39,7 @@ public class ImportPoiMutiThreadService {
         log.debug("********************************");
         List<Station> stationList = cityStationMap.get(cityName);
         while (iStartLine < stationList.size()) {
-            List<Station> subStationList = FileUtils.splitListWithStep(stationList, iStartLine, 100);
+            List<Station> subStationList = (List<Station>)FileUtils.splitListWithStep(stationList, iStartLine, 100);
 
             if (subStationList != null) {
                 Map<String, Map<String, List<Poi>>> stationIdPoiListMap = ImportUtils.getStationIdPoiListMap(cityName, subStationList, poiTypeMap, iStartLine, poiIdSet);

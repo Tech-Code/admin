@@ -5,6 +5,7 @@ import com.techapi.bus.entity.PoiType;
 import com.techapi.bus.entity.Station;
 import org.apache.log4j.Logger;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -17,6 +18,7 @@ public class ImportUtils {
                                                          Map<String, PoiType> poiTypeMap, int start, Set<String> poiIdSet) {
         int lineCount = 1;
         Map<String, Map<String, List<Poi>>> stationPoiListMap = new HashMap<>();
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
         for (Station station : stationList) {
             int poiListCount = 0; // 请求的产生的poi列表
             List<Poi> notExistPoiList = new ArrayList<>(); // 去掉重复的poi列表
@@ -99,10 +101,13 @@ public class ImportUtils {
                     poi.setAddress(address);
                     poi.setTel(tel);
 
+                    poi.setIsModified("0");
+                    poi.setTimeStamp(format1.format(new Date()));
+
                     // 添加网格计算
                     poi.setGridId(MapUtil.getGridId(x + "," + y));
 
-                    // 添加通过POIID过滤
+                    // 添加通过POIID和ISMODIFIED过滤
                     if (poiIdSet.add(poi.getPoiId())) {
                         if (!realCityName.equals(cityName)) {
                             outOfCityPoiList.add(poi);

@@ -62,7 +62,7 @@ public class FileUtils {
         return poiTypeMap;
     }
 
-    public static List<Station> splitListWithStep(List<Station> stationList, int start, int step) {
+    public static List<?> splitListWithStep(List<?> stationList, int start, int step) {
 
         if (stationList == null || stationList.isEmpty()) {
             return null;

@@ -35,7 +35,7 @@ public interface PoiDao extends PagingAndSortingRepository<Poi, String>, JpaSpec
     public List<Poi> findByCityCode(int pageStart,int pageEnd);
 
     @Query("select c.poiId from Poi c"
-            + " where c.cityName like :cityName ")
+            + " where c.cityName like :cityName and c.isModified = 1")
     public Set<String> findPoiIdListByCityName(@Param("cityName") String cityName);
 
     //@Query(value = "SELECT B.ID,B.CITYCODE,B.STATIONID,B.POIID,B.POINAME,B.POITYPE1,B.POITYPE2,B.POITYPE3,B.POICOORDINATE,B.WALKDISTANCE,B.ORIENTATION,B.ADDRESS,B.TEL,B.AREA_NAME as CITYNAME FROM (SELECT A.*,rownum r FROM (SELECT C.*,D.area_name FROM bus_poi C INNER JOIN bus_area D ON C.citycode = D.ad_code) A WHERE rownum <= ?2) B WHERE r > ?1", nativeQuery = true)
@@ -205,6 +205,8 @@ public interface PoiDao extends PagingAndSortingRepository<Poi, String>, JpaSpec
     //                                             String poiName,
     //                                             String[] poiIds);
 
+    @Query(value = "select * from bus_poi where CITYNAME = ?1 and ISMODIFIED = '0' and to_date(TIMESTAMP,'YYYY-MM-DD') < to_date(?2, 'YYYY-MM-DD')", nativeQuery = true)
+    public List<Poi> findByCityNameAndTimeStamp(String cityName,String timestamp);
 
 
 }

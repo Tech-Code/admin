@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -49,6 +50,7 @@ public class ImportPoiService {
         }
         log.info("开始获取站点周边POI....");
         boolean isSkip = true;
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
         if(startCity.equals("")) {
             isSkip = false;
         }
@@ -69,11 +71,11 @@ public class ImportPoiService {
             Set<String> poiIdSet = poiDao.findPoiIdListByCityName(cityName.trim());
             int insertRows = 0;
 
-            log.info("BEGIN -- CityName: " + cityName);
             log.info("********************************");
+            log.info("BEGIN -- CityName: " + cityName);
             List<Station> stationList = cityStationMap.get(cityName);
             while (iStartLine < stationList.size()) {
-                List<Station> subStationList = FileUtils.splitListWithStep(stationList, iStartLine, 100);
+                List<Station> subStationList = (List<Station>)FileUtils.splitListWithStep(stationList, iStartLine, 100);
 
                 if (subStationList != null) {
                     Map<String, Map<String,List<Poi>>> stationIdPoiListMap = ImportUtils.getStationIdPoiListMap(cityName, subStationList, poiTypeMap, iStartLine, poiIdSet);
@@ -96,10 +98,22 @@ public class ImportPoiService {
                 iStartLine += 100;
             }
             iStartLine = 0;
-            log.info("********************************");
-            log.info("END -- CityName: " + cityName + " 插入条数: " + insertRows);
+            log.info("1.数据库更新完毕.....");
             totalInsertRows += insertRows;
             cityNameInsertRowsMap.put(cityName, insertRows);
+            // 删掉过期数据
+            List<Poi> deletedList = poiDao.findByCityNameAndTimeStamp(cityName, format1.format(new Date()));
+            int iDeleteStartLine = 0;
+            while (iDeleteStartLine < deletedList.size()) {
+                List<Poi> deletedSubList = (List<Poi>) FileUtils.splitListWithStep(deletedList, iDeleteStartLine, 1000);
+                if(deletedSubList != null) {
+                    poiDao.delete(deletedSubList);
+                    iDeleteStartLine += 1000;
+                }
+            }
+            log.info("1.数据库清理过期数据完毕.....");
+            log.info("END -- CityName: " + cityName + " 插入条数: " + insertRows);
+            log.info("********************************");
         }
         log.info("获取站点周边POI完毕....");
         log.info("总共插入条数: " + totalInsertRows);
@@ -108,6 +122,7 @@ public class ImportPoiService {
             String insertCityName = insertCityNameIterator.next().toString();
             log.info("CityName: " + insertCityName + " 插入条数: " + cityNameInsertRowsMap.get(insertCityName));
         }
+
 	}
 
     public void insertRedis(List<Poi> poiList) {

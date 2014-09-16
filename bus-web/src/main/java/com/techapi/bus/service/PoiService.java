@@ -16,6 +16,7 @@ import com.techapi.bus.util.TTL;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -47,7 +48,7 @@ public class PoiService {
         String poiId = poi.getPoiId();
         String poiName = poi.getPoiName();
         Poi existedPoi;
-
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
         String cityCode = poi.getCityCode();
         String cityName = poi.getCityName();
         if(cityCode == null || cityCode.isEmpty()) {
@@ -84,6 +85,11 @@ public class PoiService {
                     return resultMap;
                 }
             }
+        }
+
+        if(!poi.equals(existedPoi)) {
+            poi.setIsModified("1");
+            poi.setTimeStamp(format1.format(new Date()));
         }
 
         // 更新gridId

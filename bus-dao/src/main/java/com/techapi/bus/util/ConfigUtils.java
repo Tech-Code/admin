@@ -29,7 +29,7 @@ public class ConfigUtils {
 
     public static String BUS_KEY_BUSINESS_TYPE;
 
-    public static int BUS_IMPORT_POI_THREAD_COUNT;
+    //public static int BUS_IMPORT_POI_THREAD_COUNT;
 
 
 	static {
@@ -56,7 +56,7 @@ public class ConfigUtils {
 
             BUS_KEY_BUSINESS_TYPE = new String(rb.getString("bus.data.key.business.type").getBytes("ISO-8859-1"), "UTF-8");
 
-            BUS_IMPORT_POI_THREAD_COUNT = Integer.parseInt(rb.getString("bus.poi.import.thread.count"));
+            //BUS_IMPORT_POI_THREAD_COUNT = Integer.parseInt(rb.getString("bus.poi.import.thread.count"));
 
 		} catch (Exception e) {
 			e.printStackTrace();

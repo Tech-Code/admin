@@ -36,7 +36,8 @@ public class ExecutorTest {
 
     // 通过ExecutorService调用多线程
     public Map<String, Integer> doExecutorService_submit(Iterator cityNameIterator, Map<String, List<Station>> cityStationMap, Map<String, PoiType> poiTypeMap) throws InterruptedException, ExecutionException {
-        ExecutorService executorService = Executors.newFixedThreadPool(ConfigUtils.BUS_IMPORT_POI_THREAD_COUNT);
+        //ExecutorService executorService = Executors.newFixedThreadPool(ConfigUtils.BUS_IMPORT_POI_THREAD_COUNT);
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
         Deque<Future<?>> futures = new ArrayDeque<Future<?>>();
         Map<String, Integer> cityNameInsertRowsMap = new HashMap<>();
         while (cityNameIterator.hasNext()) {

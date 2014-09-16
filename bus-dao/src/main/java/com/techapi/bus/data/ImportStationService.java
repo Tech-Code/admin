@@ -35,7 +35,7 @@ public class ImportStationService {
 
             while (start < stationList.size()) {
                 log.info("第" + start + "条站点数据");
-                List<Station> subStationList = FileUtils.splitListWithStep(stationList, start, 100);
+                List<Station> subStationList = (List<Station>)FileUtils.splitListWithStep(stationList, start, 100);
                 // 存入站点信息
                 stationDao.save(subStationList);
                 start += 100;

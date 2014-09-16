@@ -32,6 +32,10 @@ public class Poi implements java.io.Serializable, Comparable<Poi> {
 	private String cityName;
 	@Column(name = "GRIDID")
 	private String gridId;
+    @Column(name = "TIMESTAMP")
+    private String timeStamp; // 时间戳，用来表明更新时间
+    @Column(name = "ISMODIFIED")
+    private String isModified;  // 用来标识是否有用户修改过，默认为0:元数据,1:用户修改过
 
 	@Transient
 	private double walkDistance;// 步行距离
@@ -204,7 +208,23 @@ public class Poi implements java.io.Serializable, Comparable<Poi> {
 		return true;
 	}
 
-	@Override
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public String getIsModified() {
+        return isModified;
+    }
+
+    public void setIsModified(String isModified) {
+        this.isModified = isModified;
+    }
+
+    @Override
 	public int hashCode() {
 		int result = poiId != null ? poiId.hashCode() : 0;
 		result = 31 * result + (cityCode != null ? cityCode.hashCode() : 0);
