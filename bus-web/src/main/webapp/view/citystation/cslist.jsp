@@ -71,6 +71,10 @@
                         width: 20,
                         sortable: true,
                         formatter: function (value, row, index) {
+                            if(value == '飞机场') return '飞机';
+                            if (value == '火车站') return '火车';
+                            if (value == '长途汽车站') return '长途客车';
+                            if (value == '港口码头') return '轮渡';
                             return row.transType;
                         } //需要formatter一下才能显示正确的数据
                     },
@@ -81,15 +85,6 @@
                         sortable: true,
                         formatter: function (value, row, index) {
                             return row.cityStationName;
-                        } //需要formatter一下才能显示正确的数据
-                    },
-                    {
-                        field: 'transdetail',
-                        title: '交通工具小类',
-                        width: 20,
-                        sortable: true,
-                        formatter: function (value, row, index) {
-                            return row.transdetail;
                         } //需要formatter一下才能显示正确的数据
                     },
                     {

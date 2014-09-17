@@ -28,10 +28,10 @@
                 <label>
                     <span>交通工具类型</span>
                     <select name="transType" class="text-input" id="transType" onchange="changeTransDetail()">
-                    <option value="150100" <c:if test="${cs.transType=='飞机场' }" >selected</c:if>>飞机场</option>
-                    <option value="150200" <c:if test="${cs.transType=='火车站' }" >selected</c:if>>火车站</option>
-                    <option value="150300;150301;150302;150303" <c:if test="${cs.transType=='港口码头' }" >selected</c:if>>港口码头</option>
-                    <option value="150400" <c:if test="${cs.transType=='长途汽车站' }" >selected</c:if>>长途汽车站</option>
+                    <option value="150100" <c:if test="${cs.transType=='飞机场' }" >selected</c:if>>飞机</option>
+                    <option value="150200" <c:if test="${cs.transType=='火车站' }" >selected</c:if>>火车</option>
+                    <option value="150300" <c:if test="${cs.transType=='港口码头' }" >selected</c:if>>轮渡</option>
+                    <option value="150400" <c:if test="${cs.transType=='长途汽车站' }" >selected</c:if>>长途客车</option>
                     </select>
                 </label>
 				<label>
@@ -181,7 +181,7 @@
 
         if(selectTransType == "150100") {
 
-            var item1 = "<span><input type='checkbox' class='checkbox' name='transdetailGroup' value='飞机场' id='transdetail1' checked='true'/>飞机场</span>";
+            var item1 = "<span><input type='checkbox' class='checkbox' name='transdetailGroup' value='飞机场' id='transdetail1' checked='true'/>飞机</span>";
             divTransDetailList.append(item1);
         }
         if (selectTransType == "150200") {
@@ -196,13 +196,13 @@
             divTransDetailList.append(item4);
             divTransDetailList.append(item5);
         }
-        if (selectTransType == "150300;150301;150302;150303") {
-            var item1 = "<span><input type='checkbox' class='checkbox' name='transdetailGroup' value='港口码头' id='transdetail1' checked='true' />港口码头</span>";
+        if (selectTransType == "150300") {
+            var item1 = "<span><input type='checkbox' class='checkbox' name='transdetailGroup' value='港口码头' id='transdetail1' checked='true' />轮渡</span>";
             divTransDetailList.append(item1);
 
         }
         if (selectTransType == "150400") {
-            var item1 = "<span><input type='checkbox' class='checkbox' name='transdetailGroup' value='长途汽车站' id='transdetail1' checked='true'/>长途汽车站</span>";
+            var item1 = "<span><input type='checkbox' class='checkbox' name='transdetailGroup' value='长途汽车站' id='transdetail1' checked='true'/>长途客车</span>";
             divTransDetailList.append(item1);
 
         }

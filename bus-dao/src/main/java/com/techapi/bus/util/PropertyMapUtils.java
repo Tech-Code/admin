@@ -15,8 +15,12 @@ public class PropertyMapUtils {
 
     public static String getPoiTypeName(String poiType) {
         getPoiTypeMap();
-
-        return poiTypeMap.get(poiType);
+        String poiTypeFormal = poiTypeMap.get(poiType);
+        if(poiTypeFormal.equals("飞机")) return "飞机场";
+        if(poiTypeFormal.equals("火车")) return "火车站";
+        if(poiTypeFormal.equals("轮渡")) return "港口码头";
+        if(poiTypeFormal.equals("长途客车")) return "长途汽车站";
+        return "";
     }
 
     /**

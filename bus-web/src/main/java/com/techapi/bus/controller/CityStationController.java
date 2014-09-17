@@ -129,7 +129,12 @@ public class CityStationController{
                                           @RequestParam(value = "cityName", required = false) String cityName,
                                           @RequestParam(value = "selectTransType", required = false) String selectTransType,
                                           @RequestParam(value = "stationName", required = false) String stationName) throws Exception {
-        System.out.println("page: " + page + "rows: " + rows + "cityCode: " + cityCode + "------cityName: " + cityName + "--------selectTransType:" + selectTransType + "-------stationName:" + stationName);
-        return cityStationService.findBySearchBySection(page, rows, cityCode.trim(), cityName.trim(), selectTransType.trim(), stationName.trim());
+        //System.out.println("page: " + page + "rows: " + rows + "cityCode: " + cityCode + "------cityName: " + cityName + "--------selectTransType:" + selectTransType + "-------stationName:" + stationName);
+        String selectTransTypeFormal= selectTransType;
+        if(selectTransType.trim().equals("飞机")) selectTransTypeFormal = "飞机场";
+        if(selectTransType.trim().equals("火车")) selectTransTypeFormal = "火车站";
+        if(selectTransType.trim().equals("轮渡")) selectTransTypeFormal = "港口码头";
+        if(selectTransType.trim().equals("长途客车")) selectTransTypeFormal = "长途汽车站";
+        return cityStationService.findBySearchBySection(page, rows, cityCode.trim(), cityName.trim(), selectTransTypeFormal, stationName.trim());
     }
 }

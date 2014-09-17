@@ -63,15 +63,6 @@
                         } //需要formatter一下才能显示正确的数据
                     },
                     {
-                        field: 'transDetail',
-                        title: '交通工具小类',
-                        width: 20,
-                        sortable: true,
-                        formatter: function (value, row, index) {
-                            return row.cityStation.transdetail;
-                        } //需要formatter一下才能显示正确的数据
-                    },
-                    {
                         field: 'cityCode',
                         title: '城市代码',
                         width: 20,

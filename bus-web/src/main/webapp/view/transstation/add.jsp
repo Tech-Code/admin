@@ -126,12 +126,14 @@
 
     });
     $('#arriveTime').validatebox({
+        required: true,
         validType: 'time'
     });
     $('#miles').validatebox({
         required: true
     });
     $('#departTime').validatebox({
+        required: true,
         validType: 'time'
     });
     $('#firstDepartTime').validatebox({
