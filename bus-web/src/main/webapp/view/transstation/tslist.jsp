@@ -46,20 +46,23 @@
                         width: 2
                     }, //显示复选框
                     {
-                        field: 'transType',
-                        title: '交通工具类型',
-                        width: 20,
-                        formatter: function (value, row, index) {
-                            return row.cityStation.transType;
-                        } //需要formatter一下才能显示正确的数据
-                    },
-                    {
                         field: 'trips',
                         title: '班次',
                         width: 20,
                         sortable: true,
                         formatter: function (value, row, index) {
                             return row.trips;
+                        } //需要formatter一下才能显示正确的数据
+                    },
+                    {
+                        field: 'transType',
+                        title: '交通工具类型',
+                        width: 20,
+                        formatter: function (value, row, index) {
+                            if (row.cityStation.transType == '飞机场') return '飞机';
+                            if (row.cityStation.transType == '火车站') return '火车';
+                            if (row.cityStation.transType == '长途汽车站') return '长途客车';
+                            if (row.cityStation.transType == '港口码头') return '轮渡';
                         } //需要formatter一下才能显示正确的数据
                     },
                     {

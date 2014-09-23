@@ -79,6 +79,21 @@
                         } //需要formatter一下才能显示正确的数据
                     },
                     {
+                        field: 'transdetail',
+                        title: '交通工具小类',
+                        width: 20,
+                        sortable: true,
+                        formatter: function (value, row, index) {
+                            if(value != null) {
+                                var result = value.replace('飞机场','飞机').
+                                                   replace('火车站','火车').
+                                                   replace('长途汽车站','长途客车').
+                                                   replace('港口码头','轮渡');
+                            }
+                            return result;
+                        } //需要formatter一下才能显示正确的数据
+                    },
+                    {
                         field: 'cityStationName',
                         title: '站名',
                         width: 20,
